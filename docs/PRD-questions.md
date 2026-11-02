@@ -3,6 +3,8 @@
 Source: `docs/PRD.md` (PRD v1.0, Nov 2, 2026, @Munia Abdalla). Prepared at kickoff by the product-owner agent on 2026-11-02.
 Status: **open**. Stakeholders answer inline under each question (add `**Answer:**`). Until a question is answered, the proposed default applies and is marked as an assumption in any story that depends on it.
 
+**Update 2026-11-02:** The stakeholder answered all six BLOCKS-PLANNING questions (Q-37, Q-42, Q-43, Q-52, Q-53, Q-68) and decided "mocks behind adapters" for providers (ADR-001). That decision partly answers Q-09, Q-35 and Q-40: the vendor choice itself is still open. Each answered question carries a `Status: ANSWERED 2026-11-02` line. All other questions stay open, and the backlog uses their proposed defaults, marked `Assumption (Q-xx)`.
+
 Tags:
 - `BLOCKS-PLANNING`: the epics, MVP scope or timeline cannot be fixed without an answer.
 - `BLOCKS-SPRINT-1`: needed before sprint 1 design and build start. The default is safe to start with.
@@ -12,6 +14,8 @@ Tags:
 ---
 
 ## Needs a stakeholder answer now (BLOCKS-PLANNING)
+
+All six were answered on 2026-11-02. The answers are recorded under each question below. Q-52 was answered differently from the default: start Mon 2026-11-02 on a 7-day week.
 
 | # | Question | Proposed default |
 |---|---|---|
@@ -130,6 +134,7 @@ Tags:
 ### B. Money & payments
 
 #### Q-09
+- **Status:** ANSWERED 2026-11-02 (partly): Paymob sits behind an adapter with a realistic mock (ADR-001). The real merchant account and methods are still open.
 - **PRD:** 2.3 rule 1, 8.5, A1–A3
 - **Question:** Is Paymob the confirmed gateway, and is a merchant or sandbox account available? Which methods are in the MVP: cards, mobile wallets, Fawry?
 - **Why it matters:** Sprint 1 needs a deposit lock that works. Fawry is asynchronous by design and drives the "Payment pending" flow (A2).
@@ -348,6 +353,7 @@ Tags:
 ### D. KYC & identity
 
 #### Q-35
+- **Status:** ANSWERED 2026-11-02 (partly): KYC/OCR and liveness use a mock behind an adapter (ADR-001). The vendor choice is still open and blocks go-live.
 - **PRD:** 2.2, 3.4 step 2, 8.5
 - **Question:** Which KYC/OCR and liveness vendor do we use? It must support the Egyptian 14-digit National ID front/back and finish in under 3 minutes.
 - **Why it matters:** Sprint 1's "Join to Bid" needs T1.
@@ -362,6 +368,7 @@ Tags:
 - **Tag:** `BLOCKS-LATER`
 
 #### Q-37
+- **Status:** ANSWERED 2026-11-02: KYC T2 is in the MVP as a manual upload plus KYC Reviewer approval in the admin. No vendor.
 - **PRD:** 2.2, 3.3, 3.7, 8.7
 - **Question:** Phase 1 says "Auth + KYC T1". But auction sellers must be T2, winners must upload missing T2 documents within 48h, and some investment purchases need T2. Is T2 in the MVP?
 - **Why it matters:** Without T2, the MVP cannot list auctions or complete wins.
@@ -383,6 +390,7 @@ Tags:
 - **Tag:** `BLOCKS-LATER`
 
 #### Q-40
+- **Status:** ANSWERED 2026-11-02 (partly): SMS/WhatsApp use mocks behind adapters (ADR-001). The login methods, the email provider and the real SMS/WhatsApp vendors are still open.
 - **PRD:** 2.2 (T0 phone OTP), 3.7 reminders, 8.3, 8.5
 - **Question:** Is phone OTP the only login method, or do we also offer email, Google or Apple? Which SMS provider do we use (and which NTRA-registered sender ID), which WhatsApp Business provider, and which email provider? Note that email is not listed in 8.5.
 - **Why it matters:** Auth is in sprint 1. Notifications and their costs appear in every money flow.
