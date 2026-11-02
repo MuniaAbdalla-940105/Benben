@@ -407,6 +407,7 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 ### E. Tech & platform
 
 #### Q-42
+- **Status:** ANSWERED 2026-11-02: React 19 + Vite + Supabase (ADR-001). Bids are serialized in Postgres functions and broadcast via Supabase Realtime. The load test against PRD 8.4 runs in sprint 1 (ST-012).
 - **PRD:** 8.5, 8.4, 3.5, 3.6, 3.2
 - **Question:** PRD 8.5 suggests Flutter + Next.js + NestJS + PostgreSQL + Redis + BullMQ + Socket.IO. `CLAUDE.md` fixes React 19 + Vite + Supabase. Changing the stack needs a stakeholder decision in `docs/decisions/`. Which do we use?
 - **What each requirement needs, and how Supabase would meet it:**
@@ -430,6 +431,7 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 - **Tag:** `BLOCKS-PLANNING`
 
 #### Q-43
+- **Status:** ANSWERED 2026-11-02: a responsive, mobile-first web app and installable PWA, plus a React admin. Native apps come later (ADR-001).
 - **PRD:** 1.1 (audience: "Frontend (mobile + web)"), 3.1 (bottom nav), 3.11 (haptics), 8.3 (push), 8.4 (dynamic type on mobile), 8.5 (Flutter)
 - **Question:** Is the MVP a native app (App Store and Play Store), or responsive web/PWA first?
 - **Why it matters:** It decides the build effort, push notifications and haptics. iOS web push works only for home-screen-installed web apps (iOS 16.4+), and iOS Safari has no vibration API, so the "outbid haptic" cannot work there. Store presence matters for marketing.
@@ -493,6 +495,7 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 - **Tag:** `BLOCKS-LATER`
 
 #### Q-52
+- **Status:** ANSWERED 2026-11-02: start today, Mon 2026-11-02, on a full 7-day week, with sprints of 14 consecutive calendar days. Sprint 1 runs 2026-11-02 to 2026-11-15, sprint 2 runs 2026-11-16 to 2026-11-29, and so on. This replaces the proposed default below.
 - **PRD:** 8.7 (Phase 1 = months 0–4)
 - **Question:** What is the start date for sprint 1, the working week, and how available are stakeholders for staging validation?
 - **Why it matters:** The timeline and milestones in `BACKLOG.md` need fixed dates.
@@ -502,6 +505,7 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 ### F. Marketplace & trust
 
 #### Q-53
+- **Status:** ANSWERED 2026-11-02: the core Marketplace set, as proposed. In: browse with core filters, listing detail, save, report ad, an add-listing wizard with manual review, 30-day expiry, and "Send to Auction" as a request to Ops. Out: compare, boosts, map draw, masked calls, duplicate merge, price-change alerts.
 - **PRD:** 8.7 ("basic Marketplace with filters & reports"), 5.1–5.6
 - **Question:** Which parts of section 5 are in the MVP?
 - **Why it matters:** It defines the Marketplace epic and the MVP size.
@@ -620,6 +624,7 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 ### H. Admin & ops
 
 #### Q-68
+- **Status:** ANSWERED 2026-11-02: the minimal ops admin set, as proposed (AD-01, AD-02/03, AD-05, AD-07, AD-09, AD-11, AD-14, AD-15, AD-16/17). Ops creates auctions on behalf of sellers with a mandate. AU-10/AU-11 move to Phase 2.
 - **PRD:** 8.7, 8.1, 8.1.3, 8.1.5, 3.11 (AU-10, AU-11)
 - **Question:** Phase 1 lists "Admin Control Room + Finance". Running auctions also needs the Pipeline (F1), the Post-Auction Desk (F3), KYC review (F4), listing moderation (F5) and the Approval Queue (8.1.5). The seller dashboard is Phase 2. Which admin modules are in the MVP, and how do sellers get auctions in?
 - **Why it matters:** It is the largest driver of MVP size and the timeline.
