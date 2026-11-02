@@ -52,7 +52,7 @@ Run `/kickoff` after the stakeholder puts the PRD in `docs/PRD.md`:
 1. `product-owner` reads the PRD and writes open questions to `docs/PRD-questions.md`. Stop and ask the stakeholder if anything blocks planning.
 2. `product-owner` writes epics and stories into `backlog/`, then a sprint plan and timeline in `BACKLOG.md`.
 3. Orchestrator generates the design prompt `prompts/DESIGN/ui-ux-designer.md` from `prompts/_templates/design-prompt.md`, filled from the PRD (see Prompt generation).
-4. `ui-ux-designer` writes `docs/design/DESIGN_BRIEF.md`, the design system, and HTML prototypes for sprint 1 stories.
+4. `ui-ux-designer` writes `docs/design/DESIGN_BRIEF.md`, then **design options**: 3 visual directions on the same key screens, plus 2 UX options for each risky moment (money, bids, identity), with pros, cons and a recommendation. The orchestrator shows the options to the stakeholder, who picks one (or a mix). Only then does the designer build the design system and the HTML prototypes for the sprint 1 stories in the chosen direction.
 5. `solution-architect` writes the architecture ADR and the data contract for sprint 1.
 6. Orchestrator shows the stakeholder the plan, the timeline and the design, and waits for approval before any build.
 
