@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEN-BEN · Direction C · Grand Salon (stage + catalogue)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&family=Jost:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: {
+    navy: { 950:'#0B1426', 900:'#13203A', 800:'#1C2C4C', 700:'#2A3B5E' },
+    char: '#1F2328',
+    gold: { 200:'#EADBB4', 300:'#E2C98A', 400:'#C9A961', 700:'#7A5F22' },
+    ivory:{ 50:'#FCFAF5', 100:'#F7F2E7', 200:'#EDE5D3', 300:'#DDD3BE' },
+    muted:{ dark:'#9BA7BD', light:'#5B6475' },
+    live: { DEFAULT:'#D7263D', ondark:'#FF6B6B', onlight:'#B8202F' },
+    ok:   { dark:'#3DD68C', light:'#13795B' },
+    warn: { dark:'#FFB547', light:'#8F5300' }
+  },
+  fontFamily: { ar:['"Noto Kufi Arabic"','Jost','sans-serif'], lat:['Jost','"Noto Kufi Arabic"','sans-serif'], brand:['Outfit','sans-serif'] }
+}}}
+</script>
+<style>
+  body{font-family:"Noto Kufi Arabic",Jost,sans-serif;background:#1F2328;color:#F7F2E7}
+  [lang=en]{font-family:Jost,"Noto Kufi Arabic",sans-serif}
+  .num{font-family:Jost,"Noto Kufi Arabic",sans-serif;font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1}
+  .phone{width:375px;height:812px;border-radius:40px;border:10px solid #000;box-shadow:0 30px 60px rgba(0,0,0,.5);overflow:hidden;position:relative;background:#FCFAF5;color:#0B1426;flex:none}
+  .scroll{height:100%;overflow-y:auto;scrollbar-width:none}
+  .scroll::-webkit-scrollbar{display:none}
+  .mini{width:200px;height:300px;border-radius:22px;border:6px solid #000;overflow:hidden;position:relative;background:#FCFAF5;color:#0B1426;flex:none;font-size:11px}
+  :focus-visible{outline:2px solid #E2C98A;outline-offset:2px}
+  .on-light :focus-visible,.on-light .demo-focus{outline:2px solid #0B1426;outline-offset:3px}
+  .demo-focus{outline:2px solid #E2C98A;outline-offset:3px}
+  /* Benben slope: one corner cut at the pyramid angle (~52deg), start-top corner */
+  .slope{clip-path:polygon(0 0,calc(100% - 22px) 0,100% 28px,100% 100%,0 100%)}
+  [dir=rtl] .slope{clip-path:polygon(22px 0,100% 0,100% 100%,0 100%,0 28px)}
+  .ph{background-color:#3a4a66;background-repeat:no-repeat;background-size:cover;background-position:center bottom}
+  .ph-tower{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMax slice'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f2c58f'/%3E%3Cstop offset='1' stop-color='%23f7e6c8'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='16' height='20' patternUnits='userSpaceOnUse'%3E%3Crect x='3' y='4' width='10' height='12' fill='%237d8ba3'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='260' fill='url(%23s)'/%3E%3Crect x='30' y='100' width='120' height='160' fill='%23e8dcc6'/%3E%3Crect x='30' y='100' width='120' height='160' fill='url(%23w)'/%3E%3Crect x='165' y='45' width='110' height='215' fill='%23efe5d2'/%3E%3Crect x='165' y='45' width='110' height='215' fill='url(%23w)'/%3E%3Crect x='290' y='130' width='90' height='130' fill='%23dccfb6'/%3E%3Crect x='290' y='130' width='90' height='130' fill='url(%23w)'/%3E%3Crect y='240' width='400' height='20' fill='%237e8f5f'/%3E%3C/svg%3E")}
+  .ph-villa{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMax slice'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23a9c6dc'/%3E%3Cstop offset='1' stop-color='%23eef2ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='260' fill='url(%23s)'/%3E%3Crect x='70' y='110' width='260' height='120' fill='%23f3ece0'/%3E%3Crect x='150' y='70' width='150' height='50' fill='%23ece2d1'/%3E%3Crect x='95' y='140' width='50' height='60' fill='%2384a0b8'/%3E%3Crect x='175' y='140' width='50' height='90' fill='%23536b84'/%3E%3Crect x='255' y='140' width='50' height='60' fill='%2384a0b8'/%3E%3Crect y='228' width='400' height='32' fill='%236d8b4e'/%3E%3Ccircle cx='40' cy='200' r='34' fill='%23557a3c'/%3E%3Ccircle cx='365' cy='205' r='28' fill='%23557a3c'/%3E%3C/svg%3E")}
+  .ph-town{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMax slice'%3E%3Crect width='400' height='260' fill='%23cddbe4'/%3E%3Cg fill='%23efe6d6'%3E%3Crect x='20' y='100' width='110' height='140'/%3E%3Crect x='145' y='100' width='110' height='140'/%3E%3Crect x='270' y='100' width='110' height='140'/%3E%3C/g%3E%3Cg fill='%237890a8'%3E%3Crect x='40' y='125' width='30' height='35'/%3E%3Crect x='80' y='125' width='30' height='35'/%3E%3Crect x='165' y='125' width='30' height='35'/%3E%3Crect x='205' y='125' width='30' height='35'/%3E%3Crect x='290' y='125' width='30' height='35'/%3E%3Crect x='330' y='125' width='30' height='35'/%3E%3Crect x='60' y='180' width='30' height='60'/%3E%3Crect x='185' y='180' width='30' height='60'/%3E%3Crect x='310' y='180' width='30' height='60'/%3E%3C/g%3E%3Crect y='238' width='400' height='22' fill='%23768f58'/%3E%3C/svg%3E")}
+  /* Cinematic duotone: navy shadows, gold highlights (applied on dark stage only) */
+  .duo{position:relative}
+  .duo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(201,169,97,.28),rgba(11,20,38,.15) 40%,rgba(11,20,38,.95));mix-blend-mode:normal}
+  .duo>*{position:relative;z-index:1}
+  /* LIVE language: the gold ring sweep and the auctioneer's call */
+  @keyframes sweep{to{stroke-dashoffset:0}}
+  .ring{transform:rotate(-90deg);transform-origin:center}
+  [dir=rtl] .ring{transform:rotate(-90deg) scaleY(-1)}
+  @keyframes breathe{50%{opacity:.55}}
+  .breathe{animation:breathe 2.4s ease-in-out infinite}
+  @media (prefers-reduced-motion: reduce){.breathe{animation:none}}
+  .skel{background:#EDE5D3}
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="max-w-[1500px] mx-auto px-8 pt-10 pb-6">
+  <div class="flex items-center gap-3 mb-6" data-component="BrandPlaceholder">
+    <svg width="22" height="20" viewBox="0 0 22 20" aria-hidden="true"><path d="M11 0 22 20H0Z" fill="#C9A961"/></svg>
+    <span class="font-brand font-semibold tracking-[.18em] text-lg">BEN-BEN</span>
+    <span class="text-muted-dark text-sm" lang="ar">مزاد عقارات</span>
+    <span class="ms-3 text-[11px] uppercase tracking-widest text-muted-dark border border-navy-700 rounded px-2 py-0.5">placeholder mark, real logo from brand designer</span>
+  </div>
+  <p class="text-gold-400 font-semibold tracking-widest uppercase text-xs">Direction C</p>
+  <h1 class="text-4xl font-semibold mt-1 font-lat">Grand Salon <span class="text-muted-dark font-medium text-2xl font-ar" lang="ar" dir="rtl">· الصالون الكبير</span></h1>
+  <p class="mt-3 max-w-3xl text-muted-dark leading-relaxed">An international auction house evening, set in Cairo. <b class="text-ivory-100">Hybrid</b>: live surfaces are a dark navy <b class="text-ivory-100">stage</b> with cinematic duotone photography; everything you read is an ivory <b class="text-ivory-100">catalogue</b> (lot numbers, editorial spacing, low density, one lot per view). Geometric Kufi + Jost echo the brand's geometry, and a 52° "Benben slope" corner is the only heritage cue. Energy is <b class="text-ivory-100">ceremonial</b>: a gold ring sweeps the time, and in the final minute the auctioneer's call appears ("مرة · مرتين · بيع").</p>
+  <div class="mt-5 grid sm:grid-cols-3 gap-3 max-w-4xl text-sm">
+    <div class="bg-navy-900 rounded-lg p-3"><b class="text-gold-300">Energy lives</b><br><span class="text-muted-dark">Navy stage, gold ring, the call, lot reveals, "Sold for" moments</span></div>
+    <div class="bg-navy-900 rounded-lg p-3"><b class="text-gold-300">Calms down</b><br><span class="text-muted-dark">Ivory catalogue pages and the "bidder registration card" (AU-04)</span></div>
+    <div class="bg-navy-900 rounded-lg p-3"><b class="text-gold-300">Loudness</b><br><span class="text-muted-dark">Countdown 4/5 · bid 3/5 · extension 4/5</span></div>
+  </div>
+</header>
+
+<section class="max-w-[1500px] mx-auto px-8 py-6 grid lg:grid-cols-2 gap-8">
+  <div>
+    <h2 class="text-xl font-semibold mb-4">Palette in use (fixed brand palette, stage + catalogue)</h2>
+    <div class="flex h-14 rounded-lg overflow-hidden" aria-hidden="true">
+      <div class="bg-navy-950" style="flex:35"></div><div class="bg-ivory-50" style="flex:40"></div><div class="bg-ivory-100" style="flex:10"></div><div class="bg-gold-400" style="flex:9"></div><div class="bg-live" style="flex:3"></div><div class="bg-char" style="flex:3"></div>
+    </div>
+    <p class="text-xs text-muted-dark mt-2">Approx. share: navy stage 35% · ivory catalogue 50% · gold 9% (ring, lot numbers, CTA on stage) · LIVE red 3% (badge only) · charcoal for photo frames.</p>
+    <div class="grid grid-cols-4 gap-2 mt-4 text-[11px]">
+      <div><div class="h-12 rounded bg-navy-950"></div><b>Navy 950</b><br>stage</div>
+      <div><div class="h-12 rounded bg-ivory-50"></div><b>Ivory 50</b><br>catalogue page</div>
+      <div><div class="h-12 rounded bg-gold-400"></div><b>Gold 400</b><br>ring, CTA on stage</div>
+      <div><div class="h-12 rounded bg-gold-700"></div><b>Gold 700</b><br>lot numbers on ivory 5.8:1</div>
+      <div><div class="h-12 rounded bg-char"></div><b>Charcoal</b><br>#1F2328 · frames</div>
+      <div><div class="h-12 rounded bg-live"></div><b>LIVE</b><br>badge only</div>
+      <div><div class="h-12 rounded bg-ok-light"></div><b>Success</b><br>#13795B</div>
+      <div><div class="h-12 rounded bg-warn-dark"></div><b>Warning</b><br>stage #FFB547 · page #8F5300</div>
+    </div>
+  </div>
+  <div>
+    <h2 class="text-xl font-semibold mb-4">Type pairing: Noto Kufi Arabic + Jost</h2>
+    <div class="bg-ivory-50 text-navy-950 rounded-xl p-5 space-y-3" dir="rtl" lang="ar">
+      <p class="font-lat text-gold-700 tracking-[.3em] text-xs" dir="ltr">LOT 07</p>
+      <p class="text-[28px] font-bold leading-snug">شقة بحديقة في ريحانة هايتس</p>
+      <div class="flex items-end gap-6 flex-wrap">
+        <div><p class="text-muted-light text-xs">المزايدة الحالية · لاتيني (افتراضي)</p><p class="num text-[44px] font-medium" dir="ltr">8,450,000</p></div>
+        <div><p class="text-muted-light text-xs">أرقام هندية</p><p class="text-[40px] font-medium">٨٬٤٥٠٬٠٠٠</p></div>
+      </div>
+      <p class="text-[15px] leading-8">كوفي هندسي حديث بنِسب قريبة من شعار BEN-BEN، مقروء في الأحجام الصغيرة. Jost للأرقام والإنجليزي.</p>
+      <p class="text-sm text-muted-light" dir="ltr" lang="en">Noto Kufi Arabic 400–800 · Jost 400–600 with tabular figures. Display sizes are generous; body stays at 15–16 px with 1.8 line height for Kufi.</p>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-[1500px] mx-auto px-8 py-8">
+  <h2 class="text-xl font-semibold mb-1">Key screens at 375px · Arabic RTL</h2>
+  <p class="text-muted-dark text-sm mb-6">Scroll inside each phone. Latin digits default (Q-48). Synthetic compound names (Q-75).</p>
+  <div class="flex gap-8 overflow-x-auto pb-6">
+
+<!-- AU-01 -->
+<figure class="flex-none">
+<figcaption class="text-sm mb-2 text-muted-dark"><b class="text-ivory-100">AU-01</b> Auctions Home</figcaption>
+<div class="phone" dir="rtl" lang="ar" data-component="AuctionsHomePage">
+ <div class="scroll pb-24">
+  <!-- stage -->
+  <section class="bg-navy-950 text-ivory-100" data-component="LiveHeroCarousel" aria-label="على المنصة الآن">
+   <div class="flex items-center justify-between px-4 h-14 absolute inset-x-0 top-0 z-10" data-component="AppTopBar">
+    <div class="flex items-center gap-1.5"><svg width="15" height="13" viewBox="0 0 22 20" aria-hidden="true"><path d="M11 0 22 20H0Z" fill="#C9A961"/></svg><span class="font-brand font-semibold tracking-[.16em] text-[15px]" dir="ltr">BEN-BEN</span></div>
+    <button class="w-11 h-11 grid place-items-center" aria-label="الإشعارات"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 8a5 5 0 0 1 10 0v4l2 3H3l2-3Z"/></svg></button>
+   </div>
+   <article class="ph ph-town duo h-[440px] flex flex-col justify-end p-5" data-component="LiveHeroCard">
+    <div>
+     <div class="flex items-center gap-2 text-[12px]"><span class="bg-live text-white px-2 py-0.5 rounded-sm font-semibold">مباشر</span><span class="font-lat tracking-[.3em] text-gold-300" dir="ltr">LOT 03</span><span class="text-muted-dark">· 1 من 3</span></div>
+     <h2 class="text-[24px] font-bold leading-snug mt-2">تاون هاوس بحديقة<br>في زايد دونز</h2>
+     <p class="text-[12px] text-ivory-200/80">الشيخ زايد · 265 م² · 4 غرف · استلام فوري</p>
+     <div class="flex items-center gap-4 mt-4">
+      <div class="relative w-[84px] h-[84px] flex-none" role="timer" aria-label="متبقي 5 ساعات و12 دقيقة" data-component="CountdownRing">
+       <svg viewBox="0 0 84 84" class="w-full h-full ring"><circle cx="42" cy="42" r="38" fill="none" stroke="#2A3B5E" stroke-width="4"/><circle cx="42" cy="42" r="38" fill="none" stroke="#C9A961" stroke-width="4" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="186"/></svg>
+       <div class="absolute inset-0 grid place-items-center text-center"><div><p class="num text-[18px] font-medium leading-none" dir="ltr">05:12</p><p class="text-[9px] text-muted-dark mt-0.5">ساعة:دقيقة</p></div></div>
+      </div>
+      <div><p class="text-[11px] text-muted-dark">المزايدة الحالية</p><p class="num text-[30px] font-medium leading-none" dir="ltr">18,600,000</p><p class="text-[12px] text-muted-dark mt-1">ج.م · <span class="num text-ivory-100">14</span> مزايد موثّق</p></div>
+     </div>
+     <button class="mt-4 w-full h-12 border border-gold-400 text-gold-300 font-semibold slope">ادخل القاعة</button>
+    </div>
+   </article>
+   <div class="flex gap-2 px-4 py-3 overflow-x-auto text-[13px]" role="tablist" data-component="AreaFilterChips">
+    <button role="tab" aria-selected="true" class="px-3 h-9 bg-gold-400 text-navy-950 font-semibold flex-none">الكل</button>
+    <button role="tab" aria-selected="false" class="px-3 h-9 border border-navy-700 flex-none">التجمع الخامس</button>
+    <button role="tab" aria-selected="false" class="px-3 h-9 border border-navy-700 flex-none">الشيخ زايد</button>
+   </div>
+  </section>
+
+  <!-- catalogue -->
+  <section class="px-5 pt-6" data-component="EndingSoonRail">
+   <p class="font-lat text-gold-700 tracking-[.3em] text-[11px]" dir="ltr">CLOSING TONIGHT</p>
+   <h2 class="text-[20px] font-bold">ينتهي خلال ساعة</h2>
+   <ol class="mt-3 divide-y divide-ivory-200">
+    <li class="py-3 flex gap-3 items-center" data-component="AuctionCard">
+     <span class="font-lat text-[26px] text-gold-700 w-9 text-center" dir="ltr">11</span>
+     <div class="flex-1 min-w-0"><p class="font-semibold text-[14px] truncate">استوديو · النخيل ريزيدنس</p><p class="num text-[16px]" dir="ltr">2,975,000 <span class="font-ar text-[12px] text-muted-light">ج.م</span></p></div>
+     <div class="text-center"><p class="text-[10px] text-live-onlight font-bold">الدقائق الأخيرة</p><p class="num text-[19px] font-semibold text-live-onlight" dir="ltr">04:51</p></div>
+    </li>
+    <li class="py-3 flex gap-3 items-center" data-component="AuctionCard">
+     <span class="font-lat text-[26px] text-gold-700 w-9 text-center" dir="ltr">07</span>
+     <div class="flex-1 min-w-0"><p class="font-semibold text-[14px] truncate">شقة 3 غرف · ريحانة هايتس</p><p class="num text-[16px]" dir="ltr">8,450,000 <span class="font-ar text-[12px] text-muted-light">ج.م</span></p></div>
+     <div class="text-center"><p class="text-[10px] text-warn-light font-bold">ينتهي قريبًا</p><p class="num text-[19px] font-semibold text-warn-light" dir="ltr">42:18</p></div>
+    </li>
+    <li class="py-3 flex gap-3 items-center" data-component="AuctionCard">
+     <span class="font-lat text-[26px] text-gold-700 w-9 text-center" dir="ltr">09</span>
+     <div class="flex-1 min-w-0"><p class="font-semibold text-[14px] truncate">دوبلكس · ويست أوركيد</p><p class="num text-[16px]" dir="ltr">6,700,000 <span class="font-ar text-[12px] text-muted-light">ج.م</span></p></div>
+     <div class="text-center"><p class="text-[10px] text-warn-light font-bold">ينتهي قريبًا</p><p class="num text-[19px] font-semibold text-warn-light" dir="ltr">27:05</p></div>
+    </li>
+   </ol>
+  </section>
+
+  <section class="px-5 pt-6" data-component="StartingSoonRail">
+   <p class="font-lat text-gold-700 tracking-[.3em] text-[11px]" dir="ltr">UPCOMING</p>
+   <h2 class="text-[20px] font-bold mb-3">يبدأ قريبًا</h2>
+   <article class="bg-white border border-ivory-200 slope overflow-hidden" data-component="StartingSoonCard">
+    <div class="h-[150px] ph ph-villa"></div>
+    <div class="p-4 flex gap-4">
+     <div class="text-center border-e border-ivory-200 pe-4"><p class="text-[11px] text-muted-light">الخميس</p><p class="num text-[30px] font-medium leading-none">5</p><p class="text-[11px] text-muted-light">نوفمبر · 6 م</p></div>
+     <div class="flex-1"><p class="font-semibold text-[14px]">فيلا مستقلة · زايد دونز</p><p class="text-[12px] text-muted-light">480 م² · يبدأ من <b class="num text-navy-950">31,000,000</b></p>
+      <button class="mt-2 h-11 px-4 border border-navy-950 text-[13px] font-semibold flex items-center gap-1" aria-pressed="false" data-component="RemindMeButton"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7a4 4 0 0 1 8 0v3l1.5 2.5h-11L4 10Z"/></svg>ذكّرني</button></div>
+    </div>
+   </article>
+   <p class="text-[12px] text-muted-light mt-2">+ <span class="num">4</span> مزادات أخرى هذا الأسبوع · <a href="#" class="underline">برنامج الأسبوع</a></p>
+  </section>
+
+  <section class="px-5 pt-6" data-component="AuctionCalendarStrip">
+   <div class="flex gap-2 overflow-x-auto text-center text-[11px]">
+    <div class="min-w-[56px] bg-navy-950 text-ivory-100 py-2">اليوم<br><span class="num text-[18px]">2</span><br><span class="text-gold-300"><span class="num">3</span> مزادات</span></div>
+    <div class="min-w-[56px] border border-ivory-200 py-2">ثلاثاء<br><span class="num text-[18px]">3</span><br><span class="num">2</span></div>
+    <div class="min-w-[56px] border border-ivory-200 py-2">أربعاء<br><span class="num text-[18px]">4</span><br><span class="num">1</span></div>
+    <div class="min-w-[56px] border border-ivory-200 py-2">خميس<br><span class="num text-[18px]">5</span><br><span class="num">4</span></div>
+    <div class="min-w-[56px] border border-ivory-200 py-2 text-muted-light">جمعة<br><span class="num text-[18px]">6</span><br>–</div>
+   </div>
+  </section>
+
+  <section class="px-5 pt-6" data-component="JustSoldRail">
+   <p class="font-lat text-gold-700 tracking-[.3em] text-[11px]" dir="ltr">RESULTS</p>
+   <h2 class="text-[20px] font-bold mb-2">نتائج المزادات</h2>
+   <article class="border-t-2 border-navy-950 pt-3 pb-3" data-component="JustSoldCard">
+    <p class="text-[12px] text-muted-light"><span class="font-lat text-gold-700" dir="ltr">LOT 02</span> · شقة 3 غرف · النخيل ريزيدنس</p>
+    <p class="text-[13px] mt-1">بيعت بـ</p>
+    <p class="num text-[30px] font-medium leading-none" dir="ltr">7,850,000</p>
+    <p class="text-[12px] text-ok-light font-semibold mt-1"><span class="num" dir="ltr">+13.8%</span> فوق سعر البداية <span class="num">6,900,000</span></p>
+   </article>
+   <article class="border-t border-ivory-200 pt-3" data-component="JustSoldCard">
+    <p class="text-[12px] text-muted-light"><span class="font-lat text-gold-700" dir="ltr">LOT 05</span> · توين هاوس · ويست أوركيد</p>
+    <p class="num text-[22px] font-medium" dir="ltr">17,200,000</p>
+    <p class="text-[12px] text-ok-light font-semibold"><span class="num" dir="ltr">+11.0%</span> فوق سعر البداية</p>
+   </article>
+  </section>
+ </div>
+ <nav class="absolute bottom-0 inset-x-0 h-[72px] bg-ivory-50 border-t border-ivory-200 grid grid-cols-5 text-[10px] text-muted-light" data-component="BottomNav" aria-label="التنقل الرئيسي">
+  <a href="#" class="grid place-items-center content-center gap-1"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="4"/><path d="M2 19a8 8 0 0 1 16 0"/></svg>حسابي</a>
+  <a href="#" class="grid place-items-center content-center gap-1"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h14v14H3z"/></svg>طلبات</a>
+  <a href="#" aria-current="page" class="grid place-items-center content-center gap-1 text-navy-950 font-semibold"><svg width="22" height="20" viewBox="0 0 22 20"><path d="M11 0 22 20H0Z" fill="#0B1426"/><path d="M11 6 16 16H6Z" fill="#C9A961"/></svg>المزادات<span class="w-6 h-0.5 bg-gold-400"></span></a>
+  <a href="#" class="grid place-items-center content-center gap-1"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 9 10 3l8 6v9H2z"/></svg>إيجار</a>
+  <a href="#" class="grid place-items-center content-center gap-1"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/></svg>استكشف</a>
+ </nav>
+</div>
+</figure>
+
+<!-- AU-02 -->
+<figure class="flex-none">
+<figcaption class="text-sm mb-2 text-muted-dark"><b class="text-ivory-100">AU-02</b> Auction Detail · LIVE · guest (final minute shown)</figcaption>
+<div class="phone" dir="rtl" lang="ar" data-component="AuctionDetailPage">
+ <div class="scroll pb-32">
+  <!-- sticky stage header -->
+  <header class="sticky top-0 z-20 bg-navy-950 text-ivory-100" data-component="AuctionStickyHeader">
+   <div class="flex items-center h-11 px-2">
+    <button class="w-11 h-11 grid place-items-center" aria-label="رجوع"><svg class="rtl:-scale-x-100" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 4-6 6 6 6"/></svg></button>
+    <span class="font-lat tracking-[.3em] text-gold-300 text-[12px]" dir="ltr">LOT 07</span>
+    <span class="bg-live text-white px-1.5 py-0.5 rounded-sm text-[11px] font-semibold ms-2">مباشر</span>
+    <span class="flex-1"></span>
+    <span class="text-[11px] text-muted-dark"><span class="num text-ivory-100">1.2K</span> في القاعة</span>
+   </div>
+   <div class="flex items-center gap-4 px-4 pb-3" aria-live="polite">
+    <div class="relative w-[72px] h-[72px] flex-none" role="timer" aria-label="متبقي 48 ثانية، تم التمديد مرتين" data-component="CountdownRing">
+     <svg viewBox="0 0 84 84" class="w-full h-full ring"><circle cx="42" cy="42" r="38" fill="none" stroke="#2A3B5E" stroke-width="5"/><circle cx="42" cy="42" r="38" fill="none" stroke="#FF6B6B" stroke-width="5" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="225"/></svg>
+     <div class="absolute inset-0 grid place-items-center"><p class="num text-[20px] font-semibold text-live-ondark" dir="ltr">00:48</p></div>
+    </div>
+    <div class="flex-1">
+     <p class="text-[11px] text-muted-dark">المزايدة الحالية · <bdi dir="ltr">Bidder #7</bdi></p>
+     <p class="num text-[30px] font-medium leading-none" dir="ltr">8,950,000</p>
+     <p class="text-[11px] text-muted-dark mt-1"><span class="num text-ivory-100">9</span> مزايد موثّق · تمديد <span class="num text-ivory-100">2</span></p>
+    </div>
+   </div>
+   <!-- the auctioneer's call: final minutes -->
+   <ol class="grid grid-cols-3 text-center text-[12px] border-t border-navy-800" aria-label="نداء المزاد" data-component="AuctioneerCall">
+    <li class="py-1.5 text-live-ondark font-bold border-b-2 border-live-ondark breathe">مرة</li>
+    <li class="py-1.5 text-muted-dark">مرتين</li>
+    <li class="py-1.5 text-muted-dark">بيع</li>
+   </ol>
+   <p class="text-[11px] text-center text-muted-dark pb-1.5 bg-navy-900">أي مزايدة في آخر 60 ثانية تمدد المزاد 3 دقائق</p>
+  </header>
+
+  <div class="h-[250px] ph ph-tower duo" data-component="MediaGallery" role="img" aria-label="واجهة العمارة، صورة 1 من 14"><span class="absolute bottom-3 start-4 text-[12px] text-ivory-100 z-10"><span class="num">1 / 14</span> · فيديو · 360°</span></div>
+
+  <section class="px-5 pt-5" data-component="KeySpecs">
+   <h1 class="text-[22px] font-bold leading-snug">شقة 3 غرف بحديقة خاصة</h1>
+   <p class="text-[13px] text-muted-light">ريحانة هايتس · التجمع الخامس</p>
+   <p class="text-[12px] text-ok-light font-semibold mt-1">✓ الملكية والمستندات اتراجعت</p>
+   <dl class="grid grid-cols-2 gap-x-6 gap-y-3 mt-4 text-[13px] border-t border-ivory-200 pt-4">
+    <div><dt class="text-muted-light text-[11px]">المساحة</dt><dd class="num text-[18px]">165 م² <span class="font-ar text-[12px] text-muted-light">+ حديقة 60</span></dd></div>
+    <div><dt class="text-muted-light text-[11px]">الغرف · الحمامات</dt><dd class="num text-[18px]">3 · 2</dd></div>
+    <div><dt class="text-muted-light text-[11px]">التشطيب</dt><dd>متشطبة بالكامل</dd></div>
+    <div><dt class="text-muted-light text-[11px]">الاستلام</dt><dd>فوري · الدور الأرضي</dd></div>
+    <div><dt class="text-muted-light text-[11px]">سعر البداية</dt><dd class="num text-[16px]">7,800,000</dd></div>
+    <div><dt class="text-muted-light text-[11px]">أقل زيادة</dt><dd class="num text-[16px]">50,000</dd></div>
+   </dl>
+   <a href="#" class="mt-4 flex items-center justify-between border-y border-ivory-200 h-12 text-[13px] font-semibold" data-component="ConditionReportLink">تقرير المعاينة · PDF<svg class="rtl:-scale-x-100" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 3 5 5-5 5"/></svg></a>
+  </section>
+
+  <section class="px-5 pt-5" data-component="PaymentTerms">
+   <h2 class="text-[16px] font-bold mb-2">شروط الدفع</h2>
+   <p class="text-[13px] leading-7">مقدم <b>20%</b> خلال 48 ساعة من الفوز (<span class="num">≈ 1,790,000</span> ج.م)، والباقي على <b>12</b> قسط ربع سنوي (<span class="num">≈ 596,700</span> ج.م للقسط). عمولة المشتري <b>2.5%</b> (<span class="num">≈ 223,750</span>).</p>
+  </section>
+
+  <section class="px-5 pt-5" data-component="BidHistory">
+   <h2 class="text-[16px] font-bold mb-2">سجل المزايدات</h2>
+   <ol class="text-[13px]">
+    <li class="flex justify-between py-2 border-b border-ivory-200"><span><bdi dir="ltr" class="font-semibold">Bidder #7</bdi></span><span class="num font-semibold">8,950,000</span><span class="num text-muted-light">15:58:18</span></li>
+    <li class="flex justify-between py-2 border-b border-ivory-200"><bdi dir="ltr">Bidder #3</bdi><span class="num">8,900,000</span><span class="num text-muted-light">15:57:41</span></li>
+    <li class="flex justify-between py-2 border-b border-ivory-200 text-muted-light"><span>تمديد +3:00</span><span></span><span class="num">15:57:41</span></li>
+    <li class="flex justify-between py-2 border-b border-ivory-200"><bdi dir="ltr">Bidder #7</bdi><span class="num">8,850,000</span><span class="num text-muted-light">15:54:02</span></li>
+   </ol>
+  </section>
+
+  <section class="px-5 pt-5" data-component="ChatPreview">
+   <h2 class="text-[16px] font-bold mb-2">من القاعة</h2>
+   <div class="space-y-2 text-[13px]">
+    <p class="border-s-2 border-gold-400 ps-3"><b>مضيف BEN-BEN</b> · آخر دقيقتين. تذكير: أقل زيادة <span class="num">50,000</span>.</p>
+    <p class="ps-3"><b><bdi dir="ltr">Bidder #3</bdi></b> · الجراج مسجّل في العقد؟</p>
+    <p class="ps-3"><b class="text-gold-700">وكيل البائع</b> · أيوه، مكان واحد.</p>
+   </div>
+  </section>
+ </div>
+ <div class="absolute bottom-0 inset-x-0 bg-navy-950 text-ivory-100 px-4 pt-3 pb-4" data-component="JoinToBidBar">
+  <div class="flex justify-between text-[12px] mb-2"><span class="text-muted-dark">أقل مزايدة تالية <b class="num text-ivory-100 text-[14px]">9,000,000</b></span><a href="#" class="text-gold-300 underline">كيف يعمل المزاد؟</a></div>
+  <button class="w-full h-14 bg-gold-400 text-navy-950 font-bold text-[16px] slope demo-focus">سجّل للمزايدة</button>
+  <p class="text-center text-[11px] text-muted-dark mt-1">بمبلغ جدية <span class="num">5,000</span> ج.م يُسترد إذا لم تفز</p>
+ </div>
+</div>
+</figure>
+
+<!-- AU-04 -->
+<figure class="flex-none">
+<figcaption class="text-sm mb-2 text-muted-dark"><b class="text-ivory-100">AU-04</b> Join to Bid: bidder registration card (opened earlier, 42 min left)</figcaption>
+<div class="phone on-light" dir="rtl" lang="ar" data-component="JoinToBidSheet">
+ <div class="absolute inset-0 bg-navy-950"></div>
+ <div class="absolute inset-x-0 bottom-0 top-6 bg-ivory-50 rounded-t-2xl flex flex-col" role="dialog" aria-modal="true" aria-labelledby="c4t">
+  <div class="flex items-center justify-between px-5 pt-3">
+   <div><p class="font-lat tracking-[.3em] text-gold-700 text-[11px]" dir="ltr">BIDDER REGISTRATION · LOT 07</p><h2 id="c4t" class="text-[20px] font-bold">بطاقة المزايدة</h2></div>
+   <button class="w-11 h-11 grid place-items-center" aria-label="إغلاق"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 4 10 10M14 4 4 14"/></svg></button>
+  </div>
+  <div class="flex-1 overflow-y-auto scroll px-5 pb-3" style="height:auto">
+   <div class="mt-2 flex items-center gap-3 text-[12px] border-y border-ivory-200 py-2" data-component="AuctionContextRow">
+    <span class="flex-1">شقة 3 غرف · ريحانة هايتس</span>
+    <span>الحالية <b class="num text-[14px]">8,450,000</b></span>
+    <span class="text-warn-light font-semibold">متبقي <b class="num text-[14px]" dir="ltr">42:18</b></span>
+   </div>
+
+   <div class="mt-4 bg-white border border-ivory-200 slope p-4" data-component="DepositExplainer">
+    <p class="text-[12px] text-muted-light">مبلغ الجدية</p>
+    <p class="num text-[40px] font-medium leading-tight">5,000 <span class="font-ar text-[16px]">ج.م</span></p>
+    <p class="text-[13px] leading-7">يُحجز لهذا المزاد فقط، ويبقى باسمك. هو ضمان جدّية، وليس رسومًا.</p>
+   </div>
+
+   <ol class="mt-4 space-y-3 text-[13px] leading-7" data-component="DepositOutcomes">
+    <li class="flex gap-3"><span class="num text-gold-700 text-[18px] w-5">1</span><span><b>لم تفز؟</b> يعود لرصيدك فور انتهاء المزاد.</span></li>
+    <li class="flex gap-3"><span class="num text-gold-700 text-[18px] w-5">2</span><span><b>الثاني أو الثالث؟</b> يبقى محجوزًا حتى يكتمل البيع، ثم يعود إليك.</span></li>
+    <li class="flex gap-3"><span class="num text-gold-700 text-[18px] w-5">3</span><span><b>فزت؟</b> يُخصم من عمولة المشتري 2.5%، ولديك 48 ساعة لإتمام الشراء.</span></li>
+    <li class="flex gap-3"><span class="num text-live-onlight text-[18px] w-5">4</span><span><b>فزت ولم تُكمل خلال 48 ساعة؟</b> يُصادر المبلغ.</span></li>
+   </ol>
+
+   <div class="mt-4 border-t border-ivory-200 pt-3 text-[13px]" data-component="WinCostPreview">
+    <p class="font-semibold">لو فزت بـ <span class="num">8,500,000</span> ج.م</p>
+    <dl class="grid grid-cols-[1fr_auto] gap-y-1 mt-1"><dt class="text-muted-light">عمولة المشتري 2.5%</dt><dd class="num">212,500</dd><dt class="font-semibold">الإجمالي التقديري</dt><dd class="num font-semibold">8,712,500</dd><dt class="text-muted-light">مستحق خلال 48 ساعة</dt><dd class="num text-muted-light">1,700,000 + العمولة</dd></dl>
+   </div>
+
+   <fieldset class="mt-4 border-t border-ivory-200 pt-3" data-component="PaymentMethodPicker">
+    <legend class="text-[14px] font-bold">من أين يُحجز المبلغ؟</legend>
+    <label class="mt-2 flex items-center gap-3 bg-white border-2 border-navy-950 px-3 py-2.5 text-[13px]"><input type="radio" name="cm" checked class="w-5 h-5 accent-[#0B1426]"><span class="flex-1"><b>رصيد المحفظة</b><br><span class="text-muted-light">المتاح <span class="num">12,000</span> · بعد الحجز <span class="num">7,000</span> ج.م</span></span></label>
+    <label class="mt-1.5 flex items-center gap-3 bg-white border border-ivory-200 px-3 h-12 text-[13px]"><input type="radio" name="cm" class="w-5 h-5"><span>كارت بنكي أو ميزة</span></label>
+    <label class="mt-1.5 flex items-center gap-3 bg-white border border-ivory-200 px-3 h-12 text-[13px]"><input type="radio" name="cm" class="w-5 h-5"><span>محفظة موبايل</span></label>
+    <p class="text-[11px] text-muted-light mt-1">فوري متاح قريبًا.</p>
+   </fieldset>
+
+   <label class="mt-4 flex gap-3 items-start text-[13px] leading-7 border-t border-ivory-200 pt-3" data-component="TermsCheckbox">
+    <input type="checkbox" checked class="w-6 h-6 mt-1 flex-none accent-[#0B1426] demo-focus">
+    <span>أوافق على <a href="#" class="underline font-semibold">شروط المزاد</a> (إصدار <bdi dir="ltr">v0</bdi>): مبلغ الجدية، مهلة 48 ساعة، المصادرة عند عدم الإتمام، وعمولة المشتري 2.5%.</span>
+   </label>
+  </div>
+  <div class="px-5 pt-3 pb-5 border-t border-ivory-200">
+   <button class="w-full h-14 bg-navy-950 text-gold-300 font-bold text-[16px] slope" data-component="LockDepositButton">احجز <span class="num">5,000</span> ج.م واستلم رقمك</button>
+   <p class="text-center text-[11px] text-muted-light mt-1.5">لن يُخصم شيء قبل الضغط. ستحصل على رقم مزايد وإيصال.</p>
+  </div>
+ </div>
+</div>
+</figure>
+
+<!-- English AU-01 -->
+<figure class="flex-none">
+<figcaption class="text-sm mb-2 text-muted-dark"><b class="text-ivory-100">AU-01 · English (LTR)</b></figcaption>
+<div class="phone" dir="ltr" lang="en" data-component="AuctionsHomePage">
+ <div class="scroll pb-24">
+  <section class="bg-navy-950 text-ivory-100">
+   <div class="flex items-center justify-between px-4 h-14 absolute inset-x-0 top-0 z-10"><div class="flex items-center gap-1.5"><svg width="15" height="13" viewBox="0 0 22 20" aria-hidden="true"><path d="M11 0 22 20H0Z" fill="#C9A961"/></svg><span class="font-brand font-semibold tracking-[.16em] text-[15px]">BEN-BEN</span></div></div>
+   <article class="ph ph-town duo h-[440px] flex flex-col justify-end p-5">
+    <div>
+     <div class="flex items-center gap-2 text-[12px]"><span class="bg-live text-white px-2 py-0.5 rounded-sm font-semibold">LIVE</span><span class="tracking-[.3em] text-gold-300">LOT 03</span><span class="text-muted-dark">· 1 of 3</span></div>
+     <h2 class="text-[26px] font-medium leading-tight mt-2">Garden townhouse<br>at Zayed Dunes</h2>
+     <p class="text-[12px] text-ivory-200/80">Sheikh Zayed · 265 m² · 4 beds · Ready to move</p>
+     <div class="flex items-center gap-4 mt-4">
+      <div class="relative w-[84px] h-[84px] flex-none"><svg viewBox="0 0 84 84" class="w-full h-full ring"><circle cx="42" cy="42" r="38" fill="none" stroke="#2A3B5E" stroke-width="4"/><circle cx="42" cy="42" r="38" fill="none" stroke="#C9A961" stroke-width="4" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="186"/></svg><div class="absolute inset-0 grid place-items-center text-center"><div><p class="num text-[18px] font-medium leading-none">05:12</p><p class="text-[9px] text-muted-dark mt-0.5">h : min</p></div></div></div>
+      <div><p class="text-[11px] text-muted-dark">Current bid</p><p class="num text-[30px] font-medium leading-none">18,600,000</p><p class="text-[12px] text-muted-dark mt-1">EGP · <span class="num text-ivory-100">14</span> verified bidders</p></div>
+     </div>
+     <button class="mt-4 w-full h-12 border border-gold-400 text-gold-300 font-semibold slope">Enter the room</button>
+    </div>
+   </article>
+  </section>
+  <section class="px-5 pt-6"><p class="text-gold-700 tracking-[.3em] text-[11px]">CLOSING TONIGHT</p><h2 class="text-[22px] font-medium">Ending within the hour</h2>
+   <ol class="mt-3 divide-y divide-ivory-200">
+    <li class="py-3 flex gap-3 items-center"><span class="text-[26px] text-gold-700 w-9 text-center">11</span><div class="flex-1"><p class="font-medium text-[14px]">Studio · Al Nakheel Residence</p><p class="num text-[16px]">EGP 2,975,000</p></div><div class="text-center"><p class="text-[10px] text-live-onlight font-bold">Final minutes</p><p class="num text-[19px] font-semibold text-live-onlight">04:51</p></div></li>
+    <li class="py-3 flex gap-3 items-center"><span class="text-[26px] text-gold-700 w-9 text-center">07</span><div class="flex-1"><p class="font-medium text-[14px]">3-bed · Rayhana Heights</p><p class="num text-[16px]">EGP 8,450,000</p></div><div class="text-center"><p class="text-[10px] text-warn-light font-bold">Ending soon</p><p class="num text-[19px] font-semibold text-warn-light">42:18</p></div></li>
+   </ol>
+  </section>
+ </div>
+</div>
+</figure>
+  </div>
+</section>
+
+<section class="max-w-[1500px] mx-auto px-8 py-6">
+ <h2 class="text-xl font-semibold mb-1">States · AU-02</h2>
+ <p class="text-muted-dark text-sm mb-4">Each state: what it is, what I can do, what happens next.</p>
+ <div class="flex gap-4 overflow-x-auto pb-4" dir="rtl" lang="ar">
+  <div class="mini"><div class="bg-navy-950 h-24 p-2 flex gap-2 items-center"><div class="w-12 h-12 rounded-full border-4 border-navy-800"></div><div class="flex-1 space-y-1"><div class="h-3 bg-navy-800 w-2/3"></div><div class="h-5 bg-navy-800"></div></div></div><div class="p-2 space-y-2"><div class="skel h-20"></div><div class="skel h-3 w-1/2"></div></div><p class="text-center text-muted-light">جارٍ فتح القاعة…</p></div>
+  <div class="mini grid place-items-center text-center p-3"><div><p class="font-lat text-gold-700 tracking-[.3em]" dir="ltr">LOT —</p><p class="font-bold text-[13px]">هذا المزاد غير موجود</p><p class="text-muted-light mt-1">ربما سُحب أو انتهى. شاهد ما على المنصة الآن.</p><button class="mt-3 h-10 px-3 bg-navy-950 text-gold-300">المزادات المباشرة</button></div></div>
+  <div class="mini"><div class="bg-navy-950 text-ivory-100 p-2"><p class="text-warn-dark font-semibold" role="status">انقطع الاتصال، نعيد المحاولة…</p><p class="num text-[20px] opacity-50" dir="ltr">8,950,000</p><p class="text-muted-dark">آخر تحديث 15:58:18</p></div><div class="absolute bottom-0 inset-x-0 p-2 bg-navy-950"><button disabled class="w-full h-10 bg-navy-800 text-muted-dark">المزايدة متوقفة حتى يعود الاتصال</button></div></div>
+  <div class="mini"><div class="bg-navy-950 text-ivory-100 p-2"><p class="text-gold-300 font-semibold">✓ رقمك في القاعة <bdi dir="ltr">Bidder #12</bdi></p><p class="text-muted-dark">مزايد موثّق</p></div><div class="absolute bottom-0 inset-x-0 p-2 bg-navy-950 text-ivory-100"><div class="grid grid-cols-3 gap-1 mb-1.5"><button class="h-10 border border-navy-700 num text-[12px]" dir="ltr">9,000,000</button><button class="h-10 border border-navy-700 num text-[12px]" dir="ltr">9,050,000</button><button class="h-10 border border-navy-700 num text-[12px]" dir="ltr">9,200,000</button></div><button class="w-full h-10 bg-gold-400 text-navy-950 font-bold slope">زايد <span class="num">9,000,000</span></button></div></div>
+  <div class="mini"><div class="bg-navy-950 text-ivory-100 p-2 text-center"><p class="text-ok-dark font-bold text-[13px]">أنت صاحب أعلى مزايدة</p><p class="num text-[22px]" dir="ltr">9,000,000</p><p class="text-muted-dark">مرة… مرتين…</p></div><div class="absolute bottom-0 inset-x-0 p-2 bg-navy-950"><button disabled class="w-full h-10 bg-navy-800 text-ok-dark font-semibold">أنت في المقدمة</button></div></div>
+  <div class="mini grid place-items-center text-center p-3"><div><p class="font-bold text-[13px]">هذا عقارك</p><p class="text-muted-light mt-1">لا يمكن للبائع المزايدة. تابع الأداء من لوحة البائع.</p></div></div>
+  <div class="mini grid place-items-center text-center p-3"><div><p class="font-bold text-[13px]">المزاد متوقف مؤقتًا</p><p class="text-muted-light mt-1">عطل فني. سيعود الوقت المتبقي + 5 دقائق.</p></div></div>
+  <div class="mini bg-navy-950 text-ivory-100 grid place-items-center text-center p-3"><div><p class="text-gold-300 text-[18px] font-bold">بيع</p><p class="num text-[22px]" dir="ltr">9,050,000</p><p class="text-muted-dark mt-1">جارٍ تأكيد النتيجة النهائية.</p></div></div>
+ </div>
+
+ <h2 class="text-xl font-semibold mt-8 mb-4">States · AU-04</h2>
+ <div class="flex gap-4 overflow-x-auto pb-4" dir="rtl" lang="ar">
+  <div class="mini p-3 space-y-2"><div class="skel h-6 w-1/2"></div><div class="skel h-20"></div><div class="skel h-12"></div><p class="text-center text-muted-light">جارٍ تجهيز بطاقتك…</p></div>
+  <div class="mini p-3"><p class="font-bold">الرصيد غير كافٍ</p><p class="mt-1">المتاح <span class="num">2,300</span> من <span class="num">5,000</span> ج.م.</p><p class="mt-1">ادفع الفرق <b class="num">2,700</b> بالكارت أو المحفظة ويُحجز المبلغ كاملًا لهذا المزاد.</p><button class="absolute bottom-3 inset-x-3 h-10 bg-navy-950 text-gold-300 slope">ادفع <span class="num">2,700</span> واحجز</button></div>
+  <div class="mini p-3"><div class="border-s-4 border-live-onlight ps-2" role="alert"><p class="font-bold text-live-onlight">لم يتم الدفع</p><p>البنك رفض العملية: بيانات الكارت غير صحيحة. لم يُحجز أي مبلغ.</p></div><button class="mt-3 w-full h-10 border border-navy-950">جرّب طريقة أخرى</button></div>
+  <div class="mini p-3"><p class="font-bold">بانتظار تأكيد الدفع</p><p class="mt-1">عادةً أقل من دقيقة، وحتى 10 دقائق. يمكنك مشاهدة المزاد خلال ذلك.</p><p class="text-muted-light mt-2">إذا تأكد بعد انتهاء المزاد، يُضاف المبلغ لرصيدك المتاح.</p></div>
+  <div class="mini bg-navy-950 text-ivory-100 p-3 text-center"><p class="font-lat tracking-[.3em] text-gold-300" dir="ltr">YOUR PADDLE</p><p class="font-lat text-[44px] text-gold-300 leading-none mt-2" dir="ltr">#12</p><p class="mt-2">تم حجز <span class="num">5,000</span> ج.م</p><p class="text-muted-dark">إيصال <bdi dir="ltr">LK-20261102-0412</bdi></p><button class="absolute bottom-3 inset-x-3 h-10 bg-gold-400 text-navy-950 font-bold slope">ادخل القاعة وزايد</button></div>
+  <div class="mini p-3"><p class="font-bold">تأكيد الهوية أولًا</p><p class="mt-1">بطاقة الرقم القومي وصورة سيلفي. أقل من 3 دقائق، وبياناتك محمية.</p><button class="absolute bottom-3 inset-x-3 h-10 bg-navy-950 text-gold-300 slope">ابدأ التحقق</button></div>
+  <div class="mini p-3"><p class="font-bold">المزايدة غير متاحة</p><p class="mt-1">حسابك موقوف حتى 14 مايو 2027 بسبب عدم إتمام شراء سابق.</p><a href="#" class="underline mt-2 block">تواصل مع الدعم</a></div>
+ </div>
+</section>
+
+<section class="max-w-[1500px] mx-auto px-8 py-6 pb-16 grid md:grid-cols-2 gap-6 text-sm">
+ <div class="bg-navy-900 rounded-xl p-5"><h2 class="font-semibold text-lg mb-2">Motion and LIVE language</h2>
+  <ul class="list-disc ps-5 space-y-1 text-muted-dark">
+   <li><b class="text-ivory-100">Gold ring</b> sweeps the remaining time; turns amber under 1h and red under 5 min, with a text label.</li>
+   <li><b class="text-ivory-100">The call</b> (final 60 s): "مرة" at 60 s, "مرتين" at 30 s, "بيع" at 0. A new bid resets it and shows "+3:00". Reduced motion: no breathing, steps still change.</li>
+   <li><b class="text-ivory-100">Lot reveal:</b> hero cross-fades 600 ms between lots; no auto-advance while the user reads (WCAG 2.2.2).</li>
+   <li><b class="text-ivory-100">Sold moment:</b> the price settles in gold with "بيع"; no confetti.</li>
+  </ul></div>
+ <div class="bg-navy-900 rounded-xl p-5"><h2 class="font-semibold text-lg mb-2">Accessibility and RTL notes</h2>
+  <ul class="list-disc ps-5 space-y-1 text-muted-dark">
+   <li>Ring progress runs counter-clockwise in Arabic (mirrored), the clock digits are not mirrored.</li>
+   <li>The 52° slope corner is cut on the start-top side and mirrors with direction.</li>
+   <li>Kufi needs 1.8 line height for body; display headlines are capped at 2 lines on 375 px.</li>
+   <li>Risk: duotone tint hides true colours of finishes. Gallery opens in natural colour; tint is only on the stage.</li>
+   <li>Focus ring shown on the CTA and the T&amp;C checkbox.</li>
+  </ul></div>
+</section>
+</body>
+</html>

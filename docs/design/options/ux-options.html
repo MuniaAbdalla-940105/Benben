@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEN-BEN · UX options for the risky moments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Outfit:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: {
+    navy: { 950:'#0B1426', 900:'#13203A', 800:'#1C2C4C', 700:'#2A3B5E' },
+    gold: { 200:'#EADBB4', 400:'#C9A961', 700:'#7A5F22' },
+    ivory:{ 50:'#FCFAF5', 100:'#F7F2E7', 200:'#EDE5D3', 300:'#DDD3BE' },
+    muted:{ light:'#5B6475', dark:'#9BA7BD' },
+    live: { DEFAULT:'#D7263D', onlight:'#B8202F', ondark:'#FF6B6B' },
+    ok:'#13795B', warn:'#8F5300'
+  }
+}}}
+</script>
+<style>
+  body{font-family:"IBM Plex Sans Arabic",Inter,sans-serif;background:#F7F2E7;color:#0B1426}
+  .num{font-family:Inter,sans-serif;font-variant-numeric:tabular-nums}
+  .f{width:224px;height:460px;border:6px solid #0B1426;border-radius:26px;background:#FCFAF5;position:relative;overflow:hidden;flex:none;font-size:11.5px;line-height:1.55}
+  .cap{font-size:12px;color:#5B6475;margin-top:6px;width:224px}
+  .arrow{align-self:center;font-size:22px;color:#7A5F22;flex:none}
+  [dir=rtl] .arrow{transform:scaleX(-1)}
+  .sheet{position:absolute;inset-inline:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(11,20,38,.15);padding:10px}
+  .btn{height:40px;border-radius:12px;background:#0B1426;color:#FCFAF5;font-weight:600;display:flex;align-items:center;justify-content:center;width:100%}
+  .btn2{height:36px;border-radius:10px;border:1px solid #0B1426;display:flex;align-items:center;justify-content:center;width:100%}
+  .hdr{background:#fff;border-bottom:1px solid #EDE5D3;padding:8px}
+  .pill{display:inline-flex;align-items:center;gap:3px;border-radius:999px;padding:1px 7px;font-weight:600;font-size:10px}
+  .opt{background:#fff;border:1px solid #EDE5D3;border-radius:20px;padding:20px}
+  .tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7A5F22}
+  :focus-visible{outline:2px solid #0B1426;outline-offset:2px}
+</style>
+</head>
+<body class="min-h-screen">
+<header class="max-w-[1400px] mx-auto px-8 pt-10 pb-4">
+ <div class="flex items-center gap-2 mb-5"><svg width="20" height="18" viewBox="0 0 22 20" aria-hidden="true"><path d="M11 0 22 20H0Z" fill="#C9A961"/></svg><span style="font-family:Outfit" class="font-semibold tracking-[.18em]">BEN-BEN</span><span class="text-muted-light text-sm">مزاد عقارات · placeholder mark</span></div>
+ <h1 class="text-3xl font-bold">UX options for the risky moments</h1>
+ <p class="text-muted-light mt-2 max-w-3xl">Two options per moment, drawn in a neutral style so the flow can be chosen independently of the visual direction (A, B or C). Arabic RTL, 375 px scaled to ~60%. Flows read right to left. Same synthetic auction everywhere: <b>شقة 3 غرف · ريحانة هايتس</b>, current bid <b class="num">8,450,000</b>, increment <b class="num">50,000</b>, deposit <b class="num">5,000</b>, premium <b>2.5%</b>.</p>
+ <nav class="mt-4 flex flex-wrap gap-2 text-sm"><a class="underline" href="#m1">1 · Join to Bid</a><a class="underline" href="#m2">2 · Bid confirmation</a><a class="underline" href="#m3">3 · Outbid + extension</a><a class="underline" href="#m4">4 · After close</a></nav>
+</header>
+
+<!-- ============ MOMENT 1 ============ -->
+<section id="m1" class="max-w-[1400px] mx-auto px-8 py-6 space-y-6">
+ <h2 class="text-2xl font-bold">1 · Join to Bid (login → KYC T1 → T&amp;C → lock)</h2>
+
+ <div class="opt">
+  <p class="tag">Option 1A</p><h3 class="text-xl font-bold">Bottom sheet that grows (stay on the auction)</h3>
+  <p class="text-muted-light text-sm mb-4">The auction stays visible behind the sheet the whole time. Login and T&amp;C happen inside the sheet; KYC is the only full-screen step (camera), and it returns to the sheet. Matches PRD 3.11 "bottom sheets over full-page forms".</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="hdr"><span class="pill bg-live text-white">مباشر</span> <b class="num">8,450,000</b> · <span class="text-warn font-semibold num">42:18</span></div><div class="p-2 text-muted-light">صفحة المزاد…</div><div class="sheet" style="top:150px"><b>سجّل دخولك للمزايدة</b><p class="text-muted-light">هنبعتلك كود على موبايلك</p><div class="mt-2 h-9 border border-ivory-300 rounded-lg px-2 flex items-center num" dir="ltr">+20 10 1234 5678</div><div class="mt-2 flex gap-1 justify-center num" dir="ltr"><span class="w-8 h-9 border rounded grid place-items-center">4</span><span class="w-8 h-9 border rounded grid place-items-center">8</span><span class="w-8 h-9 border rounded grid place-items-center">1</span><span class="w-8 h-9 border-2 border-navy-950 rounded grid place-items-center"> </span></div><div class="mt-3 btn">تأكيد</div><p class="mt-2 text-muted-light text-center">الخطوة 1 من 3</p></div></div><p class="cap">1 · OTP in the sheet. Price and timer still visible above.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f bg-navy-950 text-ivory-50"><div class="p-3"><b>تأكيد الهوية</b><p class="text-muted-dark">الخطوة 2 من 3 · أقل من 3 دقائق</p></div><div class="mx-6 mt-4 h-28 border-2 border-dashed border-gold-400 rounded-xl grid place-items-center text-muted-dark">وجه البطاقة</div><p class="px-3 mt-3 text-muted-dark">ثم ظهر البطاقة، ثم سيلفي.</p><div class="absolute top-2 end-2 bg-navy-800 rounded px-1.5 num">42:18</div><div class="absolute bottom-3 inset-x-3"><div class="btn" style="background:#C9A961;color:#0B1426">التقط الصورة</div></div></div><p class="cap">2 · KYC full screen (camera needs it). Mini timer stays on top.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><span class="pill bg-live text-white">مباشر</span> <b class="num">8,450,000</b> · <span class="text-warn font-semibold num">40:51</span></div><div class="sheet" style="top:70px"><b>احجز مبلغ الجدية</b><p class="num text-[22px] font-semibold">5,000 ج.م</p><p class="text-muted-light">يرجع لك لو ما فزتش · يتخصم من العمولة لو فزت · يُصادر لو فزت وما كملتش في 48 ساعة</p><div class="mt-2 border rounded-lg p-1.5">محفظة: <b class="num">12,000</b> ← <b class="num">7,000</b></div><label class="mt-2 flex gap-1.5 items-start"><input type="checkbox" checked class="mt-1">أوافق على شروط المزاد v0</label><div class="mt-3 btn">احجز <span class="num">5,000</span> ج.م</div><p class="mt-1 text-muted-light text-center">الخطوة 3 من 3</p></div></div><p class="cap">3 · Back in the sheet: explainer, balance, T&amp;C, lock.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><span class="pill bg-live text-white">مباشر</span> <b class="num">8,450,000</b></div><div class="m-2 p-2 rounded-lg bg-ok/10 text-ok font-semibold" role="status">✓ تم حجز <span class="num">5,000</span> · أنت <bdi dir="ltr">Bidder #12</bdi></div><div class="absolute bottom-0 inset-x-0 bg-white border-t p-2"><div class="grid grid-cols-3 gap-1 mb-1 num text-[10px]"><div class="btn2" dir="ltr">8,500,000</div><div class="btn2" dir="ltr">8,550,000</div><div class="btn2" dir="ltr">8,700,000</div></div><div class="btn">زايد <span class="num">8,500,000</span></div></div></div><p class="cap">4 · Sheet closes, bid bar unlocks live. Receipt in Wallet.</p></div>
+  </div>
+ </div>
+
+ <div class="opt">
+  <p class="tag">Option 1B</p><h3 class="text-xl font-bold">Full-page stepper (4 steps, one job per page)</h3>
+  <p class="text-muted-light text-sm mb-4">A dedicated flow with a progress bar (fills right-to-left in Arabic) and a pinned auction strip. More room for T&amp;C and explanations; the auction is not visible behind.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="hdr"><div class="flex gap-1"><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span></div><p class="mt-1 text-muted-light">1 من 4 · الدخول</p></div><div class="bg-ivory-100 px-2 py-1 flex justify-between"><span>ريحانة هايتس</span><span class="num text-warn font-semibold">42:18</span></div><div class="p-3"><b class="text-[14px]">رقم موبايلك</b><div class="mt-2 h-10 border rounded-lg px-2 flex items-center num" dir="ltr">+20 10 1234 5678</div><div class="mt-3 btn">ابعت الكود</div></div></div><p class="cap">1 · Login page.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><div class="flex gap-1"><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span></div><p class="mt-1 text-muted-light">2 من 4 · الهوية</p></div><div class="bg-ivory-100 px-2 py-1 flex justify-between"><span>ريحانة هايتس</span><span class="num text-warn font-semibold">41:30</span></div><div class="p-3 space-y-2"><div class="border rounded-lg p-2">✓ وجه البطاقة</div><div class="border rounded-lg p-2">✓ ظهر البطاقة</div><div class="border-2 border-navy-950 rounded-lg p-2">سيلفي · جارٍ التحقق…</div><p class="text-muted-light">بياناتك محفوظة ومشفّرة ولا يراها البائع.</p></div></div><p class="cap">2 · KYC page with checklist.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><div class="flex gap-1"><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-ivory-200 rounded"></span></div><p class="mt-1 text-muted-light">3 من 4 · الشروط</p></div><div class="p-3"><b class="text-[14px]">الشروط في 4 نقاط</b><ol class="mt-1 space-y-1 list-decimal ps-4"><li>مبلغ جدية <span class="num">5,000</span> لكل مزاد.</li><li>المزايدة لا تُسحب.</li><li>الفائز عنده 48 ساعة للعقد والمقدم.</li><li>عدم الإتمام = مصادرة المبلغ ومخالفة.</li></ol><a class="underline block mt-1">النص الكامل (v0)</a><label class="mt-2 flex gap-1.5"><input type="checkbox" checked>قرأت وأوافق</label><div class="mt-3 btn">التالي</div></div></div><p class="cap">3 · Plain-language T&amp;C summary page.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><div class="flex gap-1"><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span><span class="flex-1 h-1 bg-navy-950 rounded"></span></div><p class="mt-1 text-muted-light">4 من 4 · الحجز</p></div><div class="p-3"><p class="num text-[22px] font-semibold">5,000 ج.م</p><div class="border rounded-lg p-1.5 mt-1">من المحفظة: <span class="num">12,000</span> ← <span class="num">7,000</span></div><div class="border rounded-lg p-1.5 mt-1 text-muted-light">كارت · محفظة موبايل</div><div class="mt-3 btn">احجز <span class="num">5,000</span> ج.م</div></div></div><p class="cap">4 · Lock page, then a full success page with "Back to auction".</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ MOMENT 2 ============ -->
+<section id="m2" class="max-w-[1400px] mx-auto px-8 py-6 space-y-6">
+ <h2 class="text-2xl font-bold">2 · Bid confirmation (PRD 3.5, AU-05)</h2>
+ <div class="opt">
+  <p class="tag">Option 2A</p><h3 class="text-xl font-bold">Always confirm</h3>
+  <p class="text-muted-light text-sm mb-4">Every bid opens AU-05. One extra tap per bid. The sheet keeps the live timer and refreshes the amount if someone outbids while it is open.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="hdr"><b class="num">8,450,000</b> · <span class="num text-warn font-semibold">42:18</span></div><div class="absolute bottom-0 inset-x-0 bg-white border-t p-2"><div class="grid grid-cols-3 gap-1 mb-1 num text-[10px]"><div class="btn2 ring-2 ring-navy-950" dir="ltr">8,500,000</div><div class="btn2" dir="ltr">8,550,000</div><div class="btn2" dir="ltr">8,700,000</div></div><div class="btn">زايد</div></div></div><p class="cap">1 · Tap +1 (8,500,000).</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="absolute inset-0 bg-navy-950/40"></div><div class="sheet" role="dialog"><b class="text-[13px]">تأكيد المزايدة</b><p class="text-muted-light">متبقي <span class="num text-warn font-semibold">42:12</span></p><dl class="grid grid-cols-[1fr_auto] gap-y-1 mt-2"><dt>مزايدتك</dt><dd class="num font-semibold">8,500,000</dd><dt>عمولة المشتري 2.5%</dt><dd class="num">212,500</dd><dt class="font-bold border-t pt-1">الإجمالي التقديري</dt><dd class="num font-bold border-t pt-1">8,712,500</dd><dt class="text-muted-light">مقدم 20% خلال 48 ساعة لو فزت</dt><dd class="num text-muted-light">1,700,000</dd></dl><p class="mt-2 text-live-onlight">لا يمكن سحب المزايدة بعد التأكيد.</p><div class="mt-2 btn">أكّد <span class="num">8,500,000</span> ج.م</div><div class="mt-1 text-center underline">إلغاء</div></div></div><p class="cap">2 · AU-05: amount, premium, total, down payment, time.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><b class="num">8,500,000</b> · <span class="num text-warn font-semibold">42:09</span></div><div class="m-2 p-2 rounded-lg bg-ok/10 text-ok font-semibold" role="status">✓ أنت صاحب أعلى مزايدة</div><div class="absolute bottom-0 inset-x-0 bg-white border-t p-2"><div class="btn2 text-ok">أنت في المقدمة</div></div></div><p class="cap">3 · Result: leading; bid buttons disabled.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="absolute inset-0 bg-navy-950/40"></div><div class="sheet"><div class="p-2 rounded-lg bg-live/10 text-live-onlight font-semibold" role="alert">سبقك مزايد آخر. أقل مزايدة الآن <span class="num">8,550,000</span></div><dl class="grid grid-cols-[1fr_auto] gap-y-1 mt-2"><dt>مزايدتك الجديدة</dt><dd class="num font-semibold">8,550,000</dd><dt>العمولة</dt><dd class="num">213,750</dd><dt class="font-bold">الإجمالي</dt><dd class="num font-bold">8,763,750</dd></dl><div class="mt-2 btn">أكّد <span class="num">8,550,000</span></div></div></div><p class="cap">Edge: outbid while the sheet is open, amounts refresh, never auto-submit.</p></div>
+  </div>
+ </div>
+ <div class="opt">
+  <p class="tag">Option 2B</p><h3 class="text-xl font-bold">Confirm, with "skip for this session"</h3>
+  <p class="text-muted-light text-sm mb-4">The first bid always confirms. The sheet offers a toggle, off by default. When on, quick buttons place the bid in one tap and show the total on the button. A chip keeps it visible and lets the user turn it off. Custom amounts and jumps of +5 increments still confirm (Assumption Q-80). The setting ends when the session ends.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="absolute inset-0 bg-navy-950/40"></div><div class="sheet"><b class="text-[13px]">تأكيد المزايدة</b><dl class="grid grid-cols-[1fr_auto] gap-y-1 mt-2"><dt>مزايدتك</dt><dd class="num font-semibold">8,500,000</dd><dt>العمولة 2.5%</dt><dd class="num">212,500</dd><dt class="font-bold">الإجمالي</dt><dd class="num font-bold">8,712,500</dd></dl><label class="mt-2 flex items-center justify-between border rounded-lg p-2"><span>زايد بضغطة واحدة لباقي الجلسة<br><span class="text-muted-light">للزيادات +1 و+2 فقط</span></span><span class="w-9 h-5 rounded-full bg-navy-950 relative"><span class="absolute top-0.5 start-0.5 w-4 h-4 rounded-full bg-white"></span></span></label><div class="mt-2 btn">أكّد <span class="num">8,500,000</span></div></div></div><p class="cap">1 · Toggle inside the first confirmation.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><b class="num">8,550,000</b> · <span class="num text-live-onlight font-bold">04:12</span> · <span class="text-live-onlight">تم تجاوزك</span></div><div class="absolute bottom-0 inset-x-0 bg-white border-t p-2"><div class="flex justify-between mb-1"><span class="pill bg-gold-200 text-gold-700">⚡ ضغطة واحدة مفعّلة</span><a class="underline">إيقاف</a></div><div class="grid grid-cols-2 gap-1 mb-1"><div class="btn" style="height:auto;padding:4px;flex-direction:column"><span class="num">8,600,000</span><span class="text-[9px] opacity-80">إجمالي <span class="num">8,815,000</span></span></div><div class="btn" style="height:auto;padding:4px;flex-direction:column"><span class="num">8,650,000</span><span class="text-[9px] opacity-80">إجمالي <span class="num">8,866,250</span></span></div></div><div class="btn2">مبلغ آخر (يحتاج تأكيد)</div></div></div><p class="cap">2 · Bar shows the chip and totals on each button.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><b class="num">8,600,000</b> · <span class="num text-live-onlight font-bold">04:10</span></div><div class="m-2 p-2 rounded-lg bg-ivory-100" role="status">⏳ جارٍ إرسال <span class="num">8,600,000</span>…</div><div class="m-2 p-2 rounded-lg bg-ok/10 text-ok font-semibold">✓ تم · أنت في المقدمة</div><p class="px-2 text-muted-light">ضغطتين ورا بعض = مزايدة واحدة (مفتاح منع التكرار).</p></div><p class="cap">3 · One tap → sending → result. Double tap safe.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ MOMENT 3 ============ -->
+<section id="m3" class="max-w-[1400px] mx-auto px-8 py-6 space-y-6">
+ <h2 class="text-2xl font-bold">3 · Outbid alert + "+3:00 Extended" (PRD 3.6, 8.3)</h2>
+ <div class="opt">
+  <p class="tag">Option 3A</p><h3 class="text-xl font-bold">Loud: interrupting banner + full-width extension bar</h3>
+  <p class="text-muted-light text-sm mb-4">A red banner drops in under the header (never over the price), with vibration and optional sound. The extension is a full-width bar for 4 s, then collapses to a counter. High urgency; strongest re-bid rate; highest risk of panic.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="hdr"><b class="num">8,500,000</b> · <span class="num text-live-onlight font-bold">00:41</span></div><div class="bg-live text-white p-2 font-semibold" role="alert">📳 تم تجاوزك! المزايدة الآن <span class="num">8,550,000</span><div class="mt-1 bg-white text-navy-950 rounded-lg h-9 grid place-items-center">زايد <span class="num">8,600,000</span></div></div><p class="p-2 text-muted-light">اهتزاز + صوت (لو مفعّل)</p></div><p class="cap">1 · Outbid banner, one-tap re-bid inside it.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><b class="num">8,600,000</b> · <span class="num font-bold">03:00</span></div><div class="bg-navy-950 text-gold-400 p-3 text-center font-bold text-[16px]" role="alert">+3:00 تم تمديد المزاد<br><span class="text-[11px] text-muted-dark font-normal">مزايدة في آخر 60 ثانية · التمديد رقم <span class="num">3</span></span></div><p class="p-2 text-muted-light">يظهر 4 ثوانٍ ثم يختفي.</p></div><p class="cap">2 · Extension bar, 4 s.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr flex justify-between"><span><b class="num">8,600,000</b></span><span class="num font-bold">02:56</span><span class="pill bg-navy-950 text-gold-400">تمديد <span class="num">3</span></span></div><div class="m-2 p-2 rounded-lg bg-ok/10 text-ok font-semibold">✓ أنت في المقدمة</div></div><p class="cap">3 · Settles into a counter in the header.</p></div>
+  </div>
+ </div>
+ <div class="opt">
+  <p class="tag">Option 3B</p><h3 class="text-xl font-bold">Contained: the header and bid bar change state</h3>
+  <p class="text-muted-light text-sm mb-4">No overlay. "My status" in the sticky header flips to "Outbid" (icon + word + red edge), the main bid button becomes the new minimum, the device vibrates once. The extension shows as a chip on the timer. Calmer; readable at 200% zoom; nothing hides the numbers.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="hdr"><div class="flex justify-between"><span>الحالية <b class="num">8,550,000</b></span><span class="num text-live-onlight font-bold">00:41</span></div><div class="mt-1 p-1.5 rounded border-s-4 border-live-onlight bg-live/10 text-live-onlight font-semibold" role="alert">✕ حالتك: تم تجاوزك · أقل مزايدة <span class="num">8,600,000</span></div></div><div class="absolute bottom-0 inset-x-0 bg-white border-t p-2"><div class="btn">زايد <span class="num">8,600,000</span></div></div></div><p class="cap">1 · Status row flips; CTA updates. One vibration.</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><div class="flex justify-between items-center"><span>الحالية <b class="num">8,600,000</b></span><span class="flex items-center gap-1"><span class="num font-bold">03:00</span><span class="pill bg-navy-950 text-gold-400">+3:00</span></span></div><div class="mt-1 p-1.5 rounded bg-ok/10 text-ok font-semibold">✓ حالتك: الأعلى</div></div><div class="absolute top-24 inset-x-2 bg-navy-950 text-ivory-50 rounded-lg p-2" role="status">تم تمديد المزاد 3 دقائق · التمديد رقم <span class="num">3</span></div></div><p class="cap">2 · Chip on the timer + polite toast (screen reader hears it once).</p></div>
+   <span class="arrow">→</span>
+   <div><div class="f"><div class="hdr"><div class="flex justify-between items-center"><span>الحالية <b class="num">8,600,000</b></span><span class="flex items-center gap-1"><span class="num font-bold">02:56</span><span class="pill bg-ivory-100">تمديد <span class="num">3</span></span></span></div><div class="mt-1 p-1.5 rounded bg-ok/10 text-ok font-semibold">✓ حالتك: الأعلى</div></div><p class="p-2 text-muted-light">في الخلفية؟ إشعار push، و SMS في آخر 10 دقائق (PRD 8.3).</p></div><p class="cap">3 · Steady state.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ MOMENT 4 ============ -->
+<section id="m4" class="max-w-[1400px] mx-auto px-8 py-6 pb-16 space-y-6">
+ <h2 class="text-2xl font-bold">4 · Deposit status after close (AU-07)</h2>
+ <p class="text-muted-light text-sm">Auction ended Mon 2 Nov, 4:01 PM, hammer <b class="num">8,950,000</b>. Each option is shown for the three outcomes: winner, backup bidder (rank 2), released.</p>
+ <div class="opt">
+  <p class="tag">Option 4A</p><h3 class="text-xl font-bold">Outcome first: one result screen, a checklist for winners</h3>
+  <p class="text-muted-light text-sm mb-4">Big outcome headline, then "your deposit" card, then next steps. The winner screen is a 48h countdown with a 3-item checklist and the amount due.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="bg-navy-950 text-ivory-50 p-3"><p class="text-gold-400 font-bold">مبروك، فزت بالمزاد</p><p class="num text-[20px]">8,950,000 ج.م</p><p class="text-muted-dark">متبقي لإتمام الشراء</p><p class="num text-[24px] font-bold">47:52:10</p><p class="text-muted-dark text-[10px]">حتى الأربعاء 4 نوفمبر · 4:01 م</p></div><ol class="p-2 space-y-1.5"><li class="border rounded-lg p-1.5">☐ حدّد موعد توقيع العقد في مكتب BEN-BEN</li><li class="border rounded-lg p-1.5">☐ حوّل المقدم + العمولة وارفع الإيصال<br><b class="num">2,008,750</b> <span class="text-muted-light">= 1,790,000 + 223,750 − 5,000</span></li><li class="border rounded-lg p-1.5">☐ ارفع مستندات المستوى T2</li></ol><p class="px-2 text-muted-light">مبلغ الجدية <span class="num">5,000</span> اتخصم من العمولة. لو ما كملتش في الوقت، يُصادر.</p></div><p class="cap">Winner</p></div>
+   <div><div class="f"><div class="p-3"><p class="font-bold text-[14px]">أنت المزايد الثاني</p><p>آخر مزايدة لك <b class="num">8,900,000</b></p></div><div class="mx-2 border rounded-lg p-2"><b>مبلغك محجوز</b><p class="num text-[18px]">5,000 ج.م</p><p class="text-muted-light">لحد ما الفائز يكمل أو تنتهي مهلته (الأربعاء 4:01 م).</p></div><div class="m-2 text-[11px]"><b>بعدها؟</b> لو الفائز ما كملش، يوصلك عرض تشتري بمزايدتك وتقبل أو ترفض بدون أي خصم. لو كمّل، المبلغ يرجعلك فورًا.</div></div><p class="cap">Backup bidder (rank 2)</p></div>
+   <div><div class="f"><div class="p-3"><p class="font-bold text-[14px]">انتهى المزاد</p><p class="text-muted-light">اتباع بـ <span class="num">8,950,000</span>. أعلى مزايدة لك <span class="num">8,700,000</span>.</p></div><div class="mx-2 border rounded-lg p-2 bg-ok/10"><b class="text-ok">✓ تم رد مبلغ الجدية</b><p class="num text-[18px]">5,000 ج.م</p><p class="text-muted-light">رجع لرصيدك المتاح · 4:01 م</p></div><div class="m-2 btn2">مزادات مشابهة في التجمع</div></div><p class="cap">Released</p></div>
+  </div>
+ </div>
+ <div class="opt">
+  <p class="tag">Option 4B</p><h3 class="text-xl font-bold">Deposit-first: a timeline of your EGP 5,000</h3>
+  <p class="text-muted-light text-sm mb-4">A wallet-style timeline shows every step of the deposit (locked → auction ended → released / held / applied), with the next step highlighted. Winners get the same timeline with the 48h checklist as the "next step" node. Strong fintech trust; the outcome itself is a bit less celebratory.</p>
+  <div class="flex gap-3 overflow-x-auto pb-2" dir="rtl" lang="ar">
+   <div><div class="f"><div class="p-3"><p class="font-bold text-[14px]">فزت · <span class="num">8,950,000</span></p></div><ol class="px-3 border-s-2 border-ivory-300 ms-4 space-y-2"><li><b>✓ حجز <span class="num">5,000</span></b><br><span class="text-muted-light num">2 نوفمبر 1:12 م</span></li><li><b>✓ انتهى المزاد، فزت</b><br><span class="text-muted-light num">4:01 م</span></li><li class="bg-gold-200/50 rounded p-1.5"><b>● الآن: أكمل خلال <span class="num">47:52</span></b><br>عقد · تحويل <span class="num">2,008,750</span> · مستندات T2</li><li class="text-muted-light">○ عند الإتمام: يتخصم من العمولة</li><li class="text-live-onlight">○ لو انتهت المهلة: يُصادر</li></ol></div><p class="cap">Winner</p></div>
+   <div><div class="f"><div class="p-3"><p class="font-bold text-[14px]">المزايد الثاني</p></div><ol class="px-3 border-s-2 border-ivory-300 ms-4 space-y-2"><li><b>✓ حجز <span class="num">5,000</span></b></li><li><b>✓ انتهى المزاد</b><br><span class="text-muted-light">مزايدتك <span class="num">8,900,000</span></span></li><li class="bg-gold-200/50 rounded p-1.5"><b>● الآن: محجوز كمزايد احتياطي</b><br>حتى الأربعاء 4:01 م أو قبلها</li><li class="text-muted-light">○ لو الفائز كمّل: يرجع لرصيدك</li><li class="text-muted-light">○ لو ما كملش: عرض شراء بمزايدتك، 24 ساعة للرد</li></ol></div><p class="cap">Backup bidder (rank 2)</p></div>
+   <div><div class="f"><div class="p-3"><p class="font-bold text-[14px]">انتهى المزاد</p></div><ol class="px-3 border-s-2 border-ivory-300 ms-4 space-y-2"><li><b>✓ حجز <span class="num">5,000</span></b></li><li><b>✓ انتهى المزاد</b><br><span class="text-muted-light">اتباع بـ <span class="num">8,950,000</span></span></li><li class="bg-ok/10 rounded p-1.5 text-ok"><b>✓ رجع لرصيدك المتاح</b><br><span class="num">4:01 م</span> · إيصال <bdi dir="ltr">RL-0412</bdi></li></ol><div class="absolute bottom-3 inset-x-3 btn2">عرض المحفظة</div></div><p class="cap">Released</p></div>
+  </div>
+ </div>
+</section>
+</body>
+</html>
