@@ -97,6 +97,16 @@ Statuses (field `status:` at the top of each story file):
 
 Sprint planning (orchestrator proposes, stakeholder approves) → sprint (per-story cycle, status updated in `BACKLOG.md`) → backlog reprioritized → release decision (stakeholder approves) → retrospective (update agent files and this file with lessons) → next sprint.
 
+## One story = one session = one branch = one PR
+
+Every story (and every bug) is built in its **own Claude Code session** on its **own branch**, so the stakeholder can verify it in isolation.
+
+1. **Orchestrator session** (the main one): keeps the backlog, writes prompts, starts story sessions, and reports to the stakeholder. It builds no story code itself.
+2. **Story session:** the orchestrator runs `/run-story ST-###`. That starts a new cloud session named `ST-### <title>`, checked out from the latest `main`, on the branch `st-###-<what-it-delivers>`. The session runs the whole per-story cycle (build → review → QA) and works only on that branch.
+3. **Pull request:** the story session opens one PR into `main`, titled `ST-### <title>`. The body has: the story link, acceptance criteria as a checklist, how to verify (staging/preview URL, test accounts, steps), test evidence, and the security review result.
+4. **Stakeholder verification:** you open the session or the PR, check the preview deployment, then reply `/feedback ST-### accepted` or leave comments. Comments go back to the same session and branch. Only you merge the PR.
+5. **Dependencies:** a story starts only after the PRs it depends on are merged to `main`. Independent stories in the same sprint can run in parallel sessions.
+
 ## Branches and commits
 
 Every branch and commit name must say what the work is. A reader should understand it without opening the diff.
