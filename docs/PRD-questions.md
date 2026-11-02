@@ -678,6 +678,80 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 
 ---
 
+### I. Design (added by ui-ux-designer, 2026-11-02)
+
+#### Q-75
+- **PRD:** 3.11, 8.6 (areas / compounds)
+- **Question:** May prototypes and the staging seed use real compound and developer names, or only synthetic ones?
+- **Why it matters:** Real names in marketing-like screens can imply a partnership the company does not have.
+- **Proposed default:** Assumption: synthetic names that sound local (Rayhana Heights, Zayed Dunes, Al Nakheel Residence, West Orchid, Silver Square) until Ops supplies the real lookup (Q-74).
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-76
+- **PRD:** 3.1, 3.11, Q-32
+- **Question:** Do guests see an approximate viewer count ("1.2K watching") as social proof, next to the verified-bidder count?
+- **Why it matters:** It adds energy on AU-01/AU-02 but costs realtime presence at scale (PRD 8.4).
+- **Proposed default:** Assumption: yes, rounded (Q-32), shown on AU-01 hero and AU-02 header.
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-77
+- **PRD:** 3.3 (seller sets down payment % and payment terms), 3.11 (AU-02 payment terms)
+- **Question:** How are seller payment terms structured: down payment % + number and frequency of instalments, or free text? Are remaining developer instalments (resale of off-plan) shown separately?
+- **Why it matters:** AU-02 shows computed amounts (down payment, per-instalment) that change with the current bid.
+- **Proposed default:** Assumption: structured fields (down payment %, instalment count, frequency), amounts computed from the current bid and labelled "approximate". Developer instalments as a separate line when present.
+- **Tag:** `BLOCKS-LATER`
+
+#### Q-78
+- **PRD:** 8.4, brand brief (navy / gold / ivory)
+- **Question:** Is the consumer app dark-first, light-first, or does it follow the system theme?
+- **Why it matters:** It is the main difference between design directions A, B and C, and it sets the token set built in part 2.
+- **Proposed default:** Decided with the direction choice. Designer recommendation: light-first with dark live surfaces (see `docs/design/options/OPTIONS.md`); a full dark theme later.
+- **Tag:** `BLOCKS-SPRINT-1`
+
+#### Q-79
+- **PRD:** 3.11 (haptics on outbid), 8.3, ADR-001
+- **Question:** Is the outbid sound on or off by default?
+- **Why it matters:** Sound helps in the final minute but surprises users in public places; iOS web has no vibration, so the visual alert must stand alone.
+- **Proposed default:** Assumption: vibration on where supported, sound off by default with a toggle in the live room and settings.
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-80
+- **PRD:** 3.5 ("optional skip confirmation toggle per session")
+- **Question:** When "skip confirmation" is on, should large jumps (+5 increments) and custom amounts still ask to confirm?
+- **Why it matters:** Bids cannot be withdrawn. A mis-tap on a large amount is a money and dispute risk for first-time bidders.
+- **Proposed default:** Assumption: skip applies only to +1 and +2 quick bids; +5 and custom amounts always confirm. The setting ends with the session and a chip shows it is on.
+- **Tag:** `BLOCKS-SPRINT-1`
+
+#### Q-81
+- **PRD:** 3.4, 3.11 (AU-04), 3.5
+- **Question:** Should AU-04 (Join to Bid) show an example cost "if you win at the next minimum bid" (bid + 2.5% premium + estimated total + down payment due in 48h) before the user has bid?
+- **Why it matters:** It removes surprises after winning (design principle 4) but adds content to the sheet.
+- **Proposed default:** Assumption: yes, as a short, collapsible example.
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-82
+- **PRD:** 1.1 (Arabic default), 8.4
+- **Question:** Which Arabic register do we use: Egyptian colloquial, modern standard, or a mix?
+- **Why it matters:** It shapes every string and the legal tone of T&C and money screens.
+- **Proposed default:** Assumption: simplified modern standard Arabic for money, legal and status text; light Egyptian colloquial allowed in energy moments and empty states. Final copy reviewed by a native copywriter.
+- **Tag:** `BLOCKS-LATER`
+
+#### Q-83
+- **PRD:** 3.1 (5-tab bottom navigation), 8.7 (Rentals Phase 3, Requests Phase 2)
+- **Question:** In Phase 1, do the Rent and Requests tabs show "coming soon", or are they hidden until their phase?
+- **Why it matters:** Empty tabs look unfinished; hiding them changes the 5-tab layout and the centred Auctions tab.
+- **Proposed default:** Assumption: keep 5 tabs; Rent and Requests show a "coming soon" page with a "notify me" option.
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-84
+- **PRD:** 3.4 step 6, 3.7, 2.3 rule 4, Q-27
+- **Question:** What exact date and time do we show a backup bidder for "held until"? The winner's 48h deadline, or the end of the whole second-chance chain?
+- **Why it matters:** AU-07 for rank 2 and 3 must state a clear date; an unclear hold harms trust.
+- **Proposed default:** Assumption: show the winner's deadline as "at least until", and update it when the chain moves on (Q-27 default).
+- **Tag:** `BLOCKS-LATER`
+
+---
+
 ## 3. Question count by tag
 
 | Tag | Count | Questions |
@@ -687,3 +761,5 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 | `BLOCKS-LATER` | 50 | All others not listed here |
 | `NICE-TO-KNOW` | 6 | Q-16, Q-18, Q-32, Q-33, Q-66, Q-72 |
 | **Total** | **74** | |
+
+Design group (I) adds Q-75 to Q-84: `BLOCKS-SPRINT-1` Q-78, Q-80 · `BLOCKS-LATER` Q-77, Q-82, Q-84 · `NICE-TO-KNOW` Q-75, Q-76, Q-79, Q-81, Q-83. New total: 84.
