@@ -97,6 +97,43 @@ Statuses (field `status:` at the top of each story file):
 
 Sprint planning (orchestrator proposes, stakeholder approves) → sprint (per-story cycle, status updated in `BACKLOG.md`) → backlog reprioritized → release decision (stakeholder approves) → retrospective (update agent files and this file with lessons) → next sprint.
 
+## Branches and commits
+
+Every branch and commit name must say what the work is. A reader should understand it without opening the diff.
+
+**Branches** are lowercase kebab-case `<type>/<subject>`. A story branch starts with its ID, and every name says what is being built:
+
+| Work | Pattern | Example |
+|---|---|---|
+| Story | `st-###-<what-it-delivers>` | `st-007-auction-bid-engine-with-anti-sniping` |
+| Bug | `bug-###-<what-is-broken>` | `bug-012-countdown-uses-device-clock` |
+| Kickoff / planning | `kickoff/<what>` or `sprint-<n>/<what>` | `kickoff/sprint-1-plan-design-architecture` |
+| Design only | `design/<screens-or-system>` | `design/auction-home-and-live-room` |
+| Infra / CI | `devops/<what>` | `devops/github-actions-ci-and-supabase-staging` |
+| Decision record | `adr/<###-topic>` | `adr/002-realtime-bidding-on-supabase` |
+
+Never use names like `fix`, `update`, `wip`, `test`, `new-branch`, or random or session-generated suffixes.
+
+**Commits** use Conventional Commits: `<type>(<scope>): <what changed, imperative, ≤ 72 chars>`.
+
+- Types: `feat`, `fix`, `docs`, `design`, `test`, `refactor`, `chore`, `ci`, `db` (migrations and RLS), `sec`.
+- The scope is the module (`auctions`, `wallet`, `kyc`, `marketplace`, `admin`, `backlog`, `design`, …).
+- The body explains **why** and what the reviewer should check, and names the PRD section where relevant.
+- The last body line is the story or bug ID: `Refs: ST-007` or `Fixes: BUG-012`.
+- One logical change per commit. Never use messages like "update files", "fix", "changes", or "wip".
+
+Example:
+
+```
+feat(auctions): extend end time by 3 min on bids in the final 60 s
+
+Server-side anti-sniping per PRD 3.6. The extension is computed inside
+place_bid() so it is atomic with the bid insert; clients receive
+auction.extended over Realtime with the new ends_at.
+
+Refs: ST-007
+```
+
 ## Guardrails
 
 - Every piece of work has a story or bug file and exactly one owning agent.
