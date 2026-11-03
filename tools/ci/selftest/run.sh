@@ -372,7 +372,8 @@ EOF
       GIT_INDEX_FILE="$idx" git update-index --add --cacheinfo "100644,$blob,$path"
     done
     tree="$(GIT_INDEX_FILE="$idx" git write-tree)"; rm -f "$idx"
-    git commit-tree "$tree" -p HEAD -m "selftest fake base"
+    GIT_AUTHOR_NAME=ci-selftest GIT_AUTHOR_EMAIL=ci-selftest@localhost GIT_COMMITTER_NAME=ci-selftest GIT_COMMITTER_EMAIL=ci-selftest@localhost \
+      git commit-tree "$tree" -p HEAD -m "selftest fake base"
   }
   local tmpd mig rb base
   tmpd="$(mktemp -d)"
