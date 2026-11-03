@@ -1,0 +1,158 @@
+# CI for every pull request into main (ADR-002 §15, ST-001). All nine checks are required; the single
+# "CI passed" job is the one to mark as required in the branch protection rule for main.
+#
+#   1 lint, typecheck, Vitest         -> job app
+#   8 bundle secret scan              -> job app (after the build)
+#   2 fresh DB: migrations + seed     -> job db  (one `supabase start`, checks run in sequence)
+#   4 pgTAP (supabase test db)        -> job db
+#   5 supabase db lint (warning)      -> job db
+#   6 RLS + RPC allow-list            -> job db
+#   7 generated types freshness       -> job db
+#   3 up -> down -> up for new migrations -> job db (last: it rewinds the database)
+#   9 Edge Function tests (deno)      -> job functions
+#   + Playwright smoke                -> job e2e
+#
+# Every step calls a script in tools/ci/, so `pnpm ci:app` / `pnpm ci:db` run the same checks locally,
+# and .github/workflows/ci-selftest.yml proves each one fails on a bad input.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Deno inside the Supabase edge-runtime image used by the pinned CLI (edge-runtime v1.77.8 = Deno 2.1.4).
+  # Bump together with the "supabase" version in package.json.
+  DENO_VERSION: 2.1.4
+
+jobs:
+  app:
+    name: "1 lint, typecheck, unit tests · 8 bundle secret scan"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: "1 · Lint"
+        run: pnpm lint
+      - name: "1 · Typecheck"
+        if: ${{ !cancelled() }}
+        run: pnpm typecheck
+      - name: "1 · Unit tests (Vitest)"
+        if: ${{ !cancelled() }}
+        run: pnpm test
+      - name: Build both apps (synthetic anon key, so supabase-js is bundled as in a real deploy)
+        id: build
+        if: ${{ !cancelled() }}
+        run: |
+          set -a
+          # shellcheck disable=SC1090
+          source <(bash tools/ci/ci-build-env.sh)
+          set +a
+          pnpm build
+      - name: "8 · Bundle secret scan"
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: bash tools/ci/check-bundle-secrets.sh
+      - name: Seed guard (synthetic data only)
+        if: ${{ !cancelled() }}
+        run: bash tools/ci/check-seed-synthetic.sh
+
+  e2e:
+    name: Playwright smoke (built web app)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Build the web app
+        run: |
+          set -a
+          # shellcheck disable=SC1090
+          source <(bash tools/ci/ci-build-env.sh)
+          set +a
+          pnpm --filter @benben/web build
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run Playwright
+        run: pnpm e2e
+      - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  db:
+    name: "2–7 database checks (fresh DB, down scripts, pgTAP, lint, RLS, types)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # check 3 diffs migrations against the base branch
+      - uses: ./.github/actions/setup
+      - name: Start Supabase (pinned CLI; only the services the checks need)
+        id: start
+        run: pnpm exec supabase start -x studio,imgproxy,mailpit,logflare,vector,supavisor,edge-runtime
+      - name: "2 · All migrations + seed on a fresh database"
+        id: fresh
+        if: ${{ !cancelled() && steps.start.outcome == 'success' }}
+        run: bash tools/ci/check-migrations-fresh.sh
+      - name: "4 · pgTAP tests (supabase test db)"
+        if: ${{ !cancelled() && steps.fresh.outcome == 'success' }}
+        run: bash tools/ci/check-db-tests.sh
+      - name: "5 · supabase db lint (fail on warning)"
+        if: ${{ !cancelled() && steps.fresh.outcome == 'success' }}
+        run: bash tools/ci/check-db-lint.sh
+      - name: "6 · RLS on every table + RPC allow-list"
+        if: ${{ !cancelled() && steps.fresh.outcome == 'success' }}
+        run: bash tools/ci/check-rls.sh
+      - name: "7 · Generated types are fresh"
+        if: ${{ !cancelled() && steps.fresh.outcome == 'success' }}
+        run: bash tools/ci/check-types-fresh.sh
+      - name: "3 · up → down → up for migrations added in this PR"
+        if: ${{ !cancelled() && steps.fresh.outcome == 'success' }}
+        env:
+          BASE_REF: origin/${{ github.base_ref || 'main' }}
+          CHECK_DOWN_RESTORE: "0"
+        run: bash tools/ci/check-down-migrations.sh
+
+  functions:
+    name: "9 Edge Function tests (deno)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: ${{ env.DENO_VERSION }}
+      - name: "9 · deno lint + deno test supabase/functions"
+        run: bash tools/ci/check-functions.sh
+
+  ci-passed:
+    name: CI passed
+    if: ${{ always() }}
+    needs: [app, e2e, db, functions]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Fail if any required job did not succeed
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}
+        run: |
+          echo "::error::A required CI job did not succeed: ${{ toJSON(needs.*.result) }}"
+          exit 1
+      - run: echo "All required CI jobs succeeded"

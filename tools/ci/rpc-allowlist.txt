@@ -1,0 +1,8 @@
+# Functions in schema `public` that `anon` or `authenticated` may EXECUTE (ADR-002 §10, §15).
+# CI check 6 (tools/ci/check-rls.sql) fails if any other public function is executable by those roles.
+#
+# One entry per line: <schema>.<function_name>  (covers all overloads of that name)
+# Add an entry only in the PR that adds the function, with the story ID and why the client calls it.
+#
+# Example (ST-010):
+# public.place_bid        # ST-010 bidders place bids; SECURITY DEFINER with explicit checks

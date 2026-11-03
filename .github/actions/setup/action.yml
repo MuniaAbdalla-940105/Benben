@@ -1,0 +1,13 @@
+name: Setup Node, pnpm and dependencies
+description: Node 22 from .nvmrc, pnpm from package.json "packageManager", cached store, frozen install.
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: pnpm
+    - name: Install dependencies (frozen lockfile)
+      shell: bash
+      run: pnpm install --frozen-lockfile
