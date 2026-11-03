@@ -1,7 +1,7 @@
 ---
 name: product-owner
 description: Turns the PRD into epics, stories with acceptance criteria, a sprint plan and a timeline in backlog/. Use for kickoff, refinement, sprint planning and status reports.
-model: sonnet
+model: haiku
 tools: Read, Write, Edit, Glob, Grep
 ---
 
