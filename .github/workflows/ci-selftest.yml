@@ -1,0 +1,60 @@
+# Proves that every required CI check FAILS on a bad input (ST-001 acceptance criteria): a failing Vitest
+# test, a lint or type error, a stale types file, a broken migration, a table without RLS, an
+# anon-executable public function, a missing or incomplete down script, a db lint warning, a failing
+# pgTAP test, a failing deno test and a service-role key in the bundle.
+# Each group ends with a positive control (the same checks pass on the clean tree).
+# Runs on demand and whenever the checks themselves change. See tools/ci/selftest/run.sh.
+name: CI self-test
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - tools/ci/**
+      - .github/workflows/ci.yml
+      - .github/workflows/ci-selftest.yml
+      - .github/actions/**
+      - supabase/config.toml
+      - package.json
+      - pnpm-lock.yaml
+
+concurrency:
+  group: ci-selftest-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DENO_VERSION: 2.1.4 # keep equal to .github/workflows/ci.yml
+
+jobs:
+  node-checks:
+    name: "Self-test: checks 1, 8, 9 and the seed / deploy guards"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: ${{ env.DENO_VERSION }}
+      - name: Inject each bad input and assert the check fails
+        run: bash tools/ci/selftest/run.sh node
+
+  db-checks:
+    name: "Self-test: database checks 2–7"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - name: Start Supabase
+        run: pnpm exec supabase start -x studio,imgproxy,mailpit,logflare,vector,supavisor,edge-runtime
+      - name: Inject each bad input and assert the check fails
+        env:
+          BASE_REF: origin/${{ github.base_ref || 'main' }}
+        run: bash tools/ci/selftest/run.sh db
