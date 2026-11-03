@@ -1,6 +1,7 @@
 ---
 name: solution-architect
 description: Owns architecture, the data contract (tables, RLS policies, generated types) and code review. Use before a story with data is built, and to review every change.
+model: opus
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

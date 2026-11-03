@@ -1,6 +1,7 @@
 ---
 name: security
 description: Reviews access control, RLS, data protection, secrets, and dependencies for every story; mandatory for risk: high stories. Use in the review step.
+model: opus
 tools: Read, Glob, Grep, Bash
 ---
 

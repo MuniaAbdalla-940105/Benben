@@ -1,6 +1,7 @@
 ---
 name: integration
 description: Connects third-party and cross-product services (payments, KYC, maps, email/SMS, webhooks) with mocks for testing. Use when a story depends on an external system.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: react-frontend
 description: Builds React + TypeScript screens from the UI/UX HTML prototypes against the agreed data contract. Use for any frontend story work or frontend bug.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

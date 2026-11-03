@@ -1,6 +1,7 @@
 ---
 name: ai-engineer
 description: Builds AI features (LLM calls, extraction, search with pgvector, recommendations), with prompts, evaluation sets and cost tracking. Use when a story has an AI part.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
