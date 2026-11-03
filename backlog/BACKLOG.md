@@ -132,7 +132,7 @@ Configuration values (deposit, increments, premium, windows) are seeded in a con
 ## Status board
 | Story | Title | Owner | Sprint | Status | Loops |
 |---|---|---|---|---|---|
-| ST-001 | Repo, CI pipeline and Supabase staging project | devops | 1 | in-review | 0 |
+| ST-001 | Repo, CI pipeline and Supabase staging project | devops | 1 | reopened | 1 |
 | ST-002 | App shell with i18n, RTL, digit toggle and EGP formatting | react-frontend | 1 | backlog | 0 |
 | ST-003 | Design system implementation (sprint 1 components) | react-frontend | 1 | backlog | 0 |
 | ST-004 | Phone OTP sign-up and login (mock SMS), T0 account | supabase-backend | 1 | backlog | 0 |
