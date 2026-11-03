@@ -1,0 +1,50 @@
+/* Prototype page chrome only (not part of the product UI). */
+html { background: #E7E4DD; }
+body.proto { margin: 0; font-family: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif; color: #0B1530; background: #E7E4DD; }
+.proto-head { max-width: 1440px; margin: 0 auto; padding: 2rem 2rem 1rem; }
+.proto-head h1 { font-family: "Readex Pro", "Inter", sans-serif; font-size: 1.75rem; font-weight: 600; margin: .25rem 0; }
+.proto-head .meta { color: #4A4741; font-size: .875rem; }
+.proto-kicker { font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; color: #846429; font-weight: 600; }
+.proto-section { max-width: 1440px; margin: 0 auto; padding: 1rem 2rem 2rem; }
+.proto-section > h2 { font-family: "Readex Pro", "Inter", sans-serif; font-size: 1.25rem; font-weight: 600; margin: 0 0 .25rem; }
+.proto-section > p.lead { color: #4A4741; font-size: .875rem; margin: 0 0 1rem; max-width: 70ch; }
+.proto-box { background: #FBF8F2; border: 1px solid #ECE4D3; border-radius: 16px; padding: 1rem 1.25rem; font-size: .875rem; }
+.proto-box h3 { font-weight: 600; margin: 0 0 .5rem; }
+.proto-box ul { margin: 0; padding-inline-start: 1.1rem; list-style: disc; }
+.proto-box code, .proto-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8em; background: #ECE4D3; padding: 0 .3em; border-radius: 4px; }
+.proto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.proto-row { display: flex; gap: 2rem; overflow-x: auto; padding-bottom: 1rem; align-items: flex-start; }
+.proto-cap { font-size: .8125rem; color: #4A4741; margin: 0 0 .5rem; }
+.proto-cap b { color: #0B1530; }
+
+/* Device frames */
+.frame { flex: none; position: relative; overflow: hidden; background: var(--ds-bg); color: var(--ds-ink); }
+.frame--phone { width: 375px; height: 812px; border: 10px solid #111; border-radius: 44px; box-shadow: 0 24px 48px rgb(0 0 0 / .18); }
+.frame--tablet { width: 768px; height: 1024px; border: 12px solid #111; border-radius: 28px; box-shadow: 0 24px 48px rgb(0 0 0 / .18); }
+.frame--desk { width: 1280px; height: 800px; border: 1px solid #C9C4BA; border-radius: 12px; box-shadow: 0 24px 48px rgb(0 0 0 / .12); }
+.frame-scale { flex: none; overflow: hidden; }
+.frame-scale > .frame { transform-origin: top left; }
+[dir="rtl"] .frame-scale > .frame { transform-origin: top right; }
+.frame .scroll { height: 100%; overflow-y: auto; scrollbar-width: none; }
+.frame .scroll::-webkit-scrollbar { display: none; }
+
+/* State cards: a fragment at real size inside a themed container */
+.state { flex: none; width: 320px; border-radius: 18px; overflow: hidden; border: 1px solid #C9C4BA; background: var(--ds-bg); color: var(--ds-ink); }
+.state__tag { display: flex; justify-content: space-between; gap: .5rem; align-items: center; padding: .375rem .75rem; background: #24231F; color: #F6F1E7;
+  font: 600 .6875rem/1.5 "Inter", sans-serif; letter-spacing: .04em; direction: ltr; }
+.state__tag code { font-family: ui-monospace, Menlo, monospace; color: #E4CE9C; font-weight: 500; }
+.state__body { position: relative; padding: .875rem; min-height: 120px; }
+.state__body--tall { min-height: 420px; padding: 0; }
+.states { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* Controls bar */
+.proto-controls { position: sticky; top: 0; z-index: 50; background: #0B1530; color: #F6F1E7; font: 500 .8125rem/1 "Inter", sans-serif; }
+.proto-controls > div { max-width: 1440px; margin: 0 auto; padding: .5rem 2rem; display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.proto-controls a { color: #E4CE9C; }
+.proto-controls button { border: 1px solid #5F6B8A; border-radius: 999px; padding: .375rem .75rem; color: #F6F1E7; background: transparent; cursor: pointer; }
+.proto-controls button[aria-pressed="true"] { background: #C8A464; color: #0B1530; border-color: #C8A464; font-weight: 600; }
+.proto-controls .sp { flex: 1; }
+
+/* Developer annotation (contract error code, component name). Not product UI. */
+.proto-ann { display: inline-block; font: 500 .6875rem/1.4 ui-monospace, Menlo, monospace; color: #4A4741; background: #FFFBEA; border: 1px dashed #A27E3E;
+  border-radius: 4px; padding: 0 .3em; direction: ltr; unicode-bidi: isolate; vertical-align: middle; }
