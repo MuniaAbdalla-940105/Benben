@@ -8,3 +8,8 @@
 #
 # Example (ST-010):
 # public.place_bid(uuid,bigint,uuid)   # ST-010 bidders place bids; SECURITY DEFINER with explicit checks
+public.kyc_submit(text,text,text)           # BV1-B1 user submits the 3 uploaded ID files; SECURITY DEFINER, checks ownership
+public.admin_decide_kyc(uuid,boolean,text)  # BV1-B1 KYC admin approves/rejects; SECURITY DEFINER, checks the kyc_admin role
+public.dev_sms_inbox(text)                  # BV1-B1 mock SMS dev inbox; refuses when runtime_env is production
+private.has_role(text)                      # BV1-B1 RLS policy helper
+private.is_admin()                          # BV1-B1 RLS policy helper
