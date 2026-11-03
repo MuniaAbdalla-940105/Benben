@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEN-BEN · AU-02 Auction Detail (LIVE)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="_proto/components.css">
+<link rel="stylesheet" href="_proto/proto.css">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="../tailwind-theme.js"></script>
+<script src="_proto/proto.js" defer></script>
+</head>
+<body class="proto">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol><symbol id="i-next" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></symbol><symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0v4l2 3H4l2-3z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol><symbol id="i-bell-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0v4l2 3H4l2-3z" fill="currentColor"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9 2h6"/></symbol><symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5a5 5 0 0 1 5.5 5"/></symbol><symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M15 12.5h6M3 9.5h12"/></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol><symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></symbol><symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></symbol><symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol><symbol id="i-auction" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M7 16v-4M12 16V8M17 16V4"/></symbol><symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></symbol><symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol><symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol><symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M6 16a3 3 0 0 1 6 0M14 10h4M14 14h4"/></symbol><symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></symbol><symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></symbol><symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol><symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></symbol><symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-7z"/></symbol><symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></symbol><symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7h16v-7M12 3v12M8 7l4-4 4 4"/></symbol><symbol id="i-offline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 12.5a10 10 0 0 1 5-2.6M12 20h.01"/></symbol><symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14M16 5v14"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol><symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></symbol><symbol id="i-vibrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="8" height="16" rx="1.5"/><path d="M4 8v8M20 8v8"/></symbol><symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol><symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></symbol><symbol id="i-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></symbol><symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v4h-4"/></symbol><symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol><symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></symbol><symbol id="i-key2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/><path d="M12 14v2"/></symbol></svg>
+<!--title: BEN-BEN · AU-02 Auction Detail (LIVE)-->
+<header class="proto-head">
+ <p class="proto-kicker">AU-02 · ST-009 (guest view, countdown) · ST-011 (bid bar, live updates) · ST-008 (Join to Bid entry) · ST-014 (extension)</p>
+ <h1>AU-02 Auction Detail · LIVE</h1>
+ <p class="meta">Direction B base + C live stage (ADR-003). The sticky header is the navy stage in both themes: lot number, LIVE pill, gold-framed countdown ring, current bid and leader, bidder count, and a "my status" strip (UX 3B). The page below is the ivory (or dark) catalogue. Data: <code class="proto-code">auction_public</code> + <code class="proto-code">get_auction_live_state</code> (contract ST-009); time from <code class="proto-code">server_time()</code>, never the device clock. Reserve is never shown (Q-22).</p>
+ <div class="proto-grid mt-4">
+  <div class="proto-box"><h3>Components</h3><ul>
+   <li><code>AuctionStageHeader</code> (BackButton, LotNumber, LivePill, WatchButton, ShareButton)</li>
+   <li><code>CountdownRing</code> · <code>LivePrice</code> (aria-live polite) · <code>MyStatusBar</code></li>
+   <li><code>MediaGallery</code> · <code>KeySpecs</code> · <code>ConditionReportLink</code> · <code>PaymentTerms</code></li>
+   <li><code>BidLadder</code> (BidHistory) · <code>ChatPreview</code></li>
+   <li><code>JoinToBidBar</code> (guest / registered) · <code>BidBar</code> (verified: QuickBidButton ×3, CustomAmountField, AutoBidLink, SkipConfirmChip)</li>
+  </ul></div>
+  <div class="proto-box"><h3>Sample data (synthetic, Q-75)</h3><ul>
+   <li>LOT 07 · شقة 3 غرف بحديقة · ريحانة هايتس، التجمع الخامس · 165 م² + حديقة 60 م²</li>
+   <li>Start <b>7,800,000</b> · current <b>8,450,000</b> · increment <b>50,000</b> (5M–10M band) · next min <b>8,500,000</b></li>
+   <li>Quick bids +1/+2/+5: 8,500,000 · 8,550,000 · 8,700,000 · premium 2.5% · down payment 20%</li>
+   <li>9 verified bidders (participant_count) · 12 bids · 42:18 left (amber) · 0 extensions</li>
+  </ul></div>
+  <div class="proto-box"><h3>Behaviour</h3><ul>
+   <li>Header price rolls on <code>bid.placed</code>; history row slides in. Reduced motion: instant swap.</li>
+   <li>Ring arc = share of the current window: 24 h above 1 h, the last hour under 1 h, the last 5 min under 5 min. Gold frame, state colour on the arc.</li><li>Timer announces at 1 h, 5 min, 1 min, on extension; label + icon change with colour.</li>
+   <li>Quick buttons +1, +2: AU-05 confirm unless "skip for this session" is on. +5 and custom: always AU-05 (Q-80).</li>
+   <li>768: two columns (gallery + details | sticky stage panel with bid bar). 1280: same, max width 1200.</li>
+  </ul></div>
+ </div>
+</header>
+
+<section class="proto-section">
+ <h2>Main frames · 375 px · Arabic RTL</h2>
+ <p class="lead">Scroll inside each phone. Each frame is followed by its dark-theme copy. The stage header looks the same in both themes by design.</p>
+ <div class="proto-row">
+
+<!-- ============ Guest ============ -->
+<figure data-pair><p class="proto-cap"><b>Guest</b> · <span class="theme-name">Light</span> · "Join to Bid"</p>
+<div class="frame frame--phone ds-root" data-theme="light" dir="rtl" lang="ar" data-component="AuctionDetailPage">
+ <div class="scroll pb-40">
+  <header class="sticky top-0 z-20" data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)" data-component="AuctionStageHeader">
+   <div class="flex items-center h-12 px-1 gap-1">
+    <button class="c-icon-btn" aria-label="رجوع"><svg class="w-5 h-5 c-flip" aria-hidden="true"><use href="#i-back"/></svg></button>
+    <span class="c-lot" dir="ltr">LOT 07</span><span class="c-live ds-anim-live-pulse ms-1">مباشر</span>
+    <span class="flex-1"></span>
+    <button class="c-icon-btn" aria-label="متابعة المزاد"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-heart"/></svg></button><button class="c-icon-btn" aria-label="مشاركة"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-share"/></svg></button>
+   </div>
+   <div class="flex items-center gap-3 px-4 pb-3">
+    <div class="c-ring c-ring--warn w-[76px] h-[76px]" role="timer" aria-label="ينتهي قريبًا، متبقي 42 دقيقة" data-component="CountdownRing"><svg viewBox="0 0 84 84"><circle class="c-ring__frame" cx="42" cy="42" r="41" fill="none" stroke-width="1"/><circle class="c-ring__track" cx="42" cy="42" r="36" fill="none" stroke-width="5"/><circle class="c-ring__arc" cx="42" cy="42" r="36" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="67"/></svg><div class="c-ring__inner"><p class="t-xs t-warn font-semibold">قريبًا</p><p class="ds-num font-semibold" dir="ltr">42:18</p></div></div>
+    <div class="flex-1 min-w-0" aria-live="polite" data-component="LivePrice">
+     <p class="t-xs t-muted">المزايدة الحالية · مزايد <span class="ds-num">#7</span></p>
+     <p class="ds-num n-lg" dir="ltr"><span class="ds-anim-price-roll">8,450,000</span> <span class="t-sm font-normal">ج.م</span></p>
+     <p class="t-xs t-muted mt-0.5"><span class="ds-num" style="color:var(--ds-ink)">9</span> مزايدين موثّقين · <span class="ds-num">12</span> مزايدة · تمديد <span class="ds-num">0</span></p>
+    </div>
+   </div>
+   <div class="flex justify-between items-center px-4 py-2 t-xs" style="background:var(--ds-surface)" data-component="MyStatusBar"><span>حالتك: <b>تشاهد كضيف</b></span><span>أقل مزايدة تالية <b class="ds-num t-sm">8,500,000</b></span></div>
+  </header>
+
+  <div data-component="MediaGallery">
+   <div class="h-[230px] ph ph-tower relative" role="img" aria-label="واجهة العمارة، صورة 1 من 14"><span class="absolute top-2 start-2 c-badge c-badge--neutral"><span class="ds-num">1/14</span> صور · فيديو</span></div>
+   <div class="flex gap-1.5 px-4 -mt-5 relative"><span class="w-11 h-11 rounded-md ph ph-tower ring-2 ring-white"></span><span class="w-11 h-11 rounded-md ph ph-villa ring-2 ring-white"></span><span class="w-11 h-11 rounded-md ph ph-town ring-2 ring-white"></span><span class="w-11 h-11 rounded-md bg-primary text-primary-on grid place-items-center t-xs ring-2 ring-white">+<span class="ds-num">11</span></span></div>
+  </div>
+
+  <section class="px-4 pt-4" data-component="KeySpecs">
+   <h1 class="t-h1">شقة 3 غرف بحديقة خاصة</h1>
+   <p class="t-sm t-muted">ريحانة هايتس · التجمع الخامس، القاهرة الجديدة</p>
+   <p class="mt-1 inline-flex items-center gap-1 t-xs t-ok font-semibold"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-shield"/></svg>الملكية والمستندات اتراجعت · معاينة 28 أكتوبر</p>
+   <div class="c-card mt-3 grid grid-cols-4 text-center py-2 t-xs t-muted">
+    <div><b class="ds-num block n-md" style="color:var(--ds-ink)">165</b>م²</div><div><b class="ds-num block n-md" style="color:var(--ds-ink)">3</b>غرف</div><div><b class="ds-num block n-md" style="color:var(--ds-ink)">2</b>حمام</div><div><b class="block t-h3" style="color:var(--ds-ink)">أرضي</b>الدور</div>
+   </div>
+   <dl class="c-card c-money p-3 mt-2"><dt>سعر البداية</dt><dd>7,800,000</dd><dt>سعر المتر بالمزايدة الحالية</dt><dd>≈ 51,200</dd><dt>أقل زيادة</dt><dd>50,000</dd><dt>التشطيب</dt><dd style="direction:rtl;font-family:inherit">متشطبة بالكامل</dd><dt>الاستلام</dt><dd style="direction:rtl;font-family:inherit">فوري</dd></dl>
+   <a href="#" class="c-card c-row mt-2 t-sm" data-component="ConditionReportLink"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-doc"/></svg><span class="flex-1"><b>تقرير المعاينة</b><br><span class="t-xs t-muted">14 صفحة · PDF · 2.1 MB</span></span><svg class="w-4 h-4 c-flip" aria-hidden="true"><use href="#i-next"/></svg></a>
+  </section>
+
+  <section class="px-4 pt-5" data-component="PaymentTerms">
+   <h2 class="t-h2 mb-2">شروط الدفع بعد الفوز</h2>
+   <div class="c-card p-3">
+    <div class="flex h-2 rounded-full overflow-hidden mb-3" aria-hidden="true"><div class="bg-primary" style="flex:20"></div><div class="bg-accent" style="flex:80"></div></div>
+    <dl class="c-money"><dt>مقدم 20% خلال 48 ساعة</dt><dd>≈ 1,690,000</dd><dt>80% على 12 قسط ربع سنوي</dt><dd>≈ 563,300</dd><dt>عمولة المشتري 2.5%</dt><dd>≈ 211,250</dd></dl>
+    <p class="t-xs t-muted mt-2">تقريبية، محسوبة على المزايدة الحالية وتتغيّر معها.</p>
+   </div>
+  </section>
+
+  <section class="px-4 pt-5" data-component="BidHistory">
+   <h2 class="t-h2 mb-2">سجل المزايدات</h2>
+   <ol class="c-card c-ladder" data-component="BidLadder">
+    <li class="is-lead"><span class="c-avatar">7</span><span><b>مزايد <span class="ds-num">#7</span></b> <span class="t-xs t-accent">الأعلى</span></span><b class="ds-num" dir="ltr">8,450,000</b><span class="ds-num t-xs t-muted">14:17:52</span></li>
+    <li><span class="c-avatar">3</span><span>مزايد <span class="ds-num">#3</span></span><span class="ds-num" dir="ltr">8,400,000</span><span class="ds-num t-xs t-muted">14:16:10</span></li>
+    <li><span class="c-avatar">7</span><span>مزايد <span class="ds-num">#7</span></span><span class="ds-num" dir="ltr">8,350,000</span><span class="ds-num t-xs t-muted">14:12:41</span></li>
+    <li><span class="c-avatar">11</span><span>مزايد <span class="ds-num">#11</span></span><span class="ds-num" dir="ltr">8,300,000</span><span class="ds-num t-xs t-muted">14:09:03</span></li>
+   </ol>
+   <a href="#" class="c-btn c-btn--ghost c-btn--sm mt-1">كل المزايدات (<span class="ds-num">12</span>)</a>
+  </section>
+
+  <section class="px-4 pt-4" data-component="ChatPreview">
+   <h2 class="t-h2 mb-2">الدردشة</h2>
+   <div class="c-card p-3 space-y-2 t-sm">
+    <p class="rounded-md p-2" style="background:var(--ds-accent-tint)"><b>مضيف BEN-BEN · مثبّت</b><br>تقرير المعاينة متاح. العدادات متركّبة والجراج مسجّل في العقد.</p>
+    <p><b>مزايد <span class="ds-num">#3</span></b> هل الحديقة داخلة في الـ165 م²؟</p>
+    <p><b>مضيف BEN-BEN</b> لا، الحديقة 60 م² إضافية.</p>
+    <a href="#" class="c-btn c-btn--quiet c-btn--block"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-expand"/></svg>افتح غرفة المزاد</a>
+    <p class="t-xs t-muted">للكتابة في الدردشة انضم للمزايدة.</p>
+   </div>
+  </section>
+ </div>
+ <div class="absolute bottom-0 inset-x-0 px-4 pt-3 pb-4" style="background:var(--ds-surface);border-top:1px solid var(--ds-line)" data-component="JoinToBidBar">
+  <div class="flex items-center gap-3">
+   <div class="flex-1"><p class="t-xs t-muted">أقل مزايدة تالية</p><p class="ds-num n-md" dir="ltr">8,500,000 <span class="t-xs font-normal">ج.م</span></p></div>
+   <button class="c-btn c-btn--primary c-btn--lg is-focus">انضم للمزايدة</button>
+  </div>
+  <p class="t-xs t-muted mt-2">يتطلب حجز مبلغ جدية <span class="ds-num">5,000</span> ج.م يُسترد إذا لم تفز. <a href="#" class="underline">كيف يعمل المزاد؟</a></p>
+ </div>
+</div>
+</figure>
+
+<!-- ============ Verified ============ -->
+<figure data-pair><p class="proto-cap"><b>Verified bidder</b> · <span class="theme-name">Light</span> · bid bar (ST-011)</p>
+<div class="frame frame--phone ds-root" data-theme="light" dir="rtl" lang="ar" data-component="AuctionDetailPage">
+ <div class="scroll pb-56">
+  <header class="sticky top-0 z-20" data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)" data-component="AuctionStageHeader">
+   <div class="flex items-center h-12 px-1 gap-1"><button class="c-icon-btn" aria-label="رجوع"><svg class="w-5 h-5 c-flip" aria-hidden="true"><use href="#i-back"/></svg></button><span class="c-lot" dir="ltr">LOT 07</span><span class="c-live ds-anim-live-pulse ms-1">مباشر</span><span class="flex-1"></span><span class="c-badge c-badge--verified me-2"><svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#i-shield"/></svg>مزايد <span class="ds-num">#12</span></span></div>
+   <div class="flex items-center gap-3 px-4 pb-3">
+    <div class="c-ring c-ring--warn w-[76px] h-[76px]" role="timer" aria-label="ينتهي قريبًا، متبقي 41 دقيقة"><svg viewBox="0 0 84 84"><circle class="c-ring__frame" cx="42" cy="42" r="41" fill="none" stroke-width="1"/><circle class="c-ring__track" cx="42" cy="42" r="36" fill="none" stroke-width="5"/><circle class="c-ring__arc" cx="42" cy="42" r="36" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="71"/></svg><div class="c-ring__inner"><p class="t-xs t-warn font-semibold">قريبًا</p><p class="ds-num font-semibold" dir="ltr">41:05</p></div></div>
+    <div class="flex-1" aria-live="polite"><p class="t-xs t-muted">المزايدة الحالية · مزايد <span class="ds-num">#7</span></p><p class="ds-num n-lg" dir="ltr">8,450,000 <span class="t-sm font-normal">ج.م</span></p><p class="t-xs t-muted"><span class="ds-num" style="color:var(--ds-ink)">9</span> مزايدين موثّقين · تمديد <span class="ds-num">0</span></p></div>
+   </div>
+   <div class="flex justify-between items-center px-4 py-2 t-xs" style="background:var(--ds-surface)" data-component="MyStatusBar"><span>حالتك: <b>منضم · لم تزايد بعد</b></span><span>محجوز <b class="ds-num">5,000</b></span></div>
+  </header>
+  <div class="h-[200px] ph ph-tower"></div>
+  <section class="px-4 pt-4"><h1 class="t-h1">شقة 3 غرف بحديقة خاصة</h1><p class="t-sm t-muted">ريحانة هايتس · التجمع الخامس</p>
+   <ol class="c-card c-ladder mt-3"><li class="is-lead"><span class="c-avatar">7</span><span><b>مزايد <span class="ds-num">#7</span></b></span><b class="ds-num" dir="ltr">8,450,000</b><span class="ds-num t-xs t-muted">14:17:52</span></li><li><span class="c-avatar">3</span><span>مزايد <span class="ds-num">#3</span></span><span class="ds-num" dir="ltr">8,400,000</span><span class="ds-num t-xs t-muted">14:16:10</span></li></ol>
+  </section>
+ </div>
+ <div class="absolute bottom-0 inset-x-0 px-4 pt-3 pb-4 space-y-2" style="background:var(--ds-surface);border-top:1px solid var(--ds-line)" data-component="BidBar">
+  <div class="flex justify-between items-center t-xs"><span class="t-muted">أقل مزايدة <b class="ds-num t-sm" style="color:var(--ds-ink)">8,500,000</b> · الزيادة <span class="ds-num">50,000</span></span><a href="#" class="underline" data-component="AutoBidLink"><svg class="w-3.5 h-3.5 inline" aria-hidden="true"><use href="#i-bolt"/></svg> مزايدة تلقائية</a></div>
+  <div class="grid grid-cols-3 gap-2" role="group" aria-label="مزايدة سريعة" data-component="QuickBidButtons">
+   <button class="c-btn c-btn--secondary min-h-target-bid flex-col gap-0 px-1" style="line-height:1.15"><span class="t-xs font-normal t-muted">+1</span><span class="ds-num t-sm" dir="ltr">8,500,000</span></button>
+   <button class="c-btn c-btn--secondary min-h-target-bid flex-col gap-0 px-1" style="line-height:1.15"><span class="t-xs font-normal t-muted">+2</span><span class="ds-num t-sm" dir="ltr">8,550,000</span></button>
+   <button class="c-btn c-btn--secondary min-h-target-bid flex-col gap-0 px-1" style="line-height:1.15"><span class="t-xs font-normal t-muted">+5 · يتطلب تأكيد</span><span class="ds-num t-sm" dir="ltr">8,700,000</span></button>
+  </div>
+  <div class="flex gap-2">
+   <button class="c-btn c-btn--primary c-btn--lg flex-1">زايد <span class="ds-num">8,500,000</span></button>
+   <button class="c-btn c-btn--quiet c-btn--lg px-3" aria-label="مبلغ مخصص" data-component="CustomAmountButton">مبلغ آخر</button>
+  </div>
+ </div>
+</div>
+</figure>
+
+<!-- ============ English ============ -->
+<figure data-pair><p class="proto-cap"><b>English (LTR)</b> · <span class="theme-name">Light</span> · guest</p>
+<div class="frame frame--phone ds-root" data-theme="light" dir="ltr" lang="en" data-component="AuctionDetailPage">
+ <div class="scroll pb-40">
+  <header class="sticky top-0 z-20" data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)">
+   <div class="flex items-center h-12 px-1 gap-1"><button class="c-icon-btn" aria-label="Back"><svg class="w-5 h-5 c-flip" aria-hidden="true"><use href="#i-back"/></svg></button><span class="c-lot">LOT 07</span><span class="c-live ds-anim-live-pulse ms-1">LIVE</span><span class="flex-1"></span><button class="c-icon-btn" aria-label="Watch"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-heart"/></svg></button><button class="c-icon-btn" aria-label="Share"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-share"/></svg></button></div>
+   <div class="flex items-center gap-3 px-4 pb-3">
+    <div class="c-ring c-ring--warn w-[76px] h-[76px]" role="timer" aria-label="Ending soon, 42 minutes left"><svg viewBox="0 0 84 84"><circle class="c-ring__frame" cx="42" cy="42" r="41" fill="none" stroke-width="1"/><circle class="c-ring__track" cx="42" cy="42" r="36" fill="none" stroke-width="5"/><circle class="c-ring__arc" cx="42" cy="42" r="36" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="67"/></svg><div class="c-ring__inner"><p class="t-xs t-warn font-semibold">Soon</p><p class="ds-num font-semibold">42:18</p></div></div>
+    <div class="flex-1"><p class="t-xs t-muted">Current bid · Bidder #7</p><p class="ds-num n-lg">EGP 8,450,000</p><p class="t-xs t-muted"><span class="ds-num" style="color:var(--ds-ink)">9</span> verified bidders · 12 bids · 0 extensions</p></div>
+   </div>
+   <div class="flex justify-between px-4 py-2 t-xs" style="background:var(--ds-surface)"><span>You: <b>watching as a guest</b></span><span>Next min. <b class="ds-num t-sm">8,500,000</b></span></div>
+  </header>
+  <div class="h-[230px] ph ph-tower"></div>
+  <section class="px-4 pt-4"><h1 class="t-h1" style="font-family:var(--ds-font-latin)">3-bed garden apartment</h1><p class="t-sm t-muted">Rayhana Heights · Fifth Settlement, New Cairo</p><p class="mt-1 inline-flex items-center gap-1 t-xs t-ok font-semibold"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-shield"/></svg>Title and documents reviewed · inspected 28 Oct</p>
+   <div class="c-card mt-3 grid grid-cols-4 text-center py-2 t-xs t-muted"><div><b class="ds-num block n-md" style="color:var(--ds-ink)">165</b>m²</div><div><b class="ds-num block n-md" style="color:var(--ds-ink)">3</b>beds</div><div><b class="ds-num block n-md" style="color:var(--ds-ink)">2</b>baths</div><div><b class="block t-h3" style="color:var(--ds-ink)">G</b>floor</div></div>
+   <dl class="c-card c-money p-3 mt-2"><dt>Starting price</dt><dd>7,800,000</dd><dt>Price per m² now</dt><dd>≈ 51,200</dd><dt>Min. increment</dt><dd>50,000</dd></dl>
+   <h2 class="t-h2 mt-5 mb-2">Payment terms if you win</h2>
+   <dl class="c-card c-money p-3"><dt>20% down payment within 48 h</dt><dd>≈ 1,690,000</dd><dt>80% over 12 quarterly instalments</dt><dd>≈ 563,300</dd><dt>Buyer's premium 2.5%</dt><dd>≈ 211,250</dd></dl>
+  </section>
+ </div>
+ <div class="absolute bottom-0 inset-x-0 px-4 pt-3 pb-4" style="background:var(--ds-surface);border-top:1px solid var(--ds-line)">
+  <div class="flex items-center gap-3"><div class="flex-1"><p class="t-xs t-muted">Next minimum bid</p><p class="ds-num n-md">EGP 8,500,000</p></div><button class="c-btn c-btn--primary c-btn--lg">Join to Bid</button></div>
+  <p class="t-xs t-muted mt-2">Requires an EGP 5,000 deposit, refunded if you don't win. <a href="#" class="underline">How auctions work</a></p>
+ </div>
+</div>
+</figure>
+ </div>
+</section>
+
+<section class="proto-section">
+ <h2>Responsive · 1280 px (shown at 55%) · Arabic RTL</h2>
+ <p class="lead">From 768 px: catalogue column (gallery, specs, terms, history, chat) and a sticky stage panel (ring, price, my status, bid bar) on the inline-end side. Bottom bar disappears; the panel holds the action. 1280: max content width 1200, same layout.</p>
+ <div class="proto-row">
+  <figure data-pair><p class="proto-cap"><b>Desktop</b> · <span class="theme-name">Light</span></p>
+   <div class="frame-scale" style="width:704px;height:440px"><div class="frame frame--desk ds-root" data-theme="light" dir="rtl" lang="ar" style="transform:scale(.55)">
+    <div class="h-14 flex items-center gap-4 px-8" style="background:var(--ds-surface);border-bottom:1px solid var(--ds-line)"><img class="ds-brand-on-light h-7 w-auto" data-brand="symbol" src="../brand/logo/symbol.svg" alt="BEN-BEN"><img class="ds-brand-on-dark h-7 w-auto" data-brand="symbol" src="../brand/logo/symbol-on-navy.svg" alt="BEN-BEN"><span class="t-sm">المزادات</span><span class="t-sm t-muted">استكشف</span><span class="flex-1"></span><span class="t-sm">المتاح <b class="ds-num">12,000</b></span></div>
+    <div class="max-w-[1200px] mx-auto grid grid-cols-[1fr_400px] gap-8 p-8">
+     <div><div class="h-[360px] rounded-xl ph ph-tower"></div><h1 class="t-h1 mt-4">شقة 3 غرف بحديقة خاصة · ريحانة هايتس</h1><p class="t-sm t-muted">التجمع الخامس · 165 م² · 3 غرف · متشطبة بالكامل · استلام فوري</p></div>
+     <aside class="rounded-xl overflow-hidden self-start" data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)">
+      <div class="p-5 flex items-center gap-4"><div class="c-ring c-ring--warn w-[96px] h-[96px]"><svg viewBox="0 0 84 84"><circle class="c-ring__frame" cx="42" cy="42" r="41" fill="none" stroke-width="1"/><circle class="c-ring__track" cx="42" cy="42" r="36" fill="none" stroke-width="5"/><circle class="c-ring__arc" cx="42" cy="42" r="36" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="67"/></svg><div class="c-ring__inner"><p class="t-xs t-warn font-semibold">قريبًا</p><p class="ds-num n-md" dir="ltr">42:18</p></div></div><div><span class="c-lot" dir="ltr">LOT 07</span> <span class="c-live">مباشر</span><p class="ds-num n-xl mt-1" dir="ltr">8,450,000</p><p class="t-xs t-muted"><span class="ds-num">9</span> مزايدين موثّقين</p></div></div>
+      <div class="p-5" style="background:var(--ds-surface)"><p class="t-sm">حالتك: <b>تشاهد كضيف</b></p><button class="c-btn c-btn--primary c-btn--lg c-btn--block mt-3">انضم للمزايدة</button><p class="t-xs t-muted mt-2">مبلغ جدية <span class="ds-num">5,000</span> ج.م يُسترد إذا لم تفز.</p></div>
+     </aside>
+    </div>
+   </div></div>
+  </figure>
+ </div>
+</section>
+
+<section class="proto-section">
+ <h2>States</h2>
+ <p class="lead">Toggle "Dark" in the bar to see the state cards in the dark theme. Dotted labels are contract error codes (DATA_MODEL §6), not UI text.</p>
+ <div class="states" data-states data-theme="light" dir="rtl" lang="ar">
+
+  <div class="state"><div class="state__tag"><span>Loading</span><code>get_auction_live_state pending</code></div><div class="state__body space-y-2" aria-busy="true">
+   <div class="rounded-md p-3 flex gap-3" data-surface="stage" style="background:var(--ds-bg)"><div class="w-14 h-14 rounded-full c-skel"></div><div class="flex-1 space-y-2"><div class="c-skel h-3 w-1/2"></div><div class="c-skel h-6"></div></div></div>
+   <div class="c-skel ds-anim-shimmer h-28"></div><div class="c-skel ds-anim-shimmer h-4 w-2/3"></div><div class="c-skel ds-anim-shimmer h-12"></div><p class="t-xs t-muted text-center">جارٍ تحميل المزاد…</p></div></div>
+
+  <div class="state"><div class="state__tag"><span>Empty / not found</span><code>AUCTION_NOT_FOUND</code></div><div class="state__body c-empty"><span class="c-empty__icon"><svg class="w-7 h-7" aria-hidden="true"><use href="#i-search"/></svg></span><p class="t-h3">هذا المزاد غير متاح</p><p class="t-sm t-muted">ربما أُلغي أو الرابط غير صحيح.</p><a href="#" class="c-btn c-btn--primary c-btn--sm">المزادات المباشرة الآن</a></div></div>
+
+  <div class="state"><div class="state__tag"><span>Error · load failed</span><code>INTERNAL_ERROR</code></div><div class="state__body c-empty"><span class="c-empty__icon"><svg class="w-7 h-7" aria-hidden="true"><use href="#i-alert"/></svg></span><p class="t-h3">تعذّر تحميل المزاد</p><p class="t-sm t-muted">حدث خطأ غير متوقع. رقم الطلب <span class="ds-num">req_7f3a</span></p><button class="c-btn c-btn--secondary c-btn--sm"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-refresh"/></svg>إعادة المحاولة</button></div></div>
+
+  <div class="state"><div class="state__tag"><span>Error · connection lost (A6)</span><code>Realtime CHANNEL_ERROR</code></div><div class="state__body p-0">
+   <div class="c-alert c-alert--warn rounded-none" role="status"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-offline"/></svg><span><b>إعادة الاتصال…</b>الأرقام قد لا تكون محدّثة. آخر تحديث <span class="ds-num">14:17:52</span>.</span></div>
+   <div class="p-3"><p class="t-xs t-muted">المزايدة الحالية</p><p class="ds-num n-lg t-muted" dir="ltr">8,450,000</p></div>
+   <div class="p-3" style="border-top:1px solid var(--ds-line)"><button class="c-btn c-btn--primary c-btn--block" disabled>المزايدة متوقفة لحين الاتصال</button><p class="t-xs t-muted mt-1">عند العودة نعيد مزامنة السعر والوقت من الخادم.</p></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Success · bid placed, leading</span><code>place_bid ok · ALREADY_LEADING</code></div><div class="state__body p-0">
+   <div class="flex justify-between items-center px-3 py-2 t-xs" data-surface="stage" style="background:var(--ds-surface);color:var(--ds-ink)"><span class="t-ok font-semibold"><svg class="w-3.5 h-3.5 inline" aria-hidden="true"><use href="#i-check"/></svg> حالتك: الأعلى</span><span>مزايدتك <b class="ds-num">8,500,000</b></span></div>
+   <div class="p-3"><div class="c-toast c-toast--ok" role="status"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-check"/></svg><span>تمت المزايدة بـ <span class="ds-num">8,500,000</span> ج.م · أنت الأعلى الآن</span></div></div>
+   <div class="p-3" style="border-top:1px solid var(--ds-line)"><button class="c-btn c-btn--quiet c-btn--block" disabled><svg class="w-4 h-4" aria-hidden="true"><use href="#i-check"/></svg>أنت في المقدمة</button><p class="t-xs t-muted mt-1 text-center">سننبّهك فور تجاوزك.</p></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Outbid (UX 3B) · one vibration</span><code>bid.placed (other)</code></div><div class="state__body p-0">
+   <div data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)" class="p-3"><p class="t-xs t-muted">المزايدة الحالية · مزايد <span class="ds-num">#7</span></p><p class="ds-num n-lg" dir="ltr">8,550,000</p></div>
+   <div class="flex items-center gap-2 px-3 py-2 t-sm font-semibold ds-anim-status-flash" style="border-inline-start:4px solid var(--ds-danger);color:var(--ds-danger)" role="alert"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-alert"/></svg>حالتك: تم تجاوزك · أقل مزايدة <span class="ds-num">8,600,000</span><svg class="w-4 h-4 ms-auto" aria-hidden="true"><use href="#i-vibrate"/></svg></div>
+   <div class="p-3" style="border-top:1px solid var(--ds-line)"><button class="c-btn c-btn--primary c-btn--block">زايد <span class="ds-num">8,600,000</span></button><p class="t-xs t-muted mt-1">الأزرار السريعة تحدّثت: <span class="ds-num">8,600,000 · 8,650,000 · 8,800,000</span></p></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Rejected bid</span><code>OUTBID · BID_TOO_LOW</code></div><div class="state__body space-y-3">
+   <div class="c-alert c-alert--danger" role="alert"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-alert"/></svg><span><b>سبقك مزايد آخر</b>أقل مزايدة الآن <span class="ds-num">8,600,000</span> ج.م. لم تُسجَّل مزايدتك. <code class="proto-ann">OUTBID</code></span></div>
+   <div class="c-field"><label class="c-label">مبلغ مخصص</label><div class="c-input is-error"><span class="flex-1 ds-num" dir="ltr">8,520,000</span><span class="c-input__affix">ج.م</span></div><p class="c-error">أقل مزايدة <span class="ds-num">8,550,000</span> ج.م. <code class="proto-ann">BID_TOO_LOW</code></p></div>
+   <div class="c-alert c-alert--warn"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-info"/></svg><span>المبلغ أعلى بكثير من الحد الأدنى. راجع الرقم. <code class="proto-ann">BID_TOO_HIGH</code></span></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Extended (ST-014)</span><code>auction.extended</code></div><div class="state__body p-0">
+   <div data-surface="stage" style="background:var(--ds-bg);color:var(--ds-ink)" class="p-3 flex items-center gap-3"><div class="c-ring c-ring--danger w-[64px] h-[64px]"><svg viewBox="0 0 84 84"><circle class="c-ring__frame" cx="42" cy="42" r="41" fill="none" stroke-width="1"/><circle class="c-ring__track" cx="42" cy="42" r="36" fill="none" stroke-width="6"/><circle class="c-ring__arc" cx="42" cy="42" r="36" fill="none" stroke-width="6" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="90"/></svg><div class="c-ring__inner"><p class="ds-num font-bold t-danger t-sm" dir="ltr">03:00</p></div></div><div><p class="ds-num n-md" dir="ltr">8,950,000</p><span class="c-badge c-badge--verified">+3:00 · تمديد <span class="ds-num">3</span></span></div></div>
+   <div class="p-3"><div class="c-toast" role="alert"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-clock"/></svg><span>تم تمديد المزاد 3 دقائق بسبب مزايدة في آخر 60 ثانية · التمديد رقم <span class="ds-num">3</span></span></div><p class="t-xs t-muted mt-2">الوقت الجديد من الخادم (<span class="ds-num">ends_at</span>)، والعدّاد يُعلن مرة واحدة.</p></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Final minutes · unstable link (A6)</span><code>&lt; 5 min</code></div><div class="state__body space-y-2">
+   <div class="c-timer c-timer--danger c-timer--boxed"><svg class="w-3.5 h-3.5" aria-hidden="true"><use href="#i-alert"/></svg><span class="c-timer__label">الدقائق الأخيرة</span><span class="c-timer__value">00:48</span></div>
+   <div class="c-alert c-alert--warn"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-bolt"/></svg><span><b>الاتصال غير مستقر</b>فعّل المزايدة التلقائية حتى لا تفوتك آخر ثانية. <a href="#" class="underline">إعداد تلقائي</a></span></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Paused</span><code>AUCTION_PAUSED</code></div><div class="state__body space-y-2">
+   <span class="c-live c-live--paused"><svg class="w-3 h-3" aria-hidden="true"><use href="#i-pause"/></svg>متوقف مؤقتًا</span>
+   <p class="t-sm">توقف المزاد بسبب عطل فني. الوقت المتبقي محفوظ، ويُضاف وقت التوقف + 5 دقائق عند الاستئناف.</p>
+   <button class="c-btn c-btn--primary c-btn--block" disabled>المزايدة متوقفة مؤقتًا</button></div></div>
+
+  <div class="state"><div class="state__tag"><span>Ended</span><code>AUCTION_ENDED</code></div><div class="state__body space-y-2">
+   <span class="c-live c-live--ended">انتهى</span><p class="t-xs t-muted">بيع بـ</p><p class="ds-num n-lg" dir="ltr">8,950,000</p>
+   <p class="t-sm">انتهى المزاد. جارٍ تأكيد النتيجة، وستصلك رسالة خلال دقائق.</p><button class="c-btn c-btn--secondary c-btn--block" disabled>انتهى المزاد</button></div></div>
+
+  <div class="state"><div class="state__tag"><span>Upcoming</span><code>status upcoming · AUCTION_NOT_LIVE</code></div><div class="state__body space-y-2">
+   <span class="c-badge c-badge--neutral">يبدأ قريبًا</span><div class="c-timer c-timer--neutral"><span class="c-timer__label">يبدأ</span><span class="c-timer__value" style="font-size:1.25rem">الخميس 6:00 م</span></div>
+   <p class="t-sm">يمكنك الانضمام وحجز مبلغ الجدية الآن، والمغادرة متاحة قبل البدء فقط.</p><div class="flex gap-2"><button class="c-btn c-btn--primary flex-1">انضم مبكرًا</button><button class="c-btn c-btn--secondary"><svg class="w-4 h-4" aria-hidden="true"><use href="#i-bell"/></svg>ذكّرني</button></div></div></div>
+
+  <div class="state"><div class="state__tag"><span>Permission · seller</span><code>SELLER_CANNOT_JOIN</code></div><div class="state__body space-y-2">
+   <div class="c-alert c-alert--info"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-lock"/></svg><span><b>هذا مزادك</b>لا يمكن للبائع المزايدة على عقاره. تابع الأداء من لوحة البائع.</span></div><button class="c-btn c-btn--primary c-btn--block" disabled>انضم للمزايدة</button></div></div>
+
+  <div class="state"><div class="state__tag"><span>Permission · suspended / banned</span><code>USER_SUSPENDED · USER_BANNED</code></div><div class="state__body space-y-2">
+   <div class="c-alert c-alert--danger"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-lock"/></svg><span><b>المزايدة غير متاحة لحسابك</b>موقوف حتى 14 مايو 2027 بسبب عدم إتمام شراء سابق. <code class="proto-ann">USER_SUSPENDED</code></span></div>
+   <div class="c-alert c-alert--danger"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-lock"/></svg><span><b>تم حظر الحساب</b>السبب: نشاط مزايدة غير نظامي. <code class="proto-ann">USER_BANNED</code></span></div><a href="#" class="c-btn c-btn--ghost c-btn--sm">تواصل مع الدعم</a></div></div>
+
+  <div class="state"><div class="state__tag"><span>Permission · not joined</span><code>NOT_PARTICIPANT · NOT_AUTHENTICATED</code></div><div class="state__body space-y-2">
+   <p class="t-sm">انضم للمزايدة على هذا المزاد أولًا. المشاهدة والدردشة (قراءة فقط) متاحة للجميع.</p><button class="c-btn c-btn--primary c-btn--block">انضم للمزايدة</button><p class="t-xs t-muted">ضيف؟ نطلب رقم الموبايل داخل نفس الشيت (UX 1A).</p></div></div>
+
+  <div class="state"><div class="state__tag"><span>Busy / rate limit</span><code>BUSY_RETRY · RATE_LIMITED · DUPLICATE_REQUEST</code></div><div class="state__body space-y-2">
+   <button class="c-btn c-btn--primary c-btn--block is-loading" aria-busy="true">زايد</button><p class="t-xs t-muted text-center">الخادم مشغول، نعيد المحاولة بنفس الطلب… <code class="proto-ann">BUSY_RETRY</code></p>
+   <div class="c-alert c-alert--warn"><svg class="w-5 h-5" aria-hidden="true"><use href="#i-clock"/></svg><span>محاولات كثيرة. حاول بعد <span class="ds-num">8</span> ثوانٍ. <code class="proto-ann">RATE_LIMITED</code></span></div></div></div>
+ </div>
+</section>
+
+</body>
+</html>

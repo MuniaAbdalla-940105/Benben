@@ -52,7 +52,7 @@ Run `/kickoff` after the stakeholder puts the PRD in `docs/PRD.md`:
 1. `product-owner` reads the PRD and writes open questions to `docs/PRD-questions.md`. Stop and ask the stakeholder if anything blocks planning.
 2. `product-owner` writes epics and stories into `backlog/`, then a sprint plan and timeline in `BACKLOG.md`.
 3. Orchestrator generates the design prompt `prompts/DESIGN/ui-ux-designer.md` from `prompts/_templates/design-prompt.md`, filled from the PRD (see Prompt generation).
-4. `ui-ux-designer` writes `docs/design/DESIGN_BRIEF.md`, the design system, and HTML prototypes for sprint 1 stories.
+4. `ui-ux-designer` writes `docs/design/DESIGN_BRIEF.md`, then **design options**: 3 visual directions on the same key screens, plus 2 UX options for each risky moment (money, bids, identity), with pros, cons and a recommendation. The orchestrator shows the options to the stakeholder, who picks one (or a mix). Only then does the designer build the design system and the HTML prototypes for the sprint 1 stories in the chosen direction.
 5. `solution-architect` writes the architecture ADR and the data contract for sprint 1.
 6. Orchestrator shows the stakeholder the plan, the timeline and the design, and waits for approval before any build.
 
@@ -96,6 +96,53 @@ Statuses (field `status:` at the top of each story file):
 ## Sprint cycle (two weeks)
 
 Sprint planning (orchestrator proposes, stakeholder approves) → sprint (per-story cycle, status updated in `BACKLOG.md`) → backlog reprioritized → release decision (stakeholder approves) → retrospective (update agent files and this file with lessons) → next sprint.
+
+## One story = one session = one branch = one PR
+
+Every story (and every bug) is built in its **own Claude Code session** on its **own branch**, so the stakeholder can verify it in isolation.
+
+1. **Orchestrator session** (the main one): keeps the backlog, writes prompts, starts story sessions, and reports to the stakeholder. It builds no story code itself.
+2. **Story session:** the orchestrator runs `/run-story ST-###`. That starts a new cloud session named `ST-### <title>`, checked out from the latest `main`, on the branch `st-###-<what-it-delivers>`. The session runs the whole per-story cycle (build → review → QA) and works only on that branch.
+3. **Pull request:** the story session opens one PR into `main`, titled `ST-### <title>`. The body has: the story link, acceptance criteria as a checklist, how to verify (staging/preview URL, test accounts, steps), test evidence, and the security review result.
+4. **Stakeholder verification:** you open the session or the PR, check the preview deployment, then reply `/feedback ST-### accepted` or leave comments. Comments go back to the same session and branch. Only you merge the PR.
+5. **Dependencies:** a story starts only after the PRs it depends on are merged to `main`. Independent stories in the same sprint can run in parallel sessions.
+
+## Branches and commits
+
+Every branch and commit name must say what the work is. A reader should understand it without opening the diff.
+
+**Branches** are lowercase kebab-case `<type>/<subject>`. A story branch starts with its ID, and every name says what is being built:
+
+| Work | Pattern | Example |
+|---|---|---|
+| Story | `st-###-<what-it-delivers>` | `st-007-auction-bid-engine-with-anti-sniping` |
+| Bug | `bug-###-<what-is-broken>` | `bug-012-countdown-uses-device-clock` |
+| Kickoff / planning | `kickoff/<what>` or `sprint-<n>/<what>` | `kickoff/sprint-1-plan-design-architecture` |
+| Design only | `design/<screens-or-system>` | `design/auction-home-and-live-room` |
+| Infra / CI | `devops/<what>` | `devops/github-actions-ci-and-supabase-staging` |
+| Decision record | `adr/<###-topic>` | `adr/002-realtime-bidding-on-supabase` |
+
+Never use names like `fix`, `update`, `wip`, `test`, `new-branch`, or random or session-generated suffixes.
+
+**Commits** use Conventional Commits: `<type>(<scope>): <what changed, imperative, ≤ 72 chars>`.
+
+- Types: `feat`, `fix`, `docs`, `design`, `test`, `refactor`, `chore`, `ci`, `db` (migrations and RLS), `sec`.
+- The scope is the module (`auctions`, `wallet`, `kyc`, `marketplace`, `admin`, `backlog`, `design`, …).
+- The body explains **why** and what the reviewer should check, and names the PRD section where relevant.
+- The last body line is the story or bug ID: `Refs: ST-007` or `Fixes: BUG-012`.
+- One logical change per commit. Never use messages like "update files", "fix", "changes", or "wip".
+
+Example:
+
+```
+feat(auctions): extend end time by 3 min on bids in the final 60 s
+
+Server-side anti-sniping per PRD 3.6. The extension is computed inside
+place_bid() so it is atomic with the bid insert; clients receive
+auction.extended over Realtime with the new ends_at.
+
+Refs: ST-007
+```
 
 ## Guardrails
 

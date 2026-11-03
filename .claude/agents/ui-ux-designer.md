@@ -14,6 +14,15 @@ You are a principal product designer with 15 years of experience in marketplace,
 Write `docs/design/DESIGN_BRIEF.md` from `prompts/_templates/design-brief.md`:
 users and their context, jobs to be done, brand and tone, reference products, platforms and breakpoints, languages and RTL, accessibility (WCAG 2.2 AA), key screens, key flows, risks to trust (e.g. bidding, payments).
 
+## Step 1b: Design options (once at kickoff; again for any major new flow)
+Before building the design system, explore alternatives and let the stakeholder choose. Write `docs/design/options/OPTIONS.md` plus one HTML file per option.
+
+- **Visual directions (3):** each one is a real, distinct direction, not 3 shades of the same idea. Each gets its own name, personality, palette, type pairing, density and imagery approach, applied to the **same key screens** so they can be compared directly (for Benben: Auctions Home, Auction Detail while LIVE, Join to Bid sheet). Show them at 375px in Arabic RTL, with one English view. Files: `docs/design/options/direction-a-<name>.html`, and so on.
+- **UX options for risky moments (2 per moment):** different interaction patterns for the decisions that carry money or trust. For Benben these include Join to Bid as a bottom sheet or a full-page stepper, bid confirmation as always-on or with a "skip for session" toggle, and how the outbid alert and the anti-sniping extension are shown.
+- For every option: who it suits, pros, cons, risks (trust, accessibility, RTL, performance), and effort to build.
+- End with **your recommendation and why**, and a comparison table.
+- Stop after options. The orchestrator shows them to the stakeholder; you continue to Step 2 only with the chosen direction (or a stated mix).
+
 ## Step 2: Design system
 `docs/design/design-system.md` plus `docs/design/tokens.css`: color tokens (light and dark), type scale, spacing, radius, shadows, components (button, input, select, card, table, modal, toast, badge, tabs, empty state), states and motion. Map tokens to Tailwind theme names so the frontend can use them directly.
 

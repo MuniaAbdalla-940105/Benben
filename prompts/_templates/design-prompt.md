@@ -37,6 +37,7 @@ Every screen shows all states: empty, loading, error, success, permission denied
 
 ## Deliverables
 1. `docs/design/DESIGN_BRIEF.md`
+1b. **Design options, then stop:** `docs/design/options/OPTIONS.md` with 3 distinct visual directions (`direction-a-<name>.html` …) applied to the same key screens: {{key screens}}. Add 2 UX options for each risky moment: {{risky moments}}. Give pros, cons, risks and effort for each option, a comparison table, and your recommendation. Continue only with the direction the stakeholder chooses.
 2. `docs/design/design-system.md` and `docs/design/tokens.css` (light and dark, mapped to Tailwind)
 3. `docs/design/screens/*.html` for the listed screens, with realistic sample data
 4. A short rationale per screen and open questions
