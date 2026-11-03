@@ -38,8 +38,8 @@ e2e/                Playwright specs
 
 - **Every pull request into `main`** runs `.github/workflows/ci.yml`: lint, typecheck, Vitest, a fresh-database migration + seed check, up→down→up for new migrations, pgTAP, `supabase db lint`, RLS and RPC allow-list, generated-types freshness, a browser-bundle secret scan, Edge Function tests, and a Playwright smoke test. The single required status is **`CI passed`**. The same checks run locally with `pnpm ci:app` and `pnpm ci:db`.
 - **`.github/workflows/ci-selftest.yml`** proves every check fails on a bad input (on demand, and when the checks change).
-- **Every PR** also gets a preview of `apps/web` (`.github/workflows/preview.yml`), linked in a PR comment.
-- **Merge to `main`** (only after stakeholder acceptance) runs `.github/workflows/deploy-staging.yml`: migrations, Edge Functions, `runtime_env`, Vault secrets and seed to the Supabase staging project, then both apps to their stable staging URLs.
+- **Every PR** also gets a preview of `apps/web`, linked in a PR comment: `preview.yml` builds it with no secrets, and `preview-deploy.yml` (from `main`) validates and uploads it to the separate `benben-web-preview` Pages project.
+- **Merge to `main`** (only after stakeholder acceptance) runs `.github/workflows/deploy-staging.yml`, in this order: check the target is the project named `benben-staging`, `db push` the migrations, mark `runtime_env` as staging, run the seed files (Vault secrets, then the synthetic staging seed), set `APP_ENV=staging` and the mock providers, deploy the Edge Functions and smoke-test them, then build, scan and deploy both apps to their stable staging URLs, and run Playwright against staging.
 - Deploys and previews **skip with a clear message** until the stakeholder provides the staging project and the host. See [ADR-005](docs/decisions/ADR-005-staging-hosting-and-region.md) §3 for the exact secrets.
 
 ## Workflow

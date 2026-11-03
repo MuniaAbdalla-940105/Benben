@@ -1,6 +1,6 @@
 # ADR-005: Staging environment: Supabase plan and region, frontend host, and pipeline inputs
 
-- Status: **proposed, pending stakeholder.** The pipeline is built and runs; nothing is deployed until the stakeholder creates the accounts below and adds the secrets.
+- Status: **proposed, pending stakeholder** (revised 2026-11-03 after the ST-001 security and architecture review). The pipeline is built and runs; nothing is deployed until the stakeholder creates the accounts below and adds the secrets.
 - Date: 2026-11-03
 - Author: devops (ST-001)
 - Builds on: ADR-001 (stack), ADR-002 §4 (environments) and §15 (CI, deploy, env vars, secrets), ADR-004
@@ -48,29 +48,44 @@ Cons and mitigations: preview URLs are public (synthetic data only; Access can b
 Resulting URLs (they exist only after the first deploy; nothing is live yet):
 - web staging: `https://benben-web-staging.pages.dev`
 - admin staging: `https://benben-admin-staging.pages.dev`
-- PR preview (web): `https://<branch-alias>.benben-web-staging.pages.dev`, posted as a PR comment by `.github/workflows/preview.yml`.
+- PR preview (web): `https://pr-<number>.benben-web-preview.pages.dev`, posted as a PR comment by `.github/workflows/preview-deploy.yml`.
 
 ## 3. What the stakeholder must provide
 
-Repository settings are at GitHub → Settings → Secrets and variables → Actions, and Settings → Environments.
+Repository settings are at GitHub → Settings → Secrets and variables → Actions, and Settings → Environments. Revised after the ST-001 security review (H1, M1, M5).
+
+**Environments** (Settings → Environments):
+
+| Environment | Deployment branches | Required reviewers | Secrets in it |
+|---|---|---|---|
+| `staging` | **`main` only** | the stakeholder (approves each staging deploy and rollback run) | `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `CLOUDFLARE_API_TOKEN` |
+| `preview` | **`main` only** (the preview-deploy workflow runs from `main`) | none | `CLOUDFLARE_API_TOKEN` (may be a separate token) |
+
+**Secrets and variables:**
 
 | Name | Kind | Where | Value / how to get it |
 |---|---|---|---|
-| `SUPABASE_ACCESS_TOKEN` | secret | Environment **`staging`** | supabase.com → Account → Access tokens. Prefer a token scoped to the staging organisation or project. |
-| `SUPABASE_DB_PASSWORD` | secret | Environment **`staging`** | The database password chosen when creating `benben-staging`. |
-| `STAGING_PROJECT_REF` | variable (or secret) | Repository | The 20-character project ref (Project Settings → General). Not sensitive: it is part of the public API URL. Workflows accept it as a variable or a secret. |
-| `STAGING_SUPABASE_ANON_KEY` | variable | Repository | Project Settings → API keys → the **publishable** key (`sb_publishable_…`) or the legacy `anon` key. Public by design. Never the secret or service-role key: check 8 fails the deploy if one is used. |
-| `CLOUDFLARE_API_TOKEN` | secret | Repository | Cloudflare dashboard → My Profile → API Tokens → custom token with **Account › Cloudflare Pages › Edit** on the BEN-BEN account only. |
-| `CLOUDFLARE_ACCOUNT_ID` | variable (or secret) | Repository | Cloudflare dashboard → Workers & Pages → Account ID. |
+| `SUPABASE_ACCESS_TOKEN` | secret | environment `staging` | supabase.com → Account → Access tokens. Prefer a token scoped to the staging organisation or project. |
+| `SUPABASE_DB_PASSWORD` | secret | environment `staging` | The database password chosen when creating `benben-staging`. |
+| `CLOUDFLARE_API_TOKEN` | secret | environments `staging` **and** `preview` (never repository level) | Cloudflare → My Profile → API Tokens → custom token with **Account › Cloudflare Pages › Edit** on the BEN-BEN account only. |
+| `STAGING_PROJECT_REF` | variable | repository | The 20-character project ref. Not sensitive: it is part of the public API URL. The deploy also checks that this ref belongs to a project **named `benben-staging`** before writing anything (M5). |
+| `STAGING_SUPABASE_ANON_KEY` | variable | repository | The **publishable** key (`sb_publishable_…`) or the legacy `anon` key. Public by design. Never the secret or service-role key: check 8 fails the build if one is used. |
+| `CLOUDFLARE_ACCOUNT_ID` | variable | repository | Cloudflare → Workers & Pages → Account ID. |
 
-Also:
-- **Environment `staging`:** add a deployment branch rule "`main` only". The database password and access token are then readable only by the deploy and rollback workflows on `main`, never by a pull-request branch.
-- **Branch protection on `main`:** require the status check **`CI passed`** (from `.github/workflows/ci.yml`) and require pull requests. This makes every CI check block merges (ST-001 AC 2).
-- The Cloudflare token and the anon key are repository-level because PR previews run on PR branches. Pull requests from forks get no secrets, so their preview is skipped.
+**Edge Function settings** (set by the deploy job with `supabase secrets set`; nothing to add by hand): `APP_ENV=staging` (ADR-006; must agree with `private.runtime_env`), `PAYMENTS_PROVIDER=mock`, `KYC_PROVIDER=mock`, `SMS_PROVIDER=mock`. Locally, `pnpm db:start` writes `APP_ENV=local` to the git-ignored `supabase/functions/.env`. Real provider secrets (`PAYMENTS_HMAC_SECRET`, `SEND_SMS_HOOK_SECRET`, …) arrive with their stories.
 
-The service-role key is **not** a GitHub secret: Supabase provides it to Edge Functions automatically (ADR-002 §15), and CI never needs it. The Vault secrets (`pii_key`, `pii_pepper`, `reserve_key`, `cron_secret`) are generated inside the staging database by the deploy job (`tools/ci/sql/ensure-vault-secrets.sql`) and are never in Git, CI logs or GitHub.
+**Branch protection on `main`** (Settings → Branches):
+- require a pull request before merging, and **require review from Code Owners** (`.github/CODEOWNERS` covers `.github/**`, `tools/ci/**`, `supabase/migrations/**`, `supabase/migrations-down/**`, `supabase/migrations-reverted.txt`, `supabase/config.toml`);
+- require the status check **`CI passed`** (from `.github/workflows/ci.yml`);
+- **require branches to be up to date before merging** (review A3: two PRs that each add a migration are then re-checked in order).
 
-Until these exist, `deploy-staging.yml` and `preview.yml` run a preflight that lists the missing names in the run summary and skip every deploy job. The runs stay green, and no staging URL is claimed.
+**Pages projects:** `benben-web-staging` and `benben-admin-staging` (stable staging URLs) and **`benben-web-preview`** (PR previews only, so a preview can never replace staging). All three are created on first deploy.
+
+The service-role key is **not** a GitHub secret: Supabase provides it to Edge Functions automatically (ADR-002 §15), and CI never needs it. The Vault secrets (`pii_key`, `pii_pepper`, `reserve_key`, `cron_secret`) are generated inside the database by `supabase/seed/00_vault_secrets.sql`, locally, in CI and on staging, and are never in Git, CI logs or GitHub.
+
+**How previews stay safe (review H1).** `preview.yml` runs the pull request's code with **no secrets** and uploads `apps/web/dist` as an artifact. `preview-deploy.yml` runs from `main` (a `workflow_run` trigger) in the `preview` environment. It takes the PR number and head SHA from the run and the GitHub API, never from the artifact; deploys same-repository PRs only; validates and re-scans the artifact; and uploads it with the pinned wrangler to `benben-web-preview` under the branch `pr-<number>`. The deploy, rollback and preview-deploy jobs all run only on `refs/heads/main` (M1).
+
+Until these exist, `deploy-staging.yml` and `preview-deploy.yml` report the missing names in the run summary and skip their deploy steps. The runs stay green, and no staging URL is claimed.
 
 ## 4. Consequences
 
