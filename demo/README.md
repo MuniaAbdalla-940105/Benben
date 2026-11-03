@@ -26,3 +26,5 @@ A clickable, fake-data tour of the whole product. No backend, no build step, syn
 No build step, so it is plain static hosting.
 - **Dashboard (Git):** Workers & Pages → Create → Pages → connect this repo, branch `sprint-1/demo-poc` (or `main` after merge). Framework preset: None. Build command: empty. Build output directory: `demo`.
 - **Or direct upload:** `npx wrangler pages deploy demo --project-name benben-demo`.
+
+- **Cloudflare Workers (Git) form:** leave Build command empty and set Deploy command to `npx wrangler deploy --config demo/wrangler.jsonc` (config in `demo/wrangler.jsonc` serves the folder as static assets). The deploy builds the repo's production branch, so set it to `sprint-1/demo-poc` until the PR is merged.
