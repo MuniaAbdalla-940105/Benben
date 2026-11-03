@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Writes apps/web/.env.local and apps/admin/.env.local from the running local Supabase stack, so a fresh
-# clone needs no manual copy-paste (ST-001 AC 1). Only the URL and the publishable (anon) key are written;
+# clone needs no manual copy-paste (ST-001 AC 1), and supabase/functions/.env with APP_ENV=local for
+# `supabase functions serve` (ADR-006). Only the URL and the publishable (anon) key are written;
 # the service-role / secret key is never put in a browser env file. .env.local is git-ignored.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -22,3 +23,13 @@ VITE_APP_ENV=local
 ENV
   echo "wrote apps/$app/.env.local"
 done
+
+cat > supabase/functions/.env <<'ENV'
+# Written by tools/dev/write-local-env.sh. Read by `supabase functions serve` (local only; git-ignored).
+# APP_ENV must agree with private.runtime_env (ADR-006): local here, staging on staging.
+APP_ENV=local
+PAYMENTS_PROVIDER=mock
+KYC_PROVIDER=mock
+SMS_PROVIDER=mock
+ENV
+echo "wrote supabase/functions/.env"

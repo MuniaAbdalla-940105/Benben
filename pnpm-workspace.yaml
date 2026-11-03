@@ -7,3 +7,8 @@ packages:
 onlyBuiltDependencies:
   - supabase
   - esbuild
+
+# wrangler (pinned for Pages uploads) pulls in workerd, whose install script is only needed for local
+# `wrangler dev`, which we do not use.
+ignoredBuiltDependencies:
+  - workerd

@@ -1,39 +1,35 @@
 #!/usr/bin/env bash
-# Deploy every Edge Function in supabase/functions to the given environment's project.
+# Deploy Edge Functions to an environment's project.
 #   usage: deploy-functions.sh <staging|production> [--dry-run]
 #   env:   SUPABASE_ACCESS_TOKEN, PROJECT_REF
-# Production never receives the functions in tools/ci/prod-forbidden-functions.txt (ADR-002 §4): they
-# are removed from the list, and the deploy fails if one is still present after filtering.
+#          PRODUCTION_FUNCTIONS_FILE (default tools/ci/functions-production.txt; override for the self-test)
+#
+# staging:    every function in supabase/functions (except _shared and other _* folders).
+# production: only the functions listed in tools/ci/functions-production.txt. The deploy FAILS (it does not
+#             skip) if that list names a prod-forbidden function (tools/ci/prod-forbidden-functions.txt) or a
+#             function that does not exist. This guard is the deploy-time layer of ADR-006's three layers.
 source "$(dirname "$0")/lib.sh"
 
 target="${1:?usage: deploy-functions.sh <staging|production> [--dry-run]}"
 dry_run="${2:-}"
 case "$target" in staging|production) ;; *) fail "unknown target environment: $target" ;; esac
 
-mapfile -t forbidden < <(sed -e 's/#.*//' -e 's/[[:space:]]//g' tools/ci/prod-forbidden-functions.txt | grep -v '^$')
-mapfile -t all < <(find supabase/functions -mindepth 2 -maxdepth 2 -name index.ts \
+strip() { sed -e 's/#.*//' -e 's/[[:space:]]//g' "$1" | grep -v '^$' || true; }
+mapfile -t forbidden < <(strip tools/ci/prod-forbidden-functions.txt)
+mapfile -t existing < <(find supabase/functions -mindepth 2 -maxdepth 2 -name index.ts \
   | awk -F/ '{print $3}' | grep -v '^_' | sort)
 
-deploy=()
-for fn in "${all[@]}"; do
-  if [ "$target" = production ] && printf '%s\n' "${forbidden[@]}" | grep -qx "$fn"; then
-    echo "  skipping $fn (prod-forbidden)"
-    continue
-  fi
-  deploy+=("$fn")
-done
-
-# Guard: independent of the filter above, so an edit to the loop cannot ship a forbidden function.
-assert_no_forbidden() {
-  local fn
-  [ "$target" = production ] || return 0
-  for fn in "$@"; do
+if [ "$target" = staging ]; then
+  deploy=("${existing[@]}")
+else
+  mapfile -t deploy < <(strip "${PRODUCTION_FUNCTIONS_FILE:-tools/ci/functions-production.txt}")
+  for fn in "${deploy[@]}"; do
     if printf '%s\n' "${forbidden[@]}" | grep -qx "$fn"; then
-      fail "prod-forbidden function '$fn' is in the production deploy list"
+      fail "prod-forbidden function '$fn' is in the production deploy list. Refusing to deploy."
     fi
+    printf '%s\n' "${existing[@]}" | grep -qx "$fn" || fail "production list names '$fn', which is not in supabase/functions"
   done
-}
-assert_no_forbidden "${deploy[@]}"
+fi
 
 log "Deploying ${#deploy[@]} function(s) to ${target}: ${deploy[*]:-none}"
 [ "${#deploy[@]}" -gt 0 ] || exit 0

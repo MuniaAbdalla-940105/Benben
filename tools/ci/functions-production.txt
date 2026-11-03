@@ -1,0 +1,4 @@
+# Edge Functions deployed to PRODUCTION (explicit list; staging deploys every function in supabase/functions).
+# tools/ci/deploy-functions.sh fails the production deploy if this list names a function from
+# tools/ci/prod-forbidden-functions.txt or one that does not exist (review A6, ADR-002 §4).
+health

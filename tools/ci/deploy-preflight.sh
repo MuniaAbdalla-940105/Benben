@@ -3,11 +3,11 @@
 # never printed). Missing inputs make the deploy SKIP with a clear message instead of failing, so CI stays
 # green until the stakeholder provides the staging project and the frontend host (ADR-005).
 #
-#   usage: deploy-preflight.sh <staging|preview>
+#   usage: deploy-preflight.sh staging   (PR previews check their own inputs in preview-deploy.yml)
 #   writes: supabase=true|false and frontend=true|false to $GITHUB_OUTPUT, a summary to $GITHUB_STEP_SUMMARY
 set -euo pipefail
 
-mode="${1:?usage: deploy-preflight.sh <staging|preview>}"
+mode="${1:?usage: deploy-preflight.sh staging}"
 out="${GITHUB_OUTPUT:-/dev/null}"
 summary="${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 
@@ -15,7 +15,6 @@ missing_names() { local n; for n in "$@"; do [ -n "${!n:-}" ] || printf '%s ' "$
 
 case "$mode" in
   staging) supabase_needs=(SUPABASE_ACCESS_TOKEN STAGING_PROJECT_REF SUPABASE_DB_PASSWORD) ;;
-  preview) supabase_needs=(STAGING_PROJECT_REF) ;;  # previews only read from staging; no DB access
   *) echo "unknown mode $mode" >&2; exit 2 ;;
 esac
 frontend_needs=(CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID STAGING_SUPABASE_ANON_KEY)

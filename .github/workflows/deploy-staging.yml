@@ -1,9 +1,14 @@
 # Deploy to staging after a stakeholder-accepted PR is merged into main (CLAUDE.md merge policy;
-# ADR-002 §4, §15; ADR-005). Order: database -> Edge Functions -> runtime_env -> Vault -> seed -> frontends
-# -> smoke tests. Migrations reach staging only through this workflow, never through the dashboard.
-#
-# Until the stakeholder provides the staging project and the frontend host, the preflight job reports the
-# missing secret NAMES in the run summary and every deploy job is skipped (the run stays green).
+# ADR-002 §4, §15; ADR-005; ADR-006). Order (review A10):
+#   1. preflight: which inputs exist; the target project is named benben-staging (M5)
+#   2. supabase: link -> db push -> private.runtime_env = staging (never over production) -> seed files
+#      (Vault secrets, staging seed) -> function settings (APP_ENV=staging, mock providers) ->
+#      Edge Functions -> health smoke test
+#   3. frontend: apps/web and apps/admin built against staging, re-scanned, uploaded to Cloudflare Pages
+#   4. Playwright against the web staging URL
+# Migrations reach staging only through this workflow, never through the dashboard. Every job runs only on
+# refs/heads/main (M1). Until the stakeholder provides the project and the host, preflight lists the missing
+# secret NAMES in the run summary and the deploy jobs are skipped (the run stays green).
 name: Deploy staging
 
 on:
@@ -19,15 +24,14 @@ permissions:
   contents: read
 
 env:
-  WRANGLER_VERSION: 4.156.2
-  # Cloudflare Pages projects; the production branch "main" gives the stable staging URLs
-  # https://benben-web-staging.pages.dev and https://benben-admin-staging.pages.dev (ADR-005).
+  # Production branch "main" of these Pages projects gives the stable staging URLs (ADR-005).
   PAGES_PROJECT_WEB: benben-web-staging
   PAGES_PROJECT_ADMIN: benben-admin-staging
 
 jobs:
   preflight:
     name: Preflight (which stakeholder inputs exist)
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 2
     environment: staging
@@ -35,48 +39,70 @@ jobs:
       supabase: ${{ steps.check.outputs.supabase }}
       frontend: ${{ steps.check.outputs.frontend }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - id: check
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-          STAGING_PROJECT_REF: ${{ secrets.STAGING_PROJECT_REF || vars.STAGING_PROJECT_REF }}
+          STAGING_PROJECT_REF: ${{ vars.STAGING_PROJECT_REF }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           STAGING_SUPABASE_ANON_KEY: ${{ vars.STAGING_SUPABASE_ANON_KEY }}
         run: bash tools/ci/deploy-preflight.sh staging
 
   supabase:
-    name: Supabase staging (db push, functions, runtime_env, Vault, seed)
+    name: Supabase staging (db push, runtime_env, seed, functions)
     needs: preflight
-    if: ${{ needs.preflight.outputs.supabase == 'true' }}
+    if: github.ref == 'refs/heads/main' && needs.preflight.outputs.supabase == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: staging
     env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-      PROJECT_REF: ${{ secrets.STAGING_PROJECT_REF || vars.STAGING_PROJECT_REF }}
+      PROJECT_REF: ${{ vars.STAGING_PROJECT_REF }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/setup
+      - name: Refuse unless the target project is benben-staging (before any write)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: bash tools/ci/assert-staging-project.sh
       - name: Link the staging project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: pnpm exec supabase link --project-ref "$PROJECT_REF"
-      - name: Migrations to apply
-        run: pnpm exec supabase db push --linked --dry-run
-      - name: Apply migrations (supabase db push)
-        run: pnpm exec supabase db push --linked --yes
-      - name: Mark the database as staging (private.runtime_env)
+      - name: Apply migrations (supabase db push; the dry run is logged first)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          pnpm exec supabase db push --linked --dry-run
+          pnpm exec supabase db push --linked --yes
+      - name: Mark the database as staging (never over production; fails unless staging)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: pnpm exec supabase db query --linked -f tools/ci/sql/set-runtime-env-staging.sql
-      - name: Ensure Vault secrets exist (generated in the database, never in Git or CI)
-        run: pnpm exec supabase db query --linked -f tools/ci/sql/ensure-vault-secrets.sql
-      - name: Staging seed (synthetic, idempotent)
-        run: pnpm exec supabase db query --linked -f supabase/seed/staging.sql
-      - name: Edge Function settings (non-secret provider selection; mocks on staging)
+      - name: Seed files in order (Vault secrets generated in the DB, then the synthetic staging seed)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          for f in supabase/seed/*.sql; do # glob order = name order, same as [db.seed] in config.toml
+            echo "seed: $f"
+            pnpm exec supabase db query --linked -f "$f"
+          done
+      - name: Edge Function settings (ADR-006 APP_ENV; mock providers on staging; not secret values)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: >
           pnpm exec supabase secrets set --project-ref "$PROJECT_REF"
-          PAYMENTS_PROVIDER=mock KYC_PROVIDER=mock SMS_PROVIDER=mock
-      - name: Deploy Edge Functions (prod-forbidden list enforced in production)
+          APP_ENV=staging PAYMENTS_PROVIDER=mock KYC_PROVIDER=mock SMS_PROVIDER=mock
+      - name: Deploy Edge Functions (staging deploys all; production uses the guarded list)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: bash tools/ci/deploy-functions.sh staging
       - name: Smoke test the health function
         run: |
@@ -91,13 +117,13 @@ jobs:
           {
             echo "### Supabase staging"
             echo "- Project: https://${PROJECT_REF}.supabase.co"
-            echo "- Migrations applied, runtime_env = staging, Vault secrets ensured, seed applied, functions deployed."
+            echo "- Migrations applied, runtime_env = staging, seed files applied, APP_ENV=staging, functions deployed."
           } >> "$GITHUB_STEP_SUMMARY"
 
   frontend:
     name: Frontend ${{ matrix.app }} (Cloudflare Pages)
     needs: [preflight, supabase]
-    if: ${{ needs.preflight.outputs.frontend == 'true' && needs.supabase.result == 'success' }}
+    if: github.ref == 'refs/heads/main' && needs.preflight.outputs.frontend == 'true' && needs.supabase.result == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment: staging
@@ -106,47 +132,45 @@ jobs:
       matrix:
         app: [web, admin]
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
-      PROJECT_REF: ${{ secrets.STAGING_PROJECT_REF || vars.STAGING_PROJECT_REF }}
+      PROJECT_REF: ${{ vars.STAGING_PROJECT_REF }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/setup
-      - name: Build (staging backend, anon key only)
+      - name: Build (staging backend, publishable key only)
         env:
           VITE_SUPABASE_ANON_KEY: ${{ vars.STAGING_SUPABASE_ANON_KEY }}
           VITE_APP_ENV: staging
         run: VITE_SUPABASE_URL="https://${PROJECT_REF}.supabase.co" pnpm --filter "@benben/${{ matrix.app }}" build
       - name: "8 · Bundle secret scan (again, on the deployed artifact)"
         run: bash tools/ci/check-bundle-secrets.sh "apps/${{ matrix.app }}/dist"
-      - name: Deploy to Cloudflare Pages (production branch main = stable staging URL)
-        id: deploy
+      - name: Upload to Cloudflare Pages (production branch main = stable staging URL)
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           PAGES_PROJECT: ${{ matrix.app == 'web' && env.PAGES_PROJECT_WEB || env.PAGES_PROJECT_ADMIN }}
         run: |
-          wrangler() { pnpm dlx "wrangler@${WRANGLER_VERSION}" "$@"; }
-          wrangler pages project list | grep -q -w "$PAGES_PROJECT" \
-            || wrangler pages project create "$PAGES_PROJECT" --production-branch main
-          wrangler pages deploy "apps/${{ matrix.app }}/dist" --project-name "$PAGES_PROJECT" --branch main \
-            --commit-hash "$GITHUB_SHA" --commit-dirty=true
-          echo "url=https://${PAGES_PROJECT}.pages.dev" >> "$GITHUB_OUTPUT"
+          bash tools/ci/pages-deploy.sh "apps/${{ matrix.app }}/dist" "$PAGES_PROJECT" main "$GITHUB_SHA"
           echo "- ${{ matrix.app }}: https://${PAGES_PROJECT}.pages.dev" >> "$GITHUB_STEP_SUMMARY"
 
   e2e-staging:
     name: Playwright against staging
     needs: frontend
-    if: ${{ needs.frontend.result == 'success' }}
+    if: github.ref == 'refs/heads/main' && needs.frontend.result == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
       E2E_BASE_URL: https://benben-web-staging.pages.dev # = PAGES_PROJECT_WEB (env is not readable here)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/setup
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e
       - if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-report-staging
           path: playwright-report/
