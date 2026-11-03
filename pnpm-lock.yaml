@@ -157,6 +157,10 @@ importers:
   packages/shared: {}
 
   packages/ui:
+    dependencies:
+      '@benben/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/react':
         specifier: 19.3.0
