@@ -50,6 +50,8 @@ BEN-BEN is an auction-first real-estate app for Egypt. Any property can be sold 
 - **RTL rules:** use logical properties (start/end). Mirror back/forward chevrons, progress bars (fill from the right in Arabic), carousels, sheet swipe hints and stepper order. Do not mirror clocks, the play icon, charts' time axis (time runs right-to-left in Arabic), phone numbers, amounts or Latin brand text. Bidder aliases ("Bidder #7") stay Latin inside Arabic text, isolated with `dir="ltr"`/`<bdi>`.
 
 ## 5. Accessibility (WCAG 2.2 AA)
+> Update 2026-11-03: the contrast values below were checked on the part 1 palette. The final values use the brand tokens (`brand/tokens.css`) and are listed in `design-system.md` §4 and in the `tokens.css` header.
+
 - **Contrast:** text ≥ 4.5:1, large text and UI parts ≥ 3:1. Checked palette pairs (shared by all options): ivory `#F7F2E7` on navy `#0B1426` 16.5:1; gold `#C9A961` on navy 8.2:1; navy on gold 8.2:1; gold text on ivory needs the deep gold `#7A5F22` (5.4:1), never `#C9A961` (fails); white on LIVE red `#D7263D` 4.96:1; red text on navy `#FF6B6B` 6.6:1; muted `#9BA7BD` on navy 7.6:1; muted `#5B6475` on ivory 5.3:1.
 - **Colour is never the only signal.** The green / amber / red timer (PRD §3.11) also changes its label and icon: "متبقي" (> 1h), "ينتهي قريبًا" + clock icon (< 1h), "الدقائق الأخيرة" + bold weight + border (< 5 min). LIVE always has the word, not just a red dot. Outbid is a word and an icon, not just a red frame.
 - **Motion:** every animation has a `prefers-reduced-motion` version: pulses become a static ring, tickers become a static "last bid" line, digit flips become instant swaps, slide-ins become fades. No flashing more than 3 times per second.
