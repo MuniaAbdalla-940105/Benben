@@ -23,5 +23,31 @@ begin
 end
 $$;
 
--- No domain tables exist yet (ST-001 only creates private.runtime_env). Area fixtures for New Cairo and
--- Sheikh Zayed are added here by the first story that creates the areas table.
+-- Areas and compounds: public names only.
+insert into public.areas (slug, name_ar, name_en) values
+  ('new-cairo', 'القاهرة الجديدة', 'New Cairo'),
+  ('sheikh-zayed', 'الشيخ زايد', 'Sheikh Zayed')
+on conflict (slug) do nothing;
+
+insert into public.compounds (area_id, slug, name_ar, name_en)
+select a.id, c.slug, c.name_ar, c.name_en
+  from (values
+    ('new-cairo', 'demo-compound-fifth-settlement', 'كمبوند تجريبي - التجمع الخامس', 'Demo Compound - Fifth Settlement'),
+    ('new-cairo', 'demo-compound-katameya', 'كمبوند تجريبي - القطامية', 'Demo Compound - Katameya'),
+    ('new-cairo', 'demo-compound-mostakbal', 'كمبوند تجريبي - المستقبل', 'Demo Compound - Mostakbal'),
+    ('sheikh-zayed', 'demo-compound-beverly', 'كمبوند تجريبي - بيفرلي', 'Demo Compound - Beverly'),
+    ('sheikh-zayed', 'demo-compound-westown', 'كمبوند تجريبي - ويستاون', 'Demo Compound - Westown')
+  ) as c(area_slug, slug, name_ar, name_en)
+  join public.areas a on a.slug = c.area_slug
+on conflict (slug) do nothing;
+
+-- Synthetic KYC admin (phone from the reserved test range; OTP 123456 via config.toml test_otp).
+insert into auth.users (id, instance_id, aud, role, phone, phone_confirmed_at, created_at, updated_at)
+values ('00000000-0000-4000-8000-000000000099', '00000000-0000-0000-0000-000000000000',
+        'authenticated', 'authenticated', '201000000099', now(), now(), now())
+on conflict (id) do nothing;
+
+insert into public.user_roles (user_id, role) values
+  ('00000000-0000-4000-8000-000000000099', 'kyc_admin'),
+  ('00000000-0000-4000-8000-000000000099', 'admin')
+on conflict do nothing;

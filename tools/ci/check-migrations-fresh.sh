@@ -10,7 +10,7 @@ bad=0
 for f in supabase/migrations/*.sql; do
   [ -e "$f" ] || continue
   name="$(basename "$f")"
-  if ! [[ "$name" =~ ^[0-9]{14}_(st|bug)[0-9]{3}_[a-z0-9_]+\.sql$ ]]; then
+  if ! [[ "$name" =~ ^[0-9]{14}_((st|bug)[0-9]{3}|bv1_b[0-9]+)_[a-z0-9_]+\.sql$ ]]; then
     echo "  bad name: $name (expected <yyyymmddhhmmss>_st###_<what>.sql or _bug###_)"
     bad=1
   fi

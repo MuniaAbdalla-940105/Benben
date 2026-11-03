@@ -5,16 +5,222 @@ export type Database = {
   
   "public": {
           Tables: {
-            [_ in never]: never
+            "app_settings": {
+                  Row: {
+                    "description": string | null,"is_public": boolean,"key": string,"updated_at": string,"updated_by": string | null,"value": NonNullable<Json>,"version": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "description"?: string | null,"is_public"?: boolean,"key": string,"updated_at"?: string,"updated_by"?: string | null,"value": NonNullable<Json>,"version"?: number
+                  }
+                  Update: {
+                    "description"?: string | null,"is_public"?: boolean,"key"?: string,"updated_at"?: string,"updated_by"?: string | null,"value"?: NonNullable<Json>,"version"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "app_settings_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"areas": {
+                  Row: {
+                    "id": string,"name_ar": string,"name_en": string,"slug": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"name_ar": string,"name_en": string,"slug": string
+                  }
+                  Update: {
+                    "id"?: string,"name_ar"?: string,"name_en"?: string,"slug"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"audit_logs": {
+                  Row: {
+                    "action": string,"actor_id": string | null,"after_json": Json | null,"before_json": Json | null,"entity": string,"entity_id": string,"id": number,"reason": string | null,"ts": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"actor_id"?: string | null,"after_json"?: Json | null,"before_json"?: Json | null,"entity": string,"entity_id": string,"id"?: never,"reason"?: string | null,"ts"?: string
+                  }
+                  Update: {
+                    "action"?: string,"actor_id"?: string | null,"after_json"?: Json | null,"before_json"?: Json | null,"entity"?: string,"entity_id"?: string,"id"?: never,"reason"?: string | null,"ts"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"compounds": {
+                  Row: {
+                    "area_id": string,"id": string,"name_ar": string,"name_en": string,"slug": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "area_id": string,"id"?: string,"name_ar": string,"name_en": string,"slug": string
+                  }
+                  Update: {
+                    "area_id"?: string,"id"?: string,"name_ar"?: string,"name_en"?: string,"slug"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "compounds_area_id_fkey"
+      columns: ["area_id"]
+isOneToOne: false
+      referencedRelation: "areas"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"kyc_submissions": {
+                  Row: {
+                    "back_path": string,"decided_at": string | null,"decided_by": string | null,"front_path": string,"id": string,"reject_reason": string | null,"selfie_path": string,"status": Database["public"]['Enums']["kyc_status"],"submitted_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "back_path": string,"decided_at"?: string | null,"decided_by"?: string | null,"front_path": string,"id"?: string,"reject_reason"?: string | null,"selfie_path": string,"status"?: Database["public"]['Enums']["kyc_status"],"submitted_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "back_path"?: string,"decided_at"?: string | null,"decided_by"?: string | null,"front_path"?: string,"id"?: string,"reject_reason"?: string | null,"selfie_path"?: string,"status"?: Database["public"]['Enums']["kyc_status"],"submitted_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "kyc_submissions_decided_by_fkey"
+      columns: ["decided_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "kyc_submissions_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"profiles": {
+                  Row: {
+                    "created_at": string,"id": string,"kyc_tier": Database["public"]['Enums']["kyc_tier"],"locale": string,"name_ar": string | null,"name_en": string | null,"phone": string,"status": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id": string,"kyc_tier"?: Database["public"]['Enums']["kyc_tier"],"locale"?: string,"name_ar"?: string | null,"name_en"?: string | null,"phone": string,"status"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"kyc_tier"?: Database["public"]['Enums']["kyc_tier"],"locale"?: string,"name_ar"?: string | null,"name_en"?: string | null,"phone"?: string,"status"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"properties": {
+                  Row: {
+                    "area_id": string | null,"area_sqm": number | null,"bedrooms": number | null,"compound_id": string | null,"created_at": string,"id": string,"kind": string,"owner_id": string,"title_ar": string | null,"title_en": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "area_id"?: string | null,"area_sqm"?: number | null,"bedrooms"?: number | null,"compound_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"owner_id": string,"title_ar"?: string | null,"title_en"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "area_id"?: string | null,"area_sqm"?: number | null,"bedrooms"?: number | null,"compound_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"owner_id"?: string,"title_ar"?: string | null,"title_en"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "properties_area_id_fkey"
+      columns: ["area_id"]
+isOneToOne: false
+      referencedRelation: "areas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "properties_compound_id_fkey"
+      columns: ["compound_id"]
+isOneToOne: false
+      referencedRelation: "compounds"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "properties_owner_id_fkey"
+      columns: ["owner_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"user_roles": {
+                  Row: {
+                    "created_at": string,"granted_by": string | null,"role": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"granted_by"?: string | null,"role": string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"granted_by"?: string | null,"role"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "user_roles_granted_by_fkey"
+      columns: ["granted_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "user_roles_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                }
           }
           Views: {
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "admin_decide_kyc":
+{ Args: { "p_approve": boolean,"p_reason"?: string,"p_submission": string }; Returns: {
+              "back_path": string,
+"decided_at": string | null,
+"decided_by": string | null,
+"front_path": string,
+"id": string,
+"reject_reason": string | null,
+"selfie_path": string,
+"status": Database["public"]['Enums']["kyc_status"],
+"submitted_at": string,
+"user_id": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "kyc_submissions"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
+"dev_sms_inbox":
+{ Args: { "p_phone": string }; Returns: string
+                           },
+"kyc_submit":
+{ Args: { "p_back": string,"p_front": string,"p_selfie": string }; Returns: {
+              "back_path": string,
+"decided_at": string | null,
+"decided_by": string | null,
+"front_path": string,
+"id": string,
+"reject_reason": string | null,
+"selfie_path": string,
+"status": Database["public"]['Enums']["kyc_status"],
+"submitted_at": string,
+"user_id": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "kyc_submissions"
+        isOneToOne: true
+        isSetofReturn: false
+      } }
           }
           Enums: {
-            [_ in never]: never
+            "kyc_status": "pending"|"approved"|"rejected","kyc_tier": "T0"|"T1"|"T2"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -130,7 +336,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            
+            "kyc_status": ["pending", "approved", "rejected"],"kyc_tier": ["T0", "T1", "T2"]
           }
         }
 } as const

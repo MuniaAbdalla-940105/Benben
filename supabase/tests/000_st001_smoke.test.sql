@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(16);
+select plan(17);
 
 -- Schema and table ---------------------------------------------------------------------------------
 select has_schema('private', 'private schema exists');
@@ -16,7 +16,8 @@ select is((select env from private.runtime_env where id), 'local', 'the local se
 
 -- No client access to private ---------------------------------------------------------------------
 select ok(not has_schema_privilege('anon', 'private', 'USAGE'), 'anon has no USAGE on schema private');
-select ok(not has_schema_privilege('authenticated', 'private', 'USAGE'), 'authenticated has no USAGE on schema private');
+select ok(has_schema_privilege('authenticated', 'private', 'USAGE'), 'authenticated has USAGE on private (RLS policy helpers only, BV1-B1)');
+select ok(not has_function_privilege('authenticated', 'private.env()', 'EXECUTE'), 'authenticated cannot execute private.env()');
 select ok(not has_table_privilege('anon', 'private.runtime_env', 'SELECT'), 'anon cannot read runtime_env');
 
 -- Constraints ---------------------------------------------------------------------------------------

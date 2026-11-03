@@ -34,6 +34,15 @@ tools/ci            the CI check scripts (the workflows only call these) and the
 e2e/                Playwright specs
 ```
 
+## Interfaces for other packages (BV1-B1)
+
+- **Routes:** add yours to `apps/web/src/routes.ts` (path, tab, label key, lazy `load`). Never edit the shell. Add your strings to `apps/web/src/i18n/messages.ts` (Arabic and English).
+- **UI kit:** `@benben/ui` exports Button, TextField, PhoneField, OtpInput, Card, ListRow, Badge, LivePill, Skeleton, EmptyState, Icon, ToastProvider/useToast. Add components there as you need them.
+- **Shared:** `@benben/shared` exports `formatEGP`/`parseEGPInput` (piasters), `localizeDigits`, `normalizeEgyptPhone`, `toErrorCode`, `newIdempotencyKey`, `serverNow`.
+- **Tables:** `profiles` (`kyc_tier` T0/T1/T2), `user_roles`, `areas`, `compounds`, `properties` (minimal), `app_settings`, `audit_logs`, `kyc_submissions`. Types: `import type { Database } from '@benben/db-types'`.
+- **Server helpers:** `private.has_role(role)`, `private.is_admin()` in RLS policies; `private.audit(...)` for the audit log; `public.admin_decide_kyc` and `public.kyc_submit`.
+- **Local login:** phone `+201000000501`, code from the dev inbox button (non-prod), or `123456` for the test numbers in `supabase/config.toml`. The seeded KYC admin is `+201000000099`.
+
 ## CI and deploys
 
 - **Every pull request into `main`** runs `.github/workflows/ci.yml`: lint, typecheck, Vitest, a fresh-database migration + seed check, up→down→up for new migrations, pgTAP, `supabase db lint`, RLS and RPC allow-list, generated-types freshness, a browser-bundle secret scan, Edge Function tests, and a Playwright smoke test. The single required status is **`CI passed`**. The same checks run locally with `pnpm ci:app` and `pnpm ci:db`.

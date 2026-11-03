@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "BEN-BEN design system for both apps. Tokens and the Tailwind preset now; components arrive in ST-003.",
+  "description": "BEN-BEN design system for both apps: tokens, the Tailwind preset and the B1 components.",
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css",
@@ -14,5 +14,12 @@
   },
   "peerDependencies": {
     "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "react": "19.3.1"
+  },
+  "dependencies": {
+    "@benben/shared": "workspace:*"
   }
 }

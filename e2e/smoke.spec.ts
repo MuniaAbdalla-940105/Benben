@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// ST-001 smoke: the deployed web app loads, is Arabic-first (RTL) and shows the brand.
+// ST-001 smoke (BV1-B1: on the login screen): the deployed web app loads, is Arabic-first (RTL) and shows the brand.
 test('web app loads in Arabic, right-to-left, with the BEN-BEN logo', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
@@ -8,7 +8,7 @@ test('web app loads in Arabic, right-to-left, with the BEN-BEN logo', async ({ p
     if (msg.type() === 'error') errors.push(msg.text());
   });
 
-  await page.goto('/');
+  await page.goto('/login');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');

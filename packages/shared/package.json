@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Shared client code (money, digits, time sync, error codes). Filled from ST-002 on.",
+  "description": "Shared client code: env, money, digits, phone, error codes, idempotency keys, server time.",
   "exports": {
     ".": "./src/index.ts"
   },
