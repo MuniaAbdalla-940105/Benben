@@ -1,0 +1,67 @@
+# Manual rollback of the newest migration on staging, using its down script (docs/runbook.md).
+# Preferred fix is always a new forward migration; use this only when staging is blocked.
+# After it runs, revert the migration file on main through a PR, or the next deploy re-applies it.
+name: Roll back a staging migration
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Migration version to roll back (14-digit timestamp, must be the newest applied)"
+        required: true
+      confirm:
+        description: 'Type "roll back staging" to confirm'
+        required: true
+
+concurrency:
+  group: deploy-staging # never at the same time as a deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  rollback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: staging
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      PROJECT_REF: ${{ secrets.STAGING_PROJECT_REF || vars.STAGING_PROJECT_REF }}
+      VERSION: ${{ inputs.version }}
+      CONFIRM: ${{ inputs.confirm }}
+    steps:
+      - name: Check inputs
+        run: |
+          [ "$CONFIRM" = "roll back staging" ] || { echo "::error::confirmation text does not match"; exit 1; }
+          [[ "$VERSION" =~ ^[0-9]{14}$ ]] || { echo "::error::version must be a 14-digit timestamp"; exit 1; }
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ] || [ -z "$PROJECT_REF" ] || [ -z "$SUPABASE_DB_PASSWORD" ]; then
+            echo "::error::staging secrets are not configured (see ADR-005)"; exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Find the down script
+        id: down
+        run: |
+          shopt -s nullglob
+          files=(supabase/migrations-down/"${VERSION}"_*.down.sql)
+          [ "${#files[@]}" -eq 1 ] || { echo "::error::expected one down script for $VERSION, found ${#files[@]}"; exit 1; }
+          echo "file=${files[0]}" >> "$GITHUB_OUTPUT"
+      - name: Link and check that the version is the newest applied on staging
+        run: |
+          pnpm exec supabase link --project-ref "$PROJECT_REF"
+          pnpm exec supabase migration list --linked | tee migrations.txt
+          newest="$(grep -o -E '^\s*[0-9]{14}\s*\|\s*[0-9]{14}' migrations.txt | awk -F'|' '{gsub(/ /,"",$2); print $2}' | sort | tail -1)"
+          [ "$newest" = "$VERSION" ] || { echo "::error::newest applied migration on staging is ${newest:-none}, not $VERSION"; exit 1; }
+      - name: Apply the down script
+        run: pnpm exec supabase db query --linked -f "${{ steps.down.outputs.file }}"
+      - name: Mark the migration as reverted in the history
+        run: pnpm exec supabase migration repair --linked --status reverted "$VERSION"
+      - name: Summary
+        run: |
+          {
+            echo "### Rolled back $VERSION on staging"
+            echo "Next: open a PR that removes or replaces supabase/migrations/${VERSION}_*.sql on main,"
+            echo "otherwise the next deploy applies it again."
+          } >> "$GITHUB_STEP_SUMMARY"
