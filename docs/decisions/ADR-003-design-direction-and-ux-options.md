@@ -16,7 +16,7 @@
    - **3B:** when you're outbid or the auction extends, the header and bid bar change state, with one vibration.
    - **4A + 4B:** winners see the outcome, a 48h countdown, the checklist and the amount due. Every outcome shows a deposit timeline card.
 3. **Theme (Q-78): follow the phone's setting.** Both light and dark are designed. Live surfaces stay navy in both.
-4. **Logo:** "The Ascent" is **not approved yet**. The stakeholder asked to see the other concepts (A Seked Ladder, B Obelisk Line). Screens use the brand symbol through `docs/design/brand/logo/` so it can be swapped later without redesign.
+4. **Logo: "The Ascent" is approved (2026-11-03)**, together with the round 1 BEN-BEN wordmark with its gold slanted hyphen. The stakeholder reviewed the round 1 alternatives and the 8 round 2 concepts (`docs/design/brand/round-2/`), then chose to stay with The Ascent. Production files: `docs/design/brand/logo/` and `docs/design/brand/app-icon/`. A trademark search in Egypt (and the Gulf, if planned) is still advised before launch.
 
 ## Consequences
 - Part 2 of the design (the design system, tokens and sprint 1–2 screens) starts in this direction.
