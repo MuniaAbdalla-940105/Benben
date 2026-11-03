@@ -144,20 +144,87 @@ EOF
     cleanup_files
   fi
 
-  if want prod-forbidden; then
-    # Not a failing check but a guarantee: the production list drops prod-forbidden functions that the
-    # staging list still deploys (ADR-002 §4).
-    write supabase/functions/mock-gateway/index.ts <<'EOF2'
-// selftest: a non-prod function
-Deno.serve(() => new Response('mock'));
-EOF2
-    expect_pass prod-forbidden "deploy guard" bash -c '
-      set -e
-      bash tools/ci/deploy-functions.sh staging --dry-run | grep -x mock-gateway
-      if bash tools/ci/deploy-functions.sh production --dry-run | grep -x mock-gateway; then
-        echo "mock-gateway would be deployed to production"; exit 1
-      fi'
+  if want bundle-key-not-logged; then
+    # L1: the scan names the file and a short prefix, never the whole key.
+    local key=sb_secret_selftestFULLVALUEmustNotBeLogged123
+    expect_fail bundle-key-not-logged "8 bundle scan (L1)" "sb_secret_se" \
+      env VITE_SUPABASE_URL=http://127.0.0.1:54321 VITE_SUPABASE_ANON_KEY="$key" \
+      bash -c 'pnpm build >/dev/null && bash tools/ci/check-bundle-secrets.sh'
+    if grep -q "$key" "$LOGDIR/bundle-key-not-logged.log"; then
+      echo "FAIL bundle-key-not-logged: the full key appears in the scan output"
+      results+=("| bundle-key-not-logged | 8 bundle scan (L1) | **full key printed** |"); failures=$((failures + 1))
+    fi
+  fi
+
+  if want bundle-access-token; then
+    expect_fail bundle-access-token "8 bundle scan (L2)" "sbp_" \
+      env VITE_SUPABASE_URL=http://127.0.0.1:54321 VITE_SUPABASE_ANON_KEY="sbp_$(printf %040d 0)" \
+      bash -c 'pnpm build >/dev/null && bash tools/ci/check-bundle-secrets.sh'
+  fi
+
+  if want bundle-postgres-dsn; then
+    expect_fail bundle-postgres-dsn "8 bundle scan (L2)" "postgresql:/" \
+      env VITE_SUPABASE_URL='postgresql://postgres:selftestpw@db.example.test:5432/postgres' VITE_SUPABASE_ANON_KEY=x \
+      bash -c 'pnpm build >/dev/null && bash tools/ci/check-bundle-secrets.sh'
+  fi
+
+  if want bundle-secret-name; then
+    write apps/web/public/selftest-secret-name.txt <<'EOF'
+CLOUDFLARE_API_TOKEN=selftest
+EOF
+    expect_fail bundle-secret-name "8 bundle scan (L2)" "CLOUDFLARE_A" \
+      bash -c 'pnpm build >/dev/null && bash tools/ci/check-bundle-secrets.sh'
     cleanup_files
+  fi
+
+  if want vite-env-prefix; then
+    write apps/web/vite.config.selftest.ts <<'EOF'
+import { defineConfig, loadEnv } from 'vite';
+export default defineConfig(({ mode }) => ({ envPrefix: ['VITE_', 'SUPABASE_'], define: { e: loadEnv(mode, '.', '') } }));
+EOF
+    expect_fail vite-env-prefix "8 Vite config (L2)" "envPrefix must be exactly|loadEnv" \
+      bash -c 'pnpm --filter @benben/web build >/dev/null && bash tools/ci/check-bundle-secrets.sh apps/web/dist'
+    cleanup_files
+  fi
+
+  if want svc-rpc-in-app; then
+    write apps/web/src/selftest-svc.ts <<'EOF'
+import { getSupabase } from './supabase';
+export const call = () => getSupabase()?.rpc('svc_runtime_env' as never);
+EOF
+    expect_fail svc-rpc-in-app "1 lint (ADR-006)" "ADR-006" pnpm lint
+    cleanup_files
+  fi
+
+  if want prod-forbidden; then
+    # A6: the production deploy FAILS (not skips) when its list names a prod-forbidden function.
+    local prodlist; prodlist="$(mktemp)"
+    printf 'health\nmock-gateway\n' > "$prodlist"
+    expect_fail prod-forbidden "deploy guard (A6)" "prod-forbidden function 'mock-gateway'" \
+      env PRODUCTION_FUNCTIONS_FILE="$prodlist" bash tools/ci/deploy-functions.sh production --dry-run
+    expect_pass prod-list-clean "deploy guard (A6)" bash tools/ci/deploy-functions.sh production --dry-run
+    rm -f "$prodlist"
+  fi
+
+  if want wrong-staging-project; then
+    # M5: refuse to write when the ref belongs to a project not named benben-staging.
+    local pj; pj="$(mktemp)"
+    echo '[{"id":"abcdefghijklmnopqrst","name":"benben-production"}]' > "$pj"
+    expect_fail wrong-staging-project "deploy preflight (M5)" "Refusing to write" \
+      env PROJECT_REF=abcdefghijklmnopqrst PROJECTS_JSON_FILE="$pj" bash tools/ci/assert-staging-project.sh
+    echo '[{"id":"abcdefghijklmnopqrst","name":"benben-staging"}]' > "$pj"
+    expect_pass right-staging-project "deploy preflight (M5)" \
+      env PROJECT_REF=abcdefghijklmnopqrst PROJECTS_JSON_FILE="$pj" bash tools/ci/assert-staging-project.sh
+    rm -f "$pj"
+  fi
+
+  if want untrusted-artifact-symlink; then
+    # H1: the preview-deploy job rejects an artifact with symlinks before uploading it.
+    local art; art="$(mktemp -d)"
+    echo '<!doctype html>' > "$art/index.html"; ln -s /etc/passwd "$art/leak"
+    expect_fail untrusted-artifact-symlink "preview deploy (H1)" "non-regular files" \
+      bash tools/ci/check-untrusted-dist.sh "$art"
+    rm -rf "$art"
   fi
 
   want control || return 0
@@ -230,9 +297,10 @@ EOF
   fi
 
   if want anon-executable-function; then
-    # Supabase default privileges grant EXECUTE on new public functions to anon and authenticated.
-    db_psql -c 'create function public.selftest_exposed() returns int language sql as $f$ select 1 $f$;'
-    expect_fail anon-executable-function "6 RPC allow-list" "selftest_exposed\(\) \(anon\)" bash "$dir/check-rls.sh"
+    # The ST-001 migration revokes the default grants, so the bad input is an explicit grant.
+    db_psql -c 'create function public.selftest_exposed() returns int language sql as $f$ select 1 $f$;
+                grant execute on function public.selftest_exposed() to anon, authenticated;'
+    expect_fail anon-executable-function "6 RPC allow-list" "public\.selftest_exposed\(\) \(anon\)" bash "$dir/check-rls.sh"
     db_psql -c 'drop function public.selftest_exposed()'
   fi
 
@@ -286,17 +354,143 @@ EOF
     supabase db reset --local >/dev/null  # check 3 left the database at the base version
   fi
 
+  # --- check 3 against a synthetic base commit (BASE_COMMIT), so these cases run before main has migrations.
+  # The fake base = HEAD's tree, with the working-tree migrations and down scripts, plus extra files.
+  fake_base() {
+    local idx f spec path src blob tree
+    idx="$(mktemp)"; rm -f "$idx"
+    GIT_INDEX_FILE="$idx" git read-tree HEAD
+    for f in supabase/migrations/*.sql supabase/migrations-down/*.sql; do
+      [ -e "$f" ] || continue
+      case "$f" in *selftest*) continue ;; esac
+      blob="$(git hash-object -w "$f")"
+      GIT_INDEX_FILE="$idx" git update-index --add --cacheinfo "100644,$blob,$f"
+    done
+    for spec in "$@"; do
+      path="${spec%%=*}"; src="${spec#*=}"
+      blob="$(git hash-object -w "$src")"
+      GIT_INDEX_FILE="$idx" git update-index --add --cacheinfo "100644,$blob,$path"
+    done
+    tree="$(GIT_INDEX_FILE="$idx" git write-tree)"; rm -f "$idx"
+    git commit-tree "$tree" -p HEAD -m "selftest fake base"
+  }
+  local tmpd mig rb base
+  tmpd="$(mktemp -d)"
+  mig=20261103000001_st999_selftest_rolled_back
+  echo 'create table public.selftest_rb (id int primary key);' > "$tmpd/up.sql"
+  echo 'drop table public.selftest_rb;' > "$tmpd/down.sql"
+
   if want edited-merged-migration; then
-    local merged
-    merged="$(git ls-tree --name-only "$(git merge-base "${BASE_REF:-origin/main}" HEAD)" supabase/migrations/ | grep -E '\.sql$' | head -1 || true)"
-    if [ -n "$merged" ] && git diff --quiet -- "$merged"; then
-      printf -- '-- selftest edit\n' >> "$merged"
-      expect_fail edited-merged-migration "3 immutability" "Merged migrations were modified" bash "$dir/check-down-migrations.sh"
-      git checkout -- "$merged"
-    else
-      echo "skip edited-merged-migration: no migration on the base branch yet (or it has local edits)"
-      results+=("| edited-merged-migration | 3 immutability | skipped: no merged migration on base yet |")
+    local first; first="$(ls supabase/migrations/*.sql | sort | head -1)"
+    { cat "$first"; echo '-- the merged version differed'; } > "$tmpd/edited.sql"
+    base="$(fake_base "$first=$tmpd/edited.sql")"
+    expect_fail edited-merged-migration "3 immutability" "Merged migrations were modified" \
+      env BASE_COMMIT="$base" bash "$dir/check-down-migrations.sh"
+  fi
+
+  base="$(fake_base "supabase/migrations/$mig.sql=$tmpd/up.sql" "supabase/migrations-down/$mig.down.sql=$tmpd/down.sql")"
+  rb="$tmpd/reverted.txt"
+
+  if want deleted-migration-unlisted; then
+    : > "$rb"
+    expect_fail deleted-migration-unlisted "3 rollback (A1)" "deleted but not listed" \
+      env BASE_COMMIT="$base" MIGRATIONS_REVERTED_FILE="$rb" bash "$dir/check-down-migrations.sh"
+  fi
+
+  if want deleted-migration-down-kept; then
+    echo "${mig%%_*}  # selftest" > "$rb"
+    write "supabase/migrations-down/$mig.down.sql" < "$tmpd/down.sql"
+    expect_fail deleted-migration-down-kept "3 rollback (A1)" "was not deleted in the same change" \
+      env BASE_COMMIT="$base" MIGRATIONS_REVERTED_FILE="$rb" bash "$dir/check-down-migrations.sh"
+    cleanup_files
+  fi
+
+  if want deleted-migration-listed; then
+    echo "${mig%%_*}  # selftest" > "$rb"
+    expect_pass deleted-migration-listed "3 rollback (A1)" \
+      env BASE_COMMIT="$base" MIGRATIONS_REVERTED_FILE="$rb" bash "$dir/check-down-migrations.sh"
+  fi
+
+  if want reverted-file-bad-format; then
+    echo "2026-11-03  # not a version" > "$rb"
+    expect_fail reverted-file-bad-format "3 rollback (A1)" "is not a 14-digit migration version" \
+      env BASE_COMMIT="$base" MIGRATIONS_REVERTED_FILE="$rb" bash "$dir/check-down-migrations.sh"
+  fi
+  rm -rf "$tmpd"
+
+  # --- check 6: views, matviews, other schemas, Data API exposure, allow-list format and signature (M4, L6)
+  if want view-without-security-invoker; then
+    db_psql -c 'create view public.selftest_view as select 1 as x;'
+    expect_fail view-without-security-invoker "6 views (M4)" "Views without security_invoker=true: public.selftest_view" \
+      bash "$dir/check-rls.sh"
+    db_psql -c 'drop view public.selftest_view'
+  fi
+
+  if want anon-readable-matview; then
+    db_psql -c 'create materialized view public.selftest_mv as select 1 as x; grant select on public.selftest_mv to anon;'
+    expect_fail anon-readable-matview "6 matviews (M4)" "public.selftest_mv \(materialized view, anon\)" bash "$dir/check-rls.sh"
+    db_psql -c 'drop materialized view public.selftest_mv'
+  fi
+
+  if want custom-schema-without-rls; then
+    db_psql -c 'create schema selftest_custom; create table selftest_custom.t (id int primary key);'
+    expect_fail custom-schema-without-rls "6 other schemas (M4)" "Tables without RLS: selftest_custom.t" bash "$dir/check-rls.sh"
+    db_psql -c 'drop schema selftest_custom cascade'
+  fi
+
+  if want private-in-api-schemas; then
+    local cfg; cfg="$(mktemp)"
+    sed 's/^schemas = \["public", "graphql_public"\]/schemas = ["public", "graphql_public", "private"]/' supabase/config.toml > "$cfg"
+    expect_fail private-in-api-schemas "6 Data API (M4)" "exposes schema private" \
+      env SUPABASE_CONFIG_FILE="$cfg" bash "$dir/check-rls.sh"
+    rm -f "$cfg"
+  fi
+
+  if want allowlist-bad-format || want allowlist-wrong-signature || want allowlist-exact-signature; then
+    local al; al="$(mktemp)"
+    db_psql -c 'create function public.selftest_exposed(n integer) returns int language sql as $f$ select n $f$;
+                revoke execute on function public.selftest_exposed(integer) from public;
+                grant execute on function public.selftest_exposed(integer) to anon, authenticated;'
+    if want allowlist-bad-format; then
+      echo 'public.selftest_exposed   # name only' > "$al"
+      expect_fail allowlist-bad-format "6 allow-list (L6)" "is not <schema>.<function>" \
+        env RPC_ALLOWLIST_FILE="$al" bash "$dir/check-rls.sh"
     fi
+    if want allowlist-wrong-signature; then
+      echo 'public.selftest_exposed(text)' > "$al"
+      expect_fail allowlist-wrong-signature "6 allow-list (L6)" "public\.selftest_exposed\(integer\) \(anon\)" \
+        env RPC_ALLOWLIST_FILE="$al" bash "$dir/check-rls.sh"
+    fi
+    if want allowlist-exact-signature; then
+      echo 'public.selftest_exposed(integer)   # selftest' > "$al"
+      expect_pass allowlist-exact-signature "6 allow-list (L6)" env RPC_ALLOWLIST_FILE="$al" bash "$dir/check-rls.sh"
+    fi
+    db_psql -c 'drop function public.selftest_exposed(integer)'
+    rm -f "$al"
+  fi
+
+  # --- M5: the staging marker never overwrites production
+  if want runtime-env-production-kept; then
+    db_psql -c "update private.runtime_env set env = 'production'"
+    expect_fail runtime-env-production-kept "deploy runtime_env (M5)" "refusing to deploy: private.runtime_env is production" \
+      db_psql -f tools/ci/sql/set-runtime-env-staging.sql
+    if [ "$(db_psql -Atc 'select env from private.runtime_env')" != production ]; then
+      echo "FAIL runtime-env-production-kept: production was overwritten"
+      results+=("| runtime-env-production-kept | deploy runtime_env (M5) | **production overwritten** |"); failures=$((failures + 1))
+    fi
+    db_psql -c "update private.runtime_env set env = 'local'"
+  fi
+
+  # --- A2: a seed that is not idempotent fails check 2
+  if want seed-not-idempotent; then
+    write supabase/seed/zz_selftest_not_idempotent.sql <<'EOF'
+create table if not exists public.selftest_seed (id serial primary key);
+alter table public.selftest_seed enable row level security;
+insert into public.selftest_seed default values;
+EOF
+    expect_fail seed-not-idempotent "2 seed idempotency (A2)" "Seed is not idempotent" bash "$dir/check-migrations-fresh.sh"
+    cleanup_files
+    supabase db reset --local >/dev/null
   fi
 
   want control || return 0
