@@ -114,12 +114,12 @@
   /* ---------- screens ---------- */
   const R = {};
 
-  R.login = () => ({ nonav: true, logo: true, html: `
-    <div class="hero"><img src="assets/logo/lockup-horizontal.svg" class="ds-brand-on-light" alt="BEN-BEN">
+  R.login = () => ({ nonav: true, html: `
+    <div class="hero"><img src="assets/logo/lockup-horizontal.svg" alt="BEN-BEN">
       <h1>${T('أهلاً بك في بن بن', 'Welcome to BEN-BEN')}</h1>
       <p class="muted">${T('مزادات عقارية في مصر، بكل شفافية.', 'Real-estate auctions in Egypt, with full transparency.')}</p></div>
     <label class="field"><span>${T('رقم الموبايل', 'Mobile number')}</span>
-      <input id="phone" inputmode="tel" value="${S.phone || '+20 100 555 0199'}" dir="ltr"></label>
+      <input id="phone-in" inputmode="tel" value="${S.phone || '+20 100 555 0199'}" dir="ltr"></label>
     <button class="btn" data-act="sendOtp">${T('إرسال الرمز', 'Send code')}</button>
     <p class="muted small" style="margin-top:14px;text-align:center">${T('عرض تجريبي: أي رمز يعمل.', 'Demo: any code works.')}</p>` });
 
@@ -401,7 +401,7 @@
     theme() { S.theme = { auto: 'light', light: 'dark', dark: 'auto' }[S.theme]; save(); render(); },
     reset() { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } S = fresh(); ui.rooms = {}; ui.ex = { area: 'all', max: 0, saved: false }; ui.au = 'live'; ui.rq = 'buyer'; closeSheet(); if (location.hash === '#/login') render(); else go('#/login'); toast('Demo reset'); },
     logout() { S.auth = false; save(); go('#/login'); },
-    sendOtp() { S.phone = $('phone').value || '+20 100 555 0199'; save(); go('#/otp'); },
+    sendOtp() { S.phone = $("phone-in").value || '+20 100 555 0199'; save(); go('#/otp'); },
     verifyOtp() { S.auth = true; save(); go(S.kyc === 'none' ? '#/kyc' : '#/auctions'); },
     upload(el) { S.idDocs[el.dataset.k] = true; save(); render(); },
     submitKyc() { S.kyc = 'pending'; save(); render(); toast(T('تم الإرسال للمراجعة', 'Submitted for review')); },

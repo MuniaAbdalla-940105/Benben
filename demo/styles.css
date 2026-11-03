@@ -16,7 +16,7 @@ input,select{font:inherit;color:inherit}
   [data-theme=dark] body{background:#03060f}
   #phone{width:390px;height:min(820px,96vh);border-radius:38px;border:10px solid #0B1530;box-shadow:0 30px 80px rgb(0 0 0/.35)}
 }
-.side{display:none}
+.side{display:none;direction:ltr;text-align:left}
 @media (min-width:1000px){
   .side{display:block;position:fixed;inset-inline-start:32px;top:50%;transform:translateY(-50%);width:250px;color:var(--ds-ink)}
   .side h2{font-family:var(--ds-font-display);font-size:20px;margin-bottom:8px}

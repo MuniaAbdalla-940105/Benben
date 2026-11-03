@@ -21,3 +21,8 @@ A clickable, fake-data tour of the whole product. No backend, no build step, syn
 - Property pages (sale, auction, rental) have a 6-slide gallery (drawn illustrations, not real photos), facts, description, details, amenities, payment plan or lease terms, a stylised map with nearby places, and an agent card.
 - Reuses the Ivory Ledger tokens (`assets/tokens.css`) and The Ascent logo from `docs/design`. System fonts only, so it works offline.
 - Not production code. Real build follows `backlog/BASIC-V1.md`.
+
+## Host on Cloudflare Pages
+No build step, so it is plain static hosting.
+- **Dashboard (Git):** Workers & Pages → Create → Pages → connect this repo, branch `sprint-1/demo-poc` (or `main` after merge). Framework preset: None. Build command: empty. Build output directory: `demo`.
+- **Or direct upload:** `npx wrangler pages deploy demo --project-name benben-demo`.
