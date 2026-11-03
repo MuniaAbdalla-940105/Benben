@@ -31,6 +31,23 @@ export default tseslint.config(
     },
   },
   {
+    // ADR-006: public.svc_* functions are service-role only; browser code must never call them.
+    files: ['apps/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.property.name='rpc'] Literal[value=/^svc_/]",
+          message: 'svc_* functions are for Edge Functions with the service role only (ADR-006). Call a public RPC instead.',
+        },
+        {
+          selector: "CallExpression[callee.property.name='rpc'] TemplateElement[value.raw=/^svc_/]",
+          message: 'svc_* functions are for Edge Functions with the service role only (ADR-006). Call a public RPC instead.',
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.{js,cjs,mjs}', '*.config.ts', 'apps/*/*.config.ts', 'e2e/**/*.ts', 'tools/**/*.{js,mjs,ts}'],
     languageOptions: { globals: globals.node },
   },

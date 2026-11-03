@@ -2,11 +2,15 @@
 # CI check 3: for migrations added in this PR, apply up -> down -> up and prove each down script
 # exactly reverses its migration (ADR-002 §3, §15).
 #
-#   BASE_REF   the branch the PR merges into (default origin/main). Added = in the working tree but not in
-#              BASE_REF; this includes untracked files, so it works the same locally.
+#   BASE_REF     the branch the PR merges into (default origin/main). Added = in the working tree but not in
+#                BASE_REF; this includes untracked files, so it works the same locally.
+#   BASE_COMMIT  optional: use this commit as the merge base directly (used by the self-test).
+#   MIGRATIONS_REVERTED_FILE  optional override of supabase/migrations-reverted.txt (used by the self-test).
 #
 # Rules enforced:
-#   a. Merged migrations are immutable: modifying, renaming or deleting one fails (staging never re-runs it).
+#   a. Merged migrations are immutable: modifying or renaming one fails (staging never re-runs it).
+#      Deleting one is allowed only for a deliberate rollback (review A1): its version is listed in
+#      supabase/migrations-reverted.txt AND its down script is deleted in the same PR.
 #   b. Added migrations must be newer than every migration on the base branch (db push applies in order).
 #   c. Each added migration has supabase/migrations-down/<same name without .sql>.down.sql.
 #   d. full schema == schema after down + up again, and schema after down == schema before the migrations.
@@ -19,20 +23,45 @@ BASE_REF="${BASE_REF:-origin/main}"
 require_local_db
 
 log "Check 3: migrations added relative to ${BASE_REF}"
-if ! git rev-parse --verify --quiet "${BASE_REF}^{commit}" >/dev/null; then
-  fail "Base ref ${BASE_REF} not found. In CI checkout needs fetch-depth: 0; locally run: git fetch origin main"
+if [ -n "${BASE_COMMIT:-}" ]; then
+  merge_base="$BASE_COMMIT"
+else
+  if ! git rev-parse --verify --quiet "${BASE_REF}^{commit}" >/dev/null; then
+    fail "Base ref ${BASE_REF} not found. In CI checkout needs fetch-depth: 0; locally run: git fetch origin main"
+  fi
+  merge_base="$(git merge-base "$BASE_REF" HEAD)"
 fi
-merge_base="$(git merge-base "$BASE_REF" HEAD)"
 
-# a. immutability
-changed_existing="$(git diff --name-only --diff-filter=MDR "$merge_base" -- 'supabase/migrations/*.sql' || true)"
-if [ -n "$changed_existing" ]; then
-  echo "$changed_existing" | sed 's/^/  /'
-  fail "Merged migrations were modified, renamed or deleted. Add a new migration instead."
+# a. immutability (renames count as delete + add)
+modified="$(git diff --no-renames --name-only --diff-filter=MT "$merge_base" -- 'supabase/migrations/*.sql' || true)"
+if [ -n "$modified" ]; then
+  echo "$modified" | sed 's/^/  /'
+  fail "Merged migrations were modified. Add a new migration instead."
 fi
+
+reverted_file="${MIGRATIONS_REVERTED_FILE:-supabase/migrations-reverted.txt}"
+mapfile -t reverted < <(sed -e 's/#.*//' -e 's/[[:space:]]//g' "$reverted_file" 2>/dev/null | grep -v '^$' || true)
+for v in "${reverted[@]}"; do
+  [[ "$v" =~ ^[0-9]{14}$ ]] || fail "$reverted_file: '$v' is not a 14-digit migration version"
+done
+mapfile -t deleted < <(git diff --no-renames --name-only --diff-filter=D "$merge_base" -- 'supabase/migrations/*.sql' || true)
+bad_delete=0
+for f in "${deleted[@]}"; do
+  [ -n "$f" ] || continue
+  name="$(basename "$f")"; version="${name%%_*}"
+  down="supabase/migrations-down/${name%.sql}.down.sql"
+  if ! printf '%s\n' "${reverted[@]}" | grep -qx "$version"; then
+    echo "  deleted but not listed in $reverted_file: $f"; bad_delete=1
+  elif [ -e "$down" ] || ! git cat-file -e "$merge_base:$down" 2>/dev/null; then
+    echo "  deleted $f but its down script $down was not deleted in the same change"; bad_delete=1
+  else
+    echo "  rollback: $f (listed in $reverted_file, down script removed)"
+  fi
+done
+[ "$bad_delete" = 0 ] || fail "Merged migrations were deleted outside the rollback procedure (docs/runbook.md §5)."
 
 mapfile -t added < <(
-  { git diff --name-only --diff-filter=A "$merge_base" -- 'supabase/migrations/*.sql'
+  { git diff --no-renames --name-only --diff-filter=A "$merge_base" -- 'supabase/migrations/*.sql'
     git ls-files --others --exclude-standard -- 'supabase/migrations/*.sql'
   } | sort -u
 )
@@ -86,8 +115,10 @@ for f in "${added[@]}"; do
   db_psql --single-transaction -f "$f" || fail "Migration failed when re-applied after its down script: $f"
 done
 db_schema_fingerprint > "$fp_reup"
-if ! diff -u "$fp_full" "$fp_reup" > /tmp/down-check-reup.diff; then
-  head -60 /tmp/down-check-reup.diff
+diff_out="$(mktemp)"
+trap 'rm -f "$fp_full" "$fp_down" "$fp_reup" "$fp_base" "$diff_out"' EXIT
+if ! diff -u "$fp_full" "$fp_reup" > "$diff_out"; then
+  head -60 "$diff_out"
   fail "Schema after up -> down -> up differs from the original (diff above)"
 fi
 pass "up -> down -> up gives the same schema"
@@ -95,8 +126,8 @@ pass "up -> down -> up gives the same schema"
 log "Check 3: compare 'after down' with a database reset to the base version"
 supabase db reset --local --no-seed --last "${#added[@]}" >/dev/null || fail "Could not reset to the base version"
 db_schema_fingerprint > "$fp_base"
-if ! diff -u "$fp_base" "$fp_down" > /tmp/down-check-base.diff; then
-  head -60 /tmp/down-check-base.diff
+if ! diff -u "$fp_base" "$fp_down" > "$diff_out"; then
+  head -60 "$diff_out"
   fail "Down scripts leave objects behind or remove too much (diff vs base version above)"
 fi
 pass "down scripts exactly reverse the added migrations"
