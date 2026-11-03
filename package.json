@@ -1,0 +1,42 @@
+{
+  "name": "benben",
+  "private": true,
+  "description": "BEN-BEN monorepo: customer PWA, staff admin, shared packages and the Supabase project.",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22.12 <23",
+    "pnpm": ">=10.28"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @benben/web dev",
+    "dev:admin": "pnpm --filter @benben/admin dev",
+    "build": "pnpm --filter \"./apps/*\" build",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r --parallel typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "db:start": "supabase start && bash tools/dev/write-local-env.sh",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset --local",
+    "db:types": "bash tools/ci/gen-types.sh",
+    "db:test": "supabase test db --local",
+    "functions:test": "bash tools/ci/check-functions.sh",
+    "ci:app": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && bash tools/ci/check-bundle-secrets.sh",
+    "ci:db": "bash tools/ci/check-db-all.sh",
+    "ci:selftest": "bash tools/ci/selftest/run.sh all"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "22.20.5",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.14.0",
+    "supabase": "2.122.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0"
+  }
+}

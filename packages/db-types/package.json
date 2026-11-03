@@ -1,0 +1,13 @@
+{
+  "name": "@benben/db-types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generated Supabase types. src/database.ts is written by `pnpm db:types` and checked by CI; never edit it by hand.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

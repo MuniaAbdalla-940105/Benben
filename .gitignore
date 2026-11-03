@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+
+# Supabase local state (linked project ref, pooler url, cli caches)
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# Deno
+supabase/functions/**/.deno/
