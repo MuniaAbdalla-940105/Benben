@@ -750,6 +750,27 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 - **Proposed default:** Assumption: show the winner's deadline as "at least until", and update it when the chain moves on (Q-27 default).
 - **Tag:** `BLOCKS-LATER`
 
+#### Q-85
+- **PRD:** 8.4 (localization); brand `CONCEPT.md` §5; ADR-003
+- **Question:** The brand designer recommends Readex Pro for all Arabic UI text. The design system uses Readex Pro for Arabic headlines only and IBM Plex Sans Arabic for body text. Is that acceptable?
+- **Why it matters:** Plex reads better at 12–16 px in T&C and money rows, and ADR-003 excludes Kufi-style body text. Readex Pro alone would be one less font to load on 4G.
+- **Proposed default:** Assumption: Plex Sans Arabic for text, Readex Pro for display and h1, Inter for Latin and numbers (`docs/design/design-system.md` §3).
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-86
+- **PRD:** 3.11 (green / amber / red timer), ADR-003 (C's gold countdown ring)
+- **Question:** The ring keeps a gold frame, but its arc uses the PRD state colours (green > 1 h, amber < 1 h, red < 5 min). Is that the intended reading of "gold countdown ring"?
+- **Why it matters:** A fully gold ring would break PRD 3.11 and ST-017 and would carry no urgency for colour-blind users without the label.
+- **Proposed default:** Assumption: gold frame plus state-coloured arc plus a text label.
+- **Tag:** `NICE-TO-KNOW`
+
+#### Q-87
+- **PRD:** 8.1 (admin), ST-020
+- **Question:** Is the admin dashboard Arabic-first like the consumer app, or English-first?
+- **Why it matters:** Default locale, table layouts and audit text. Both are designed (AD-SHELL in Arabic, AD-15 in English).
+- **Proposed default:** Assumption: the admin follows each staff member's saved language; the default is Arabic.
+- **Tag:** `NICE-TO-KNOW`
+
 ---
 
 ## 3. Question count by tag
@@ -762,4 +783,4 @@ All six were answered on 2026-11-02. The answers are recorded under each questio
 | `NICE-TO-KNOW` | 6 | Q-16, Q-18, Q-32, Q-33, Q-66, Q-72 |
 | **Total** | **74** | |
 
-Design group (I) adds Q-75 to Q-84: `BLOCKS-SPRINT-1` Q-78, Q-80 · `BLOCKS-LATER` Q-77, Q-82, Q-84 · `NICE-TO-KNOW` Q-75, Q-76, Q-79, Q-81, Q-83. New total: 84.
+Design group (I) adds Q-75 to Q-84: `BLOCKS-SPRINT-1` Q-78, Q-80 · `BLOCKS-LATER` Q-77, Q-82, Q-84 · `NICE-TO-KNOW` Q-75, Q-76, Q-79, Q-81, Q-83. New total: 84. Design part 2 adds Q-85, Q-86, Q-87 (`NICE-TO-KNOW`). New total: 87.
