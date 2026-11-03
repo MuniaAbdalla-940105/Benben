@@ -4,7 +4,7 @@ This repo is built by a team of Claude agents. Stakeholders (humans) give requir
 
 ## Roles
 
-- **Stakeholders (humans):** write the PRD, answer questions, validate stories on staging, approve sprint plans and releases. Only a stakeholder merges to `main`.
+- **Stakeholders (humans):** write the PRD, answer questions, validate stories on staging, approve sprint plans and releases. Nothing reaches `main` without explicit stakeholder acceptance.
 - **Main Claude Code session = product owner and orchestrator.** It follows `.claude/agents/product-owner.md`, keeps the backlog, writes the task prompt for each agent, delegates to subagents, and reports to stakeholders.
 - **Subagents** in `.claude/agents/`:
 
@@ -38,8 +38,12 @@ backlog/BACKLOG.md          epics, sprint plan, timeline, status board
 backlog/stories/ST-###.md   one story per file
 backlog/bugs/BUG-###.md     one bug per file, linked to its story
 prompts/ST-###/<agent>.md   generated task prompt for each agent on a story
-supabase/migrations/        all schema changes
-src/                        React app
+supabase/                   migrations, migrations-down, functions, pgTAP tests, seeds (ADR-002 §3)
+apps/web/                   customer PWA (React)
+apps/admin/                 staff dashboard (React, separate deploy)
+packages/                   db-types (generated), shared, ui
+tools/                      ci scripts, loadtest harness
+e2e/                        Playwright specs (run against staging)
 ai/                         AI services and eval sets
 ```
 
@@ -104,7 +108,7 @@ Every story (and every bug) is built in its **own Claude Code session** on its *
 1. **Orchestrator session** (the main one): keeps the backlog, writes prompts, starts story sessions, and reports to the stakeholder. It builds no story code itself.
 2. **Story session:** the orchestrator runs `/run-story ST-###`. That starts a new cloud session named `ST-### <title>`, checked out from the latest `main`, on the branch `st-###-<what-it-delivers>`. The session runs the whole per-story cycle (build → review → QA) and works only on that branch.
 3. **Pull request:** the story session opens one PR into `main`, titled `ST-### <title>`. The body has: the story link, acceptance criteria as a checklist, how to verify (staging/preview URL, test accounts, steps), test evidence, and the security review result.
-4. **Stakeholder verification:** you open the session or the PR, check the preview deployment, then reply `/feedback ST-### accepted` or leave comments. Comments go back to the same session and branch. Only you merge the PR.
+4. **Stakeholder verification:** you open the session or the PR, check the preview deployment, then reply `/feedback ST-### accepted` or leave comments. Comments go back to the same session and branch. **Merge policy (stakeholder decision, 2026-11-03):** after your explicit acceptance, the orchestrator merges the PR into `main` (merge commit; never squash away story history) and records it in the story. Without your acceptance nothing is merged, even when CI, review and QA are green. Story sessions never merge.
 5. **Dependencies:** a story starts only after the PRs it depends on are merged to `main`. Independent stories in the same sprint can run in parallel sessions.
 
 ## Branches and commits
@@ -147,7 +151,7 @@ Refs: ST-007
 ## Guardrails
 
 - Every piece of work has a story or bug file and exactly one owning agent.
-- Agents work on branches. Only a stakeholder merges to `main` and approves releases.
+- Agents work on branches. A PR is merged to `main` only after explicit stakeholder acceptance, and then only by the orchestrator. The stakeholder approves releases.
 - Every bug fix adds a regression test.
 - Traceability: PRD section → epic → story → prompt → branch/PR → test evidence → release.
 - Row-level security is on for every table. The service-role key never reaches the browser.
