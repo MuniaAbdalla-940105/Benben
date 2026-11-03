@@ -1,6 +1,7 @@
 ---
 name: supabase-backend
 description: Implements the Supabase backend: migrations, RLS policies, Postgres functions, auth, storage, realtime and edge functions, per the data contract. Use for backend story work or backend bugs.
+model: opus
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

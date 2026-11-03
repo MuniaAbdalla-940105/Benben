@@ -1,6 +1,7 @@
 ---
 name: ui-ux-designer
 description: Writes the design brief from the PRD, builds the design system and HTML prototypes for stories, and reviews built screens for UX quality. Use before any frontend work on a screen.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

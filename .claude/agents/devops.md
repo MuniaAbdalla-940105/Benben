@@ -1,6 +1,7 @@
 ---
 name: devops
 description: Sets up and maintains CI, the Supabase staging project, migrations deployment and environments. Docker is lowest priority. Use at project start and when the pipeline breaks.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

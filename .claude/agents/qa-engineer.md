@@ -1,6 +1,7 @@
 ---
 name: qa-engineer
 description: Tests a story against its acceptance criteria on staging, writes automated and regression tests, and files bugs in backlog/bugs/. Use after review passes.
+model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

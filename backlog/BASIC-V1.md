@@ -20,7 +20,9 @@ Wave 2 runs four sessions in parallel. Merge order: B2 → B3 → B4 → B5, eac
 ## Definition of Done (Basic v1)
 - The package works end to end on its preview or staging, with synthetic data.
 - CI is green (all ST-001 checks). RLS is on for every new table, and pgTAP tests cover each owner/other-user case.
-- The `solution-architect` and `security` reviews are done (light review, but security is mandatory for money, bids and identity). The `qa-engineer` smoke test is done.
+- **Reviews (token-saving, 2026-11-03):** `solution-architect` review for B2 and B3 only. `security` review for B1, B2, B3 and B6 only. `qa-engineer` runs a short smoke test of the acceptance criteria, not a full test plan.
+- **Models:** coding, frontend, QA and devops agents run on Sonnet; the architect, security and backend agents run on Opus. Story sessions for B1, B4, B5 and B6 run on Sonnet; B2 and B3 (money, bids) run on Opus.
+- **Token rules for every session:** read only the files and sections you need (use Grep, not whole-file reads of large docs); no screenshots unless something looks broken; do not re-run passing checks; keep reports to the verify checklist.
 - Arabic RTL and English, light and dark, using the design system.
 - Then the orchestrator merges.
 
