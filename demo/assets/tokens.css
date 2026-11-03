@@ -1,0 +1,289 @@
+/*
+ * BEN-BEN product design tokens, v1.0 (2026-11-03)
+ * Owner: ui-ux-designer. Decision: docs/decisions/ADR-003-design-direction-and-ux-options.md
+ *
+ * Layering
+ *   1. Brand tokens   docs/design/brand/tokens.css   (--bb-*)  colour source of truth, never redefined here
+ *   2. Product tokens this file                      (--ds-*)  semantic roles, light + dark + live stage,
+ *                                                               type, spacing, radius, shadow, motion
+ *   3. Tailwind       docs/design/tailwind-theme.js            maps --ds-* to Tailwind names
+ *
+ * Theme rules (ADR-003 §3)
+ *   - The app follows the phone setting: prefers-color-scheme picks light or dark.
+ *   - data-theme="light" | "dark" on any element forces a theme for that subtree (used by prototypes
+ *     and by a future in-app override).
+ *   - data-surface="stage" re-maps the semantic roles to the navy live stage. Live surfaces (AU-01 live
+ *     hero, AU-02 sticky header, AU-03 live room) are stage in BOTH themes.
+ *
+ * Contrast (WCAG 2.2, relative luminance), checked 2026-11-03
+ *   light  ink #0B1530 on bg #FBF8F2 17.0 · ink-muted stone-600 on surface #FFF 5.63, on bg 5.31
+ *          accent-text gold-700 on #FFF 5.47, on bg 5.16 · ok #13795B 5.06 · warn #8F5300 5.82 · danger #B42318 6.20
+ *          line-strong stone-500 on #FFF 3.48 (input borders, 1.4.11) · white on live-600 5.33
+ *   dark   ink ivory-100 on bg navy-950 17.1, on surface navy-900 16.0 · ink-muted stone-300 on navy-800 9.16
+ *          accent-text gold-300 on navy-800 10.3 · primary gold-500 with navy-900 text 7.69
+ *          ok #3DD68C 8.49 · warn #FFB547 9.06 · danger #FF7A70 6.27 (all on navy-800) · line-strong #5F6B8A on navy-900 3.40
+ *   focus  light navy-900 ring; dark/stage gold-300 ring (11.7:1 on navy-900)
+ */
+@import url("./brand/tokens.css");
+
+/* ---------- Extensions (new values; not in the brand file) ---------- */
+:root {
+  --ds-ext-ok-600: #13795B;     /* success text/icons on light */
+  --ds-ext-ok-300: #3DD68C;     /* success on navy */
+  --ds-ext-warn-700: #8F5300;   /* warning text on light */
+  --ds-ext-warn-300: #FFB547;   /* warning on navy */
+  --ds-ext-danger-700: #B42318; /* error text on light (distinct from LIVE red) */
+  --ds-ext-danger-300: #FF7A70; /* error / final minutes on navy */
+  --ds-ext-navy-line: #5F6B8A;  /* 3:1 control borders on navy */
+  --ds-ext-white: #FFFFFF;
+}
+
+/* ---------- Semantic colour roles: LIGHT (default) ---------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --ds-bg: var(--bb-ivory-50);
+  --ds-surface: var(--ds-ext-white);
+  --ds-surface-2: var(--bb-ivory-100);        /* sunken rows, chips, skeleton base */
+  --ds-surface-3: var(--bb-ivory-200);        /* skeleton highlight, pressed */
+  --ds-line: var(--bb-ivory-200);             /* hairlines, dividers (decorative) */
+  --ds-line-strong: var(--bb-stone-500);      /* input and control borders (3:1) */
+  --ds-ink: var(--bb-navy-900);
+  --ds-ink-muted: var(--bb-stone-600);
+  --ds-ink-disabled: var(--bb-stone-500);     /* disabled text is exempt from 1.4.3; still legible */
+  --ds-primary: var(--bb-navy-900);           /* primary buttons */
+  --ds-primary-hover: var(--bb-navy-800);
+  --ds-on-primary: var(--bb-ivory-100);
+  --ds-accent: var(--bb-gold-600);            /* hairlines, seal, graphics only */
+  --ds-accent-text: var(--bb-gold-700);       /* the only gold for text on light */
+  --ds-accent-tint: #F3EAD6;
+  --ds-focus: var(--bb-navy-900);
+  --ds-live: var(--bb-live-600);
+  --ds-on-live: var(--ds-ext-white);
+  --ds-ok: var(--ds-ext-ok-600);
+  --ds-ok-tint: #E3F2EC;
+  --ds-warn: var(--ds-ext-warn-700);
+  --ds-warn-tint: #FBEFD9;
+  --ds-danger: var(--ds-ext-danger-700);
+  --ds-danger-tint: #FBE6E3;
+  --ds-scrim: rgb(7 14 31 / 0.55);
+  --ds-shadow-color: 11 21 48;
+}
+
+/* ---------- Semantic colour roles: DARK ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ds-bg: var(--bb-navy-950);
+  --ds-surface: var(--bb-navy-900);
+  --ds-surface-2: var(--bb-navy-800);
+  --ds-surface-3: var(--bb-navy-700);
+  --ds-line: var(--bb-navy-700);
+  --ds-line-strong: var(--ds-ext-navy-line);
+  --ds-ink: var(--bb-ivory-100);
+  --ds-ink-muted: var(--bb-stone-300);
+  --ds-ink-disabled: var(--bb-stone-500);
+  --ds-primary: var(--bb-gold-500);           /* navy buttons would vanish on navy */
+  --ds-primary-hover: var(--bb-gold-300);
+  --ds-on-primary: var(--bb-navy-900);
+  --ds-accent: var(--bb-gold-500);
+  --ds-accent-text: var(--bb-gold-300);
+  --ds-accent-tint: rgb(200 164 100 / 0.14);
+  --ds-focus: var(--bb-gold-300);
+  --ds-live: var(--bb-live-600);
+  --ds-on-live: var(--ds-ext-white);
+  --ds-ok: var(--ds-ext-ok-300);
+  --ds-ok-tint: rgb(61 214 140 / 0.14);
+  --ds-warn: var(--ds-ext-warn-300);
+  --ds-warn-tint: rgb(255 181 71 / 0.14);
+  --ds-danger: var(--ds-ext-danger-300);
+  --ds-danger-tint: rgb(255 122 112 / 0.14);
+  --ds-scrim: rgb(0 0 0 / 0.6);
+  --ds-shadow-color: 0 0 0;
+}
+
+/* Follow the phone setting unless a subtree forces light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ds-bg: var(--bb-navy-950);
+    --ds-surface: var(--bb-navy-900);
+    --ds-surface-2: var(--bb-navy-800);
+    --ds-surface-3: var(--bb-navy-700);
+    --ds-line: var(--bb-navy-700);
+    --ds-line-strong: var(--ds-ext-navy-line);
+    --ds-ink: var(--bb-ivory-100);
+    --ds-ink-muted: var(--bb-stone-300);
+    --ds-ink-disabled: var(--bb-stone-500);
+    --ds-primary: var(--bb-gold-500);
+    --ds-primary-hover: var(--bb-gold-300);
+    --ds-on-primary: var(--bb-navy-900);
+    --ds-accent: var(--bb-gold-500);
+    --ds-accent-text: var(--bb-gold-300);
+    --ds-accent-tint: rgb(200 164 100 / 0.14);
+    --ds-focus: var(--bb-gold-300);
+    --ds-ok: var(--ds-ext-ok-300);
+    --ds-ok-tint: rgb(61 214 140 / 0.14);
+    --ds-warn: var(--ds-ext-warn-300);
+    --ds-warn-tint: rgb(255 181 71 / 0.14);
+    --ds-danger: var(--ds-ext-danger-300);
+    --ds-danger-tint: rgb(255 122 112 / 0.14);
+    --ds-scrim: rgb(0 0 0 / 0.6);
+    --ds-shadow-color: 0 0 0;
+  }
+}
+
+/* ---------- Live stage (same in both themes) ---------- */
+[data-surface="stage"] {
+  color-scheme: dark;
+  --ds-bg: var(--bb-navy-900);
+  --ds-surface: var(--bb-navy-800);
+  --ds-surface-2: var(--bb-navy-700);
+  --ds-surface-3: var(--bb-navy-700);
+  --ds-line: var(--bb-navy-700);
+  --ds-line-strong: var(--ds-ext-navy-line);
+  --ds-ink: var(--bb-ivory-100);
+  --ds-ink-muted: var(--bb-stone-300);
+  --ds-ink-disabled: var(--bb-stone-500);
+  --ds-primary: var(--bb-gold-500);
+  --ds-primary-hover: var(--bb-gold-300);
+  --ds-on-primary: var(--bb-navy-900);
+  --ds-accent: var(--bb-gold-500);
+  --ds-accent-text: var(--bb-gold-300);
+  --ds-accent-tint: rgb(200 164 100 / 0.14);
+  --ds-focus: var(--bb-gold-300);
+  --ds-ok: var(--ds-ext-ok-300);
+  --ds-ok-tint: rgb(61 214 140 / 0.16);
+  --ds-warn: var(--ds-ext-warn-300);
+  --ds-warn-tint: rgb(255 181 71 / 0.16);
+  --ds-danger: var(--ds-ext-danger-300);
+  --ds-danger-tint: rgb(255 122 112 / 0.16);
+  --ds-stage-ring-track: var(--bb-navy-700);
+  --ds-stage-ring-frame: var(--bb-gold-500);   /* gold hairline around the ring; the arc carries the state colour */
+  --ds-shadow-color: 0 0 0;
+}
+
+/* ---------- Typography ---------- */
+:root {
+  /* UI faces (see design-system.md §3 for the reasons)
+     Arabic text  IBM Plex Sans Arabic 400/500/600/700
+     Arabic display (h1, live price labels ≥ 20px)  Readex Pro 500/600, the brand's Arabic voice
+     Latin text and ALL numerals  Inter 400–700 with tabular figures */
+  --ds-font-text: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  --ds-font-display: "Readex Pro", "IBM Plex Sans Arabic", "Inter", sans-serif;
+  --ds-font-latin: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --ds-font-num: "Inter", system-ui, sans-serif;
+  --ds-font-brand: var(--bb-font-latin);        /* Outfit, lockups only (logo files are outlined SVG) */
+
+  /* size / line-height (rem, root 16px; respects browser font size and zoom) */
+  --ds-text-display: 2.25rem;  --ds-lh-display: 1.2;   /* 36 */
+  --ds-text-h1: 1.5rem;        --ds-lh-h1: 1.35;       /* 24 */
+  --ds-text-h2: 1.25rem;       --ds-lh-h2: 1.4;        /* 20 */
+  --ds-text-h3: 1.0625rem;     --ds-lh-h3: 1.45;       /* 17 */
+  --ds-text-body: 1rem;        --ds-lh-body: 1.7;      /* 16, Arabic needs ≥ 1.6 */
+  --ds-text-sm: 0.875rem;      --ds-lh-sm: 1.6;        /* 14 */
+  --ds-text-xs: 0.75rem;       --ds-lh-xs: 1.5;        /* 12, the floor; never smaller */
+  --ds-num-xl: 2.5rem;   /* 40, deposit amount, stage price */
+  --ds-num-lg: 1.75rem;  /* 28, sticky header price, timer */
+  --ds-num-md: 1.25rem;  /* 20, card price */
+  --ds-num-sm: 1rem;     /* 16, rows */
+}
+.ds-num {
+  font-family: var(--ds-font-num);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  unicode-bidi: isolate; /* amounts never reorder inside Arabic text */
+}
+
+/* ---------- Spacing (4 px grid; matches Tailwind default scale) ---------- */
+:root {
+  --ds-space-1: 0.25rem; --ds-space-2: 0.5rem; --ds-space-3: 0.75rem; --ds-space-4: 1rem;
+  --ds-space-5: 1.25rem; --ds-space-6: 1.5rem; --ds-space-8: 2rem; --ds-space-10: 2.5rem;
+  --ds-space-12: 3rem;   --ds-space-16: 4rem;
+  --ds-page-x: 1rem;          /* 375–767 */
+  --ds-page-x-md: 1.5rem;     /* 768+ */
+  --ds-target: 2.75rem;       /* 44px min for bid, confirm, checkbox rows */
+  --ds-target-bid: 3rem;      /* 48px quick-bid buttons */
+  --ds-bottom-nav: 4.5rem;    /* 72px + safe area */
+}
+
+/* ---------- Radius ---------- */
+:root {
+  --ds-radius-sm: 0.5rem;   /* chips, small badges */
+  --ds-radius-md: 0.75rem;  /* inputs, list buttons */
+  --ds-radius-lg: 1rem;     /* cards, primary buttons */
+  --ds-radius-xl: 1.25rem;  /* hero cards */
+  --ds-radius-sheet: 1.75rem; /* bottom sheet top corners */
+  --ds-radius-pill: 999px;
+}
+
+/* ---------- Elevation ---------- */
+:root {
+  --ds-shadow-card: 0 1px 2px rgb(var(--ds-shadow-color) / 0.06);
+  --ds-shadow-raised: 0 8px 24px rgb(var(--ds-shadow-color) / 0.10);
+  --ds-shadow-sheet: 0 -8px 32px rgb(var(--ds-shadow-color) / 0.18);
+  --ds-shadow-toast: 0 6px 20px rgb(var(--ds-shadow-color) / 0.22);
+}
+/* In dark and stage, elevation is a lighter surface + hairline, shadows stay subtle. */
+
+/* ---------- Motion ---------- */
+:root {
+  --ds-dur-fast: 120ms;
+  --ds-dur-base: 200ms;
+  --ds-dur-slow: 320ms;
+  --ds-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --ds-ease-exit: cubic-bezier(.3, 0, 1, 1);
+}
+@keyframes ds-live-pulse {           /* LIVE pill ring, 1.6 s, < 1 flash per second */
+  0% { box-shadow: 0 0 0 0 rgb(201 48 44 / 0.55); }
+  100% { box-shadow: 0 0 0 8px rgb(201 48 44 / 0); }
+}
+@keyframes ds-price-roll {           /* new price rolls up */
+  from { transform: translateY(40%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes ds-sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes ds-toast-in { from { transform: translateY(-8px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes ds-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ds-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+@keyframes ds-status-flash {         /* outbid / extended: tint fades in once, no blinking */
+  from { background-color: transparent; } to { background-color: var(--ds-danger-tint); }
+}
+.ds-anim-live-pulse { animation: ds-live-pulse 1.6s ease-out infinite; }
+.ds-anim-price-roll { display: inline-block; animation: ds-price-roll var(--ds-dur-slow) var(--ds-ease-standard) both; }
+.ds-anim-sheet-in { animation: ds-sheet-in 240ms var(--ds-ease-standard) both; }
+.ds-anim-toast-in { animation: ds-toast-in var(--ds-dur-base) var(--ds-ease-standard) both; }
+.ds-anim-fade-in { animation: ds-fade-in var(--ds-dur-base) linear both; }
+.ds-anim-shimmer {
+  background-image: linear-gradient(90deg, var(--ds-surface-2) 0%, var(--ds-surface-3) 50%, var(--ds-surface-2) 100%);
+  background-size: 200% 100%; animation: ds-shimmer 1.4s linear infinite;
+}
+.ds-anim-status-flash { animation: ds-status-flash var(--ds-dur-base) linear both; }
+
+/* Reduced motion: every animation has a still or instant version */
+@media (prefers-reduced-motion: reduce) {
+  .ds-anim-live-pulse { animation: none; box-shadow: 0 0 0 3px rgb(201 48 44 / 0.35); }
+  .ds-anim-price-roll { animation: none; }
+  .ds-anim-sheet-in { animation: ds-fade-in var(--ds-dur-fast) linear both; }
+  .ds-anim-toast-in { animation: ds-fade-in var(--ds-dur-fast) linear both; }
+  .ds-anim-shimmer { animation: none; background-image: none; background-color: var(--ds-surface-2); }
+  .ds-anim-status-flash { animation: none; background-color: var(--ds-danger-tint); }
+  * { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+/* Prototype aid: data-motion="reduced" on a subtree simulates the setting */
+[data-motion="reduced"] .ds-anim-live-pulse { animation: none; box-shadow: 0 0 0 3px rgb(201 48 44 / 0.35); }
+[data-motion="reduced"] .ds-anim-price-roll,
+[data-motion="reduced"] .ds-anim-shimmer { animation: none; }
+[data-motion="reduced"] .ds-anim-shimmer { background-image: none; background-color: var(--ds-surface-2); }
+
+/* ---------- Focus ---------- */
+:focus-visible { outline: 2px solid var(--ds-focus); outline-offset: 2px; }
+
+/* ---------- Brand mark helpers (logo is a file reference, swapped later by file replacement) ---------- */
+/* Two <img> per placement: .ds-brand-on-light and .ds-brand-on-dark; CSS shows the right one. */
+.ds-brand-on-dark { display: none; }
+[data-theme="dark"] .ds-brand-on-light, [data-surface="stage"] .ds-brand-on-light { display: none; }
+[data-theme="dark"] .ds-brand-on-dark, [data-surface="stage"] .ds-brand-on-dark { display: inline-block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ds-brand-on-light { display: none; }
+  :root:not([data-theme="light"]) .ds-brand-on-dark { display: inline-block; }
+}
