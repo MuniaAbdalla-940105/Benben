@@ -29,7 +29,7 @@ while IFS= read -r line || [ -n "$line" ]; do
     fail "$allowlist_file:$lineno: '$line' is not <schema>.<function>(<argtype>,...) e.g. public.place_bid(uuid,bigint)"
   fi
   if [[ "$entry" =~ \.svc_ ]]; then
-    fail "$allowlist_file:$lineno: svc_* functions are service-role only and must never be allow-listed (ADR-006)"
+    fail "$allowlist_file:$lineno: svc_* functions are service-role only and must never be allow-listed (ADR-007)"
   fi
   entries+=("$entry")
 done < "$allowlist_file"

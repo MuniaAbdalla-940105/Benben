@@ -72,7 +72,7 @@ Repository settings are at GitHub → Settings → Secrets and variables → Act
 | `STAGING_SUPABASE_ANON_KEY` | variable | repository | The **publishable** key (`sb_publishable_…`) or the legacy `anon` key. Public by design. Never the secret or service-role key: check 8 fails the build if one is used. |
 | `CLOUDFLARE_ACCOUNT_ID` | variable | repository | Cloudflare → Workers & Pages → Account ID. |
 
-**Edge Function settings** (set by the deploy job with `supabase secrets set`; nothing to add by hand): `APP_ENV=staging` (ADR-006; must agree with `private.runtime_env`), `PAYMENTS_PROVIDER=mock`, `KYC_PROVIDER=mock`, `SMS_PROVIDER=mock`. Locally, `pnpm db:start` writes `APP_ENV=local` to the git-ignored `supabase/functions/.env`. Real provider secrets (`PAYMENTS_HMAC_SECRET`, `SEND_SMS_HOOK_SECRET`, …) arrive with their stories.
+**Edge Function settings** (set by the deploy job with `supabase secrets set`; nothing to add by hand): `APP_ENV=staging` (ADR-007; must agree with `private.runtime_env`), `PAYMENTS_PROVIDER=mock`, `KYC_PROVIDER=mock`, `SMS_PROVIDER=mock`. Locally, `pnpm db:start` writes `APP_ENV=local` to the git-ignored `supabase/functions/.env`. Real provider secrets (`PAYMENTS_HMAC_SECRET`, `SEND_SMS_HOOK_SECRET`, …) arrive with their stories.
 
 **Branch protection on `main`** (Settings → Branches):
 - require a pull request before merging, and **require review from Code Owners** (`.github/CODEOWNERS` covers `.github/**`, `tools/ci/**`, `supabase/migrations/**`, `supabase/migrations-down/**`, `supabase/migrations-reverted.txt`, `supabase/config.toml`);

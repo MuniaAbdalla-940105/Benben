@@ -4,7 +4,7 @@
 # One entry per line: <schema>.<function>(<argtype>,<argtype>,...)  -- the exact identity signature, as
 # Postgres prints it with an empty search_path (spaces are ignored). Each overload needs its own line.
 # Add an entry only in the PR that adds the function, with the story ID and why the client calls it.
-# Never list public.svc_* functions: they are service-role only (ADR-006).
+# Never list public.svc_* functions: they are service-role only (ADR-007).
 #
 # Example (ST-010):
 # public.place_bid(uuid,bigint,uuid)   # ST-010 bidders place bids; SECURITY DEFINER with explicit checks

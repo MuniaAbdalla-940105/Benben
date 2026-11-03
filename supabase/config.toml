@@ -22,7 +22,7 @@ max_rows = 1000
 # instead. Left unset, a fresh project falls back to `true`.
 # BEN-BEN: left unset on purpose (review M4). `false` also strips service_role's default grants, but only
 # locally (staging does not read this file), so local and staging would differ and Edge Functions
-# (ADR-006) would behave differently. Instead the ST-001 migration revokes the anon/authenticated defaults
+# (ADR-007) would behave differently. Instead the ST-001 migration revokes the anon/authenticated defaults
 # in the database itself, which applies identically everywhere; CI check 6 and pgTAP verify it.
 # auto_expose_new_tables = true
 

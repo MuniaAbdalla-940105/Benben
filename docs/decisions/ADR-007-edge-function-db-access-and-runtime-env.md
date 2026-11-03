@@ -1,4 +1,4 @@
-# ADR-006: How Edge Functions call the database and learn the runtime environment
+# ADR-007: How Edge Functions call the database and learn the runtime environment
 
 - Status: **accepted by solution-architect** (no stack change; stakeholder informed through the ST-001 review report)
 - Date: 2026-11-03

@@ -192,7 +192,7 @@ EOF
 import { getSupabase } from './supabase';
 export const call = () => getSupabase()?.rpc('svc_runtime_env' as never);
 EOF
-    expect_fail svc-rpc-in-app "1 lint (ADR-006)" "ADR-006" pnpm lint
+    expect_fail svc-rpc-in-app "1 lint (ADR-007)" "ADR-007" pnpm lint
     cleanup_files
   fi
 

@@ -36,7 +36,7 @@ Troubleshooting:
 ## 2. Adding a migration (every story with data)
 
 1. `pnpm exec supabase migration new st###_<what>`, then rename it to the ADR-002 §3 pattern `<yyyymmddhhmmss>_st###_<what>.sql` if needed (CI check 2 enforces the pattern).
-2. Write the up SQL. Rules: `enable row level security` on every table (public and private); `revoke execute ... from public, anon, authenticated` on every function, then grant explicitly; client-callable functions go in `tools/ci/rpc-allowlist.txt` as their exact signature (`public.name(argtypes)`) with the story ID; never `svc_*` (ADR-006).
+2. Write the up SQL. Rules: `enable row level security` on every table (public and private); `revoke execute ... from public, anon, authenticated` on every function, then grant explicitly; client-callable functions go in `tools/ci/rpc-allowlist.txt` as their exact signature (`public.name(argtypes)`) with the story ID; never `svc_*` (ADR-007).
 3. Write `supabase/migrations-down/<same name without .sql>.down.sql`: it must reverse the migration exactly.
 4. `pnpm db:reset && pnpm db:types`, add pgTAP tests in `supabase/tests/`, then `pnpm ci:db`.
 5. Never edit a migration that is already on `main`. Add a new one (check 3 fails otherwise).
@@ -68,7 +68,7 @@ Troubleshooting:
 `.github/workflows/deploy-staging.yml` runs on every push to `main` (that is, after the orchestrator merges a stakeholder-accepted PR) and on demand. Order:
 
 1. **Preflight:** checks which inputs exist (ADR-005 §3). Missing ones are listed by name in the run summary and the deploy jobs are skipped.
-2. **Supabase:** refuse unless the ref belongs to the project named `benben-staging`; `supabase link`; `db push --dry-run` (logged), `db push`; set `private.runtime_env = 'staging'` (never over `production`, and fails unless the result is `staging`); run every `supabase/seed/*.sql` in name order (`00_vault_secrets.sql` creates missing Vault secrets inside the database, then `staging.sql`); set the function settings `APP_ENV=staging` (ADR-006) and the `mock` provider selectors; deploy every Edge Function (`tools/ci/deploy-functions.sh staging`); smoke-test `/functions/v1/health`.
+2. **Supabase:** refuse unless the ref belongs to the project named `benben-staging`; `supabase link`; `db push --dry-run` (logged), `db push`; set `private.runtime_env = 'staging'` (never over `production`, and fails unless the result is `staging`); run every `supabase/seed/*.sql` in name order (`00_vault_secrets.sql` creates missing Vault secrets inside the database, then `staging.sql`); set the function settings `APP_ENV=staging` (ADR-007) and the `mock` provider selectors; deploy every Edge Function (`tools/ci/deploy-functions.sh staging`); smoke-test `/functions/v1/health`.
 3. **Frontend:** build `apps/web` and `apps/admin` against staging with the publishable key, scan the bundle again, upload to Cloudflare Pages (`benben-web-staging`, `benben-admin-staging`, branch `main`).
 4. **Playwright** against the web staging URL.
 
@@ -116,4 +116,4 @@ The full list, where each one lives and who provides it: ADR-005 §3. Rules:
 - Browser bundles get `VITE_*` variables only: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (publishable), `VITE_APP_ENV`, later `VITE_MOCK_GATEWAY_URL`. Check 8 blocks anything else.
 - The service-role key never appears in CI, `.env` files or bundles; Edge Functions receive it from Supabase.
 - `.env.local` files are git-ignored; `pnpm db:start` writes them with local values.
-- Edge Function settings: `APP_ENV` (`local` | `staging` | `production`; ADR-006, must agree with `private.runtime_env`; unset counts as production), `PAYMENTS_PROVIDER`, `KYC_PROVIDER`, `SMS_PROVIDER`. Staging gets them from the deploy job; locally from `supabase/functions/.env`.
+- Edge Function settings: `APP_ENV` (`local` | `staging` | `production`; ADR-007, must agree with `private.runtime_env`; unset counts as production), `PAYMENTS_PROVIDER`, `KYC_PROVIDER`, `SMS_PROVIDER`. Staging gets them from the deploy job; locally from `supabase/functions/.env`.

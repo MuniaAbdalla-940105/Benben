@@ -7,7 +7,7 @@
 --
 -- `private.runtime_env` records which environment this database is (local | staging | production).
 -- Dev-only code fails closed: a missing row means production (ADR-002 §4; read through private.env(),
--- added by ST-004 per ADR-006). The value is written by seed.sql locally and by the staging deploy job; never by a
+-- added by ST-004 per ADR-007). The value is written by seed.sql locally and by the staging deploy job; never by a
 -- migration.
 
 create schema if not exists private;

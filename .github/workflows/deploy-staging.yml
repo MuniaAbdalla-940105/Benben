@@ -1,5 +1,5 @@
 # Deploy to staging after a stakeholder-accepted PR is merged into main (CLAUDE.md merge policy;
-# ADR-002 §4, §15; ADR-005; ADR-006). Order (review A10):
+# ADR-002 §4, §15; ADR-005; ADR-007). Order (review A10):
 #   1. preflight: which inputs exist; the target project is named benben-staging (M5)
 #   2. supabase: link -> db push -> private.runtime_env = staging (never over production) -> seed files
 #      (Vault secrets, staging seed) -> function settings (APP_ENV=staging, mock providers) ->
@@ -94,7 +94,7 @@ jobs:
             echo "seed: $f"
             pnpm exec supabase db query --linked -f "$f"
           done
-      - name: Edge Function settings (ADR-006 APP_ENV; mock providers on staging; not secret values)
+      - name: Edge Function settings (ADR-007 APP_ENV; mock providers on staging; not secret values)
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: >

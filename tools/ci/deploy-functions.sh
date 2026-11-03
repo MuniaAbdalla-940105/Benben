@@ -7,7 +7,7 @@
 # staging:    every function in supabase/functions (except _shared and other _* folders).
 # production: only the functions listed in tools/ci/functions-production.txt. The deploy FAILS (it does not
 #             skip) if that list names a prod-forbidden function (tools/ci/prod-forbidden-functions.txt) or a
-#             function that does not exist. This guard is the deploy-time layer of ADR-006's three layers.
+#             function that does not exist. This guard is the deploy-time layer of ADR-007's three layers.
 source "$(dirname "$0")/lib.sh"
 
 target="${1:?usage: deploy-functions.sh <staging|production> [--dry-run]}"

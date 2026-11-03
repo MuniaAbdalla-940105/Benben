@@ -6,7 +6,7 @@
 - Builds on: `docs/decisions/ADR-001-stack-platform-and-providers.md` (accepted)
 - PRD sections: 2.1–2.3, 3.2, 3.4–3.6, 3.9, 3.10, 8.1.4, 8.2, 8.4, 8.6
 - Contracts: `docs/design/contracts/DATA_MODEL.md`, `docs/design/contracts/ST-004.md` … `ST-011.md`
-- Amended by: `ADR-006-edge-function-db-access-and-runtime-env.md` (2026-11-03): Edge Functions reach `private` functions only through `public.svc_*` wrappers executable by `service_role`; dev-only Edge Functions check both `APP_ENV` and `private.runtime_env`.
+- Amended by: `ADR-007-edge-function-db-access-and-runtime-env.md` (2026-11-03): Edge Functions reach `private` functions only through `public.svc_*` wrappers executable by `service_role`; dev-only Edge Functions check both `APP_ENV` and `private.runtime_env`.
 
 ## 1. Context
 
@@ -68,8 +68,8 @@ flowchart LR
 Request paths in plain words:
 - **Reads** (auction detail, bid history, own wallet): `supabase-js` → PostgREST → views/tables protected by RLS.
 - **Critical writes from the user** (bid, join, leave): `supabase-js` `rpc()` → a `SECURITY DEFINER` function in `public` that checks everything and calls internal functions in `private`.
-- **Writes that need a provider** (payment intent, KYC submit): the browser calls an Edge Function with its user JWT. The function verifies the JWT, calls the provider adapter, and writes through `private` functions with the service role, called via their `public.svc_*` wrappers (ADR-006: `private` is not exposed through the API).
-- **Provider callbacks** (payment webhooks): Edge Function → HMAC verify → raw event stored → `public.svc_process_payment_event()` → `private.process_payment_event()` (ADR-006).
+- **Writes that need a provider** (payment intent, KYC submit): the browser calls an Edge Function with its user JWT. The function verifies the JWT, calls the provider adapter, and writes through `private` functions with the service role, called via their `public.svc_*` wrappers (ADR-007: `private` is not exposed through the API).
+- **Provider callbacks** (payment webhooks): Edge Function → HMAC verify → raw event stored → `public.svc_process_payment_event()` → `private.process_payment_event()` (ADR-007).
 - **Fan-out**: the bid function calls `realtime.send()` inside its transaction. The message exists only if the bid commits.
 
 ## 3. Repository layout (monorepo)
@@ -113,7 +113,7 @@ Note for the orchestrator: `CLAUDE.md` "Repo layout" still says `src/  React app
 | Data | `supabase/seed.sql`, synthetic | `supabase/seed/staging.sql`, synthetic only | Real data. No agent access |
 | Providers | mocks | mocks (`mock-gateway`, mock KYC, mock SMS) | real vendors. `mock-gateway` and `dev-sms-inbox` are **not deployed**; the deploy job fails if they are in the function list |
 | `private.runtime_env` | `local` | `staging` | `production` (the default value if the row is missing, so dev-only functions fail closed) |
-| Edge Function secret `APP_ENV` (ADR-006) | `local` | `staging` | `production` or unset (unset = production). Dev-only Edge Functions run only when it equals `private.runtime_env` and is not `production` |
+| Edge Function secret `APP_ENV` (ADR-007) | `local` | `staging` | `production` or unset (unset = production). Dev-only Edge Functions run only when it equals `private.runtime_env` and is not `production` |
 | Frontend | Vite dev server | static host with a stable staging URL (devops picks the host in ST-001) | same host, production project |
 | Keys in the browser | anon/publishable key only | anon/publishable key only | anon/publishable key only |
 
@@ -335,7 +335,7 @@ The stakeholder hears the result in the sprint 1 review.
   - `VITE_MOCK_GATEWAY_URL` (non-prod).
 - **Function secrets:**
   - `SUPABASE_SERVICE_ROLE_KEY` (auto-provided);
-  - `APP_ENV` (`local` | `staging` | `production`; set by the deploy, ADR-006);
+  - `APP_ENV` (`local` | `staging` | `production`; set by the deploy, ADR-007);
   - `PAYMENTS_PROVIDER`, `PAYMENTS_HMAC_SECRET`, `PAYMOB_API_KEY` (later);
   - `KYC_PROVIDER`, `KYC_AUTO_APPROVE_MIN_SCORE` (or `app_settings`);
   - `SMS_PROVIDER`, `SEND_SMS_HOOK_SECRET`;
