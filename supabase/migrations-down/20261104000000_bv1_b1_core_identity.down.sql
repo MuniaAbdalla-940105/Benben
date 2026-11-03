@@ -2,8 +2,8 @@
 drop policy if exists kyc_docs_owner_insert on storage.objects;
 drop policy if exists kyc_docs_owner_select on storage.objects;
 drop policy if exists kyc_docs_admin_select on storage.objects;
-delete from storage.objects where bucket_id = 'kyc-documents';
-delete from storage.buckets where id = 'kyc-documents';
+-- The private bucket 'kyc-documents' stays: Storage forbids deleting its rows from SQL, and with the
+-- policies gone it is unreachable for clients. Remove it through the Storage API if needed.
 
 drop function if exists public.dev_sms_inbox(text);
 drop function if exists public.admin_decide_kyc(uuid, boolean, text);
