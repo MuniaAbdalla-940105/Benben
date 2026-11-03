@@ -178,10 +178,10 @@ Mapping `auction_status` → `auction_public_status` (Q-22: post-close outcome s
 1. `st004_foundation_identity`: extensions (`pgcrypto`, `pg_cron`, `pg_net`, `supabase_vault`), schema `private`, shared helpers (`private.forbid_mutation`, `private.has_permission`, `private.hit_rate_limit`, `private.client_ip`), `runtime_env`, `app_settings`, `audit_logs`, `profiles`, staff RBAC tables and seed, auth hooks, `dev_sms_outbox`.
 2. `st006_ledger`: ledger enums and tables, system accounts, posting and lock functions. It extends the new-user trigger to create the wallet and accounts.
 3. `st005_kyc`: KYC tables, bucket and policies, functions.
-4. `st009_catalog_auctions`: lookups, properties, property_contexts, media, increment tables, auctions, auction_reserves, auction_events, views, read RPCs, realtime policies.
+4. `st009_catalog_auctions`: lookups, properties, property_contexts, media, increment tables, auctions, auction_reserves, auction_events, `bids` + `bid_public` (specified in ST-010), views, read RPCs, realtime policies.
 5. `st007_payments`: payments, webhook events, mock gateway state, processing functions, cron.
-6. `st008_join`: tc_versions, tc_acceptances, auction_participants, join/leave functions. It extends `process_payment_event` for `join_lock`.
-7. `st010_bids`: bids, `bid_public`, `place_bid`.
+6. `st008_join`: tc_versions, tc_acceptances, auction_participants, join/leave functions. It adds the FKs `bids.participant_id`, `auctions.current_leader_participant_id` and `payments.tc_acceptance_id`, and extends `process_payment_event` for `join_lock`.
+7. `st010_bids`: `place_bid`, `place_bid_core` and the bid rate limit. The `bids` table, the `bid_public` view and the increment functions (`increment_for`, `auction_min_next_bid`, which `auction_public` needs) are created in step 4, as specified in ST-010.
 
 ST-007 and ST-008 both touch `process_payment_event`. ST-007 ships `topup` handling; ST-008 adds the `join_lock` branch with `CREATE OR REPLACE`.
 
@@ -240,6 +240,15 @@ Frontend: `packages/shared/src/errors.ts` exports `type ErrorCode = …` with ex
 | `GATEWAY_UNAVAILABLE` | Provider error on intent creation | payments-create-intent | — | "Payment service is busy. Try again." |
 | `NOT_ALLOWED_IN_ENV` | Dev-only function called in production | dev functions | — | — |
 | `FORBIDDEN` | Staff permission missing | admin RPCs | `permission` | "You do not have access." |
+
+**Internal invariant codes.** These are raised as `P0001` exceptions, never returned to users, and the UI shows them as `INTERNAL_ERROR`. Tests assert on them:
+
+| Code | Raised when |
+|---|---|
+| `APPEND_ONLY` | UPDATE or DELETE on an append-only table (`private.forbid_mutation`) |
+| `LEDGER_IMBALANCE` | A ledger txn whose debits ≠ credits, with < 2 lines or with mixed currency (deferred check at commit) |
+| `DIRECT_BALANCE_EDIT_FORBIDDEN` | Wallet balance columns changed outside `private.ledger_post` |
+| `INCREMENT_TABLE_IN_USE` | Bands changed on an increment table already used by an auction |
 
 ## 7. Supabase-generated types: common shape
 
