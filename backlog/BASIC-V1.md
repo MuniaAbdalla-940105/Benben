@@ -15,14 +15,12 @@ Each package is one session, one branch and one PR. Packages own separate folder
 | 2 | **B5** Requests, investment, rentals (basic) | `bv1-b5-requests-investment-rentals` | buyer_requests with matches; investment_listings with yields and offers; rental_listings with requests | EP-12, EP-13, EP-18 (PRD §6.1, §6.3, §7.1–7.3, §4.2 steps 1–2, basic) | B1 |
 | 3 | **B6** Admin (basic) | `bv1-b6-admin-ops-basic` | admin shell, users and roles, approval queues (IDs, listings, auctions), create and schedule auction, live auctions list with pause and cancel, payments log | ST-020, ST-022, ST-023, ST-024, ST-025 (basic), ST-043 (log only) | B2, B3, B4, B5 merged |
 
-Wave 2 runs four sessions in parallel. Merge order: B2 → B3 → B4 → B5, each rebased on `main` before merge.
+**Packages run one at a time** (token saving): B1 → B2 → B3 → B4 → B5 → B6. Each starts from the latest `main`, and only after the stakeholder says go.
 
 ## Definition of Done (Basic v1)
 - The package works end to end on its preview or staging, with synthetic data.
 - CI is green (all ST-001 checks). RLS is on for every new table, and pgTAP tests cover each owner/other-user case.
-- **Reviews (token-saving, 2026-11-03):** `solution-architect` review for B2 and B3 only. `security` review for B1, B2, B3 and B6 only. `qa-engineer` runs a short smoke test of the acceptance criteria, not a full test plan.
-- **Models:** coding, frontend, QA and devops agents run on Sonnet; the architect, security and backend agents run on Opus. Story sessions for B1, B4, B5 and B6 run on Sonnet; B2 and B3 (money, bids) run on Opus.
-- **Token rules for every session:** read only the files and sections you need (use Grep, not whole-file reads of large docs); no screenshots unless something looks broken; do not re-run passing checks; keep reports to the verify checklist.
+- **Reviews and models (token rules in `CLAUDE.md`, 2026-11-03):** no sub-agents. The package session writes the code itself on Sonnet. One `security` review for B1, B2, B3 and B6 only, run with model Opus for B2 and B3. A short QA smoke test by the session itself.
 - Arabic RTL and English, light and dark, using the design system.
 - Then the orchestrator merges.
 
