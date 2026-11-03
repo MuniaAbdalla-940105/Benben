@@ -4,6 +4,7 @@ Real-estate platform for Egypt: Flash 24H auctions, rentals, a listings marketpl
 
 - Product requirements: [`docs/PRD.md`](docs/PRD.md)
 - How the project is built (an AI delivery framework with React + Supabase): [`CLAUDE.md`](CLAUDE.md), with diagrams in [`docs/framework/framework-diagrams.html`](docs/framework/framework-diagrams.html)
+- Clickable demo POC (open `demo/index.html`): [`demo/README.md`](demo/README.md)
 - Backlog: [`backlog/BACKLOG.md`](backlog/BACKLOG.md)
 - Architecture: [`docs/decisions/`](docs/decisions/) (ADR-002 for the system, ADR-005 for staging)
 - Operations: [`docs/runbook.md`](docs/runbook.md) (local setup, CI, deploys, rollback)
