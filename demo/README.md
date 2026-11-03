@@ -18,5 +18,6 @@ A clickable, fake-data tour of the whole product. No backend, no build step, syn
 ## Notes
 - Money is held in piasters and shown as EGP, with Arabic-Indic digits in Arabic.
 - Simulated: OTP, ID review, payments, other bidders. Auction clock is about 40 seconds (not 24 hours) so the demo is quick.
+- Property pages (sale, auction, rental) have a 6-slide gallery (drawn illustrations, not real photos), facts, description, details, amenities, payment plan or lease terms, a stylised map with nearby places, and an agent card.
 - Reuses the Ivory Ledger tokens (`assets/tokens.css`) and The Ascent logo from `docs/design`. System fonts only, so it works offline.
 - Not production code. Real build follows `backlog/BASIC-V1.md`.

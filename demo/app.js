@@ -46,6 +46,71 @@
   const kycBadge = () => ({ none: `<span class="badge">${T('غير موثّق', 'Not verified')}</span>`, pending: `<span class="badge warn">${T('قيد المراجعة', 'Pending review')}</span>`, approved: `<span class="badge ok">${T('موثّق · المستوى T1', 'Verified · Tier T1')}</span>` }[S.kyc] || '');
   const back = (h) => ({ back: h });
 
+
+  /* ---------- property detail helpers: gallery, facts, map, agent ---------- */
+  const ACC = ['#A27E3E', '#3b4a73', '#6B675F', '#846429', '#5a6fa8', '#22305A'];
+  const seed = (x) => x.id.split('').reduce((t, c) => t + c.charCodeAt(0), 0);
+  const SCENE_NAMES = [B('الواجهة', 'Exterior'), B('غرفة المعيشة', 'Living room'), B('غرفة النوم', 'Bedroom'), B('المطبخ', 'Kitchen'), B('المسقط الأفقي', 'Floor plan'), B('جولة فيديو', 'Video tour')];
+  function scene(i, c) {
+    const win = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#cfe3f2" stroke="#fff" stroke-width="2"/>`;
+    const v = [
+      `<rect width="300" height="225" fill="#cfe3f2"/><rect y="170" width="300" height="55" fill="#7aa36b"/><rect x="60" y="50" width="130" height="125" fill="#f1e9d8"/><rect x="60" y="50" width="130" height="14" fill="${c}"/>${[0, 1, 2].map((r) => [0, 1, 2].map((k) => win(72 + k * 38, 74 + r * 32, 26, 22)).join('')).join('')}<rect x="118" y="140" width="22" height="35" fill="${c}"/><rect x="200" y="80" width="70" height="95" fill="#e4dac4"/>${win(212, 94, 20, 16)}${win(240, 94, 20, 16)}<circle cx="30" cy="140" r="26" fill="#4f8a58"/><rect x="27" y="150" width="6" height="25" fill="#6b4a2b"/><circle cx="278" cy="150" r="18" fill="#4f8a58"/>`,
+      `<rect width="300" height="225" fill="#efe6d3"/><rect y="170" width="300" height="55" fill="#c9b99a"/>${win(30, 30, 100, 90)}<line x1="80" y1="30" x2="80" y2="120" stroke="#fff" stroke-width="3"/><rect x="150" y="105" width="130" height="55" rx="12" fill="${c}"/><rect x="150" y="90" width="130" height="25" rx="10" fill="${c}" opacity=".85"/><ellipse cx="150" cy="195" rx="95" ry="14" fill="#fff" opacity=".5"/><rect x="40" y="150" width="70" height="8" rx="3" fill="#6b4a2b"/><rect x="48" y="158" width="6" height="20" fill="#6b4a2b"/><rect x="96" y="158" width="6" height="20" fill="#6b4a2b"/><rect x="236" y="40" width="3" height="55" fill="#6b4a2b"/><circle cx="237" cy="40" r="16" fill="#f6e3a8"/>`,
+      `<rect width="300" height="225" fill="#f0e8da"/><rect y="175" width="300" height="50" fill="#bfae8c"/>${win(200, 30, 80, 80)}<rect x="40" y="60" width="110" height="50" rx="6" fill="${c}" opacity=".9"/><rect x="30" y="110" width="140" height="62" rx="8" fill="#fff"/><rect x="40" y="118" width="48" height="22" rx="8" fill="#e9e1d0"/><rect x="96" y="118" width="48" height="22" rx="8" fill="#e9e1d0"/><rect x="176" y="140" width="28" height="32" fill="#8a6b45"/><rect x="214" y="150" width="60" height="6" fill="#e9e1d0"/>`,
+      `<rect width="300" height="225" fill="#f4eee2"/><rect y="170" width="300" height="55" fill="#d8ccb2"/><rect x="0" y="40" width="300" height="50" fill="${c}" opacity=".85"/>${[0, 1, 2, 3, 4].map((k) => `<rect x="${14 + k * 56}" y="48" width="48" height="34" fill="#fff" opacity=".25"/>`).join('')}<rect x="0" y="110" width="300" height="60" fill="#fff"/><rect x="0" y="104" width="300" height="10" fill="#8a8272"/><rect x="190" y="116" width="60" height="6" fill="#222"/>${[0, 1, 2].map((k) => `<line x1="${70 + k * 50}" y1="8" x2="${70 + k * 50}" y2="26" stroke="#555"/><circle cx="${70 + k * 50}" cy="30" r="9" fill="#f6e3a8"/>`).join('')}<rect x="60" y="150" width="180" height="20" fill="#e4dac4"/>`,
+      `<rect width="300" height="225" fill="#fff"/><g fill="none" stroke="#24231F" stroke-width="3"><rect x="20" y="20" width="260" height="185"/><path d="M130 20v110h150M20 130h110M130 130v75M200 130v75"/></g><g font-size="12" fill="${c}" font-family="sans-serif" text-anchor="middle"><text x="75" y="80">Living</text><text x="205" y="80">Master</text><text x="75" y="175">Kitchen</text><text x="165" y="172">Bath</text><text x="240" y="172">Bed 2</text></g>`,
+      `<rect width="300" height="225" fill="#0B1530"/><circle cx="150" cy="112" r="38" fill="${c}"/><path d="M138 92l34 20-34 20z" fill="#fff"/><text x="150" y="190" fill="#C9C4BA" font-size="13" text-anchor="middle" font-family="sans-serif">Video tour · 02:14</text>`
+    ];
+    return `<svg viewBox="0 0 300 225" preserveAspectRatio="xMidYMid slice">${v[i]}</svg>`;
+  }
+  function gallery(x, tagHtml) {
+    const c = ACC[x.g % ACC.length];
+    return `<div class="gal"><div class="strip" id="strip">${SCENE_NAMES.map((n, i) => `<div class="slide" ${i === 5 ? 'data-act="video"' : ''}>${scene(i, c)}<span class="cap">${X(n)}</span></div>`).join('')}</div>
+      <span class="count" id="gcount">${D(1)} / ${D(6)}</span><div class="tag">${tagHtml || ''}</div>
+      <div class="thumbs">${SCENE_NAMES.map((n, i) => `<button class="${i ? '' : 'on'}" data-act="gal" data-i="${i}" aria-label="${X(n)}">${scene(i, c)}</button>`).join('')}</div></div>`;
+  }
+  const NEAR = {
+    nc: [['🎓', B('الجامعة الأمريكية', 'American University (AUC)'), 4], ['🛍', B('كايرو فستيفال سيتي', 'Cairo Festival City'), 6], ['🏥', B('مستشفى التجمع', 'Tagamoa Hospital'), 3.5], ['✈️', B('مطار القاهرة', 'Cairo Airport'), 24]],
+    sz: [['🛍', B('مول العرب', 'Mall of Arabia'), 5], ['🎓', B('مدرسة دولية', 'International school'), 1.5], ['🏥', B('مستشفى دار الفؤاد', 'Dar Al Fouad Hospital'), 7], ['🚆', B('محطة المونوريل', 'Monorail station'), 4]],
+    sh: [['🛍', B('مول الشروق', 'Shorouk Mall'), 2], ['🎓', B('مدرسة دولية', 'International school'), 1.2], ['🏥', B('مستشفى الشروق', 'Shorouk Hospital'), 3], ['🛣', B('الطريق الدائري', 'Ring Road'), 12]]
+  };
+  function mapBlock(x) {
+    const n = seed(x); const px = 90 + (n * 37) % 120, py = 60 + (n * 53) % 60;
+    return `<div class="mapbox"><svg viewBox="0 0 300 170"><rect width="300" height="170" fill="#e9e4d4"/><rect x="0" y="118" width="120" height="52" fill="#bcd6e6"/><rect x="170" y="14" width="100" height="46" rx="10" fill="#b7d1a4"/>
+      <g stroke="#fff" stroke-width="9" fill="none"><path d="M0 90H300M110 0V170M210 0V170"/></g><g stroke="#fff" stroke-width="4" fill="none"><path d="M0 45H300M55 0V170M260 0V170M0 140H300"/></g>
+      <g fill="#d6cdb5">${[[10, 10, 35, 28], [65, 10, 35, 28], [120, 10, 38, 28], [220, 66, 32, 18], [120, 100, 40, 28], [65, 100, 36, 28], [220, 100, 32, 28], [270, 100, 24, 28]].map(([a, b, c, d]) => `<rect x="${a}" y="${b}" width="${c}" height="${d}" rx="3"/>`).join('')}</g>
+      <circle cx="${px}" cy="${py}" r="22" fill="${ACC[x.g % 6]}" opacity=".2"/><path d="M${px} ${py + 2}c-9-11-12-15-12-21a12 12 0 0 1 24 0c0 6-3 10-12 21z" fill="#C9302C" stroke="#fff" stroke-width="2" transform="translate(0 -6)"/><circle cx="${px}" cy="${py - 21}" r="4" fill="#fff"/></svg></div>`;
+  }
+  function propDetail(x, kind) {
+    const n = seed(x); const baths = x.baths || Math.max(1, x.beds - 1);
+    const fin = [B('تشطيب كامل', 'Fully finished'), B('نصف تشطيب', 'Semi-finished'), B('سوبر لوكس', 'Super lux')][n % 3];
+    const floor = (n % 6) + 1, park = 1 + (n % 2), year = 2022 + (n % 4);
+    const view = [B('حديقة', 'Garden view'), B('حمام سباحة', 'Pool view'), B('شارع رئيسي', 'Main street')][n % 3];
+    const AM = [['🏊', B('حمام سباحة', 'Pool')], ['🏋️', B('نادي رياضي', 'Gym')], ['🛡', B('أمن ٢٤/٧', '24/7 security')], ['🚗', B('موقف سيارات', 'Parking')], ['🌳', B('حدائق', 'Landscaped gardens')], ['🛗', B('مصعد', 'Elevator')], ['❄️', B('تكييف مركزي', 'Central A/C')], ['🧒', B('منطقة أطفال', 'Kids area')], ['🏛', B('نادي اجتماعي', 'Clubhouse')], ['📶', B('منزل ذكي', 'Smart home')]];
+    const am = [0, 1, 2, 3, 4, 5, 6, 7].map((k) => AM[(k + n) % AM.length]);
+    const near = NEAR[x.area];
+    const ag = [[B('أحمد مصطفى', 'Ahmed Mostafa'), '4.9'], [B('منى سمير', 'Mona Samir'), '4.8'], [B('طارق علي', 'Tarek Ali'), '4.7']][n % 3];
+    const desc = T(`${X(TYPES[x.type])} بمساحة ${D(x.size)} م² و${D(x.beds)} غرف نوم في ${X(AREAS[x.area])}، ${X(fin)}، بإطلالة ${X(view)}. قريب من الخدمات والمدارس والطرق الرئيسية، داخل مجتمع مسوّر بأمن على مدار الساعة.`,
+      `${X(TYPES[x.type])} of ${x.size} m² with ${x.beds} bedrooms in ${X(AREAS[x.area])}. ${X(fin)}, ${X(view).toLowerCase()}. Close to schools, services and main roads, inside a gated community with 24/7 security.`);
+    const spec = [[T('الرقم المرجعي', 'Reference'), `<bdi dir="ltr">BB-${1000 + n * 7}</bdi>`], [T('الدور', 'Floor'), D(floor)], [T('التشطيب', 'Finishing'), X(fin)], [T('سنة البناء', 'Year built'), D(year)], [T('الإطلالة', 'View'), X(view)], [T('مواقف السيارات', 'Parking'), D(park)], [T('الملكية', 'Ownership'), T('تسجيل شهر عقاري', 'Registered title')]];
+    let extra = '';
+    if (kind === 'sale') { const down = x.price / 10; const mo = Math.round((x.price - down) / 84 / 100) * 100; extra = `<h2>${T('خطة الدفع', 'Payment plan')}</h2><div class="card pad"><div class="kv"><span>${T('مقدم ١٠٪', 'Down payment 10%')}</span><b>${egp(down)}</b></div><div class="kv"><span>${T('قسط شهري × ٨٤ شهر', 'Monthly × 84 months')}</span><b>${egp(mo)}</b></div><div class="kv"><span>${T('أو كاش', 'Or cash')}</span><b>${egp(x.price * 0.93)}</b></div></div>`; }
+    if (kind === 'auction') extra = `<h2>${T('المستندات والفحص', 'Documents & inspection')}</h2><div class="card menu"><div class="kv" style="padding:12px 14px"><span>📄 ${T('عقد الملكية', 'Title deed')}</span><span class="badge ok">${T('موثّق', 'Verified')}</span></div><div class="kv" style="padding:12px 14px"><span>🔍 ${T('تقرير الفحص الفني', 'Technical inspection report')}</span><span class="badge ok">PDF</span></div><div class="kv" style="padding:12px 14px"><span>⚖️ ${T('فحص قانوني', 'Legal check')}</span><span class="badge ok">${T('سليم', 'Clear')}</span></div></div>`;
+    if (kind === 'rent') extra = `<h2>${T('شروط الإيجار', 'Lease terms')}</h2><div class="card pad"><div class="kv"><span>${T('أقل مدة', 'Minimum term')}</span><b>${D(6)} ${T('أشهر', 'months')}</b></div><div class="kv"><span>${T('الدفع', 'Payment')}</span><b>${T('شهري / ربع سنوي', 'Monthly / quarterly')}</b></div><div class="kv"><span>${T('المرافق', 'Utilities')}</span><b>${T('على المستأجر', 'Tenant pays')}</b></div><div class="kv"><span>${T('حيوانات أليفة', 'Pets')}</span><b>${n % 2 ? T('مسموح', 'Allowed') : T('غير مسموح', 'Not allowed')}</b></div></div>`;
+    return `<div class="facts"><div><b>${D(x.beds)}</b>${T('غرف', 'Beds')}</div><div><b>${D(baths)}</b>${T('حمامات', 'Baths')}</div><div><b>${D(x.size)}</b>${T('م²', 'm²')}</div><div><b>${D(floor)}</b>${T('الدور', 'Floor')}</div></div>
+      <div class="row small muted" style="margin-bottom:8px"><span>📍</span><span>${X(AREAS[x.area])}, ${T('القاهرة، مصر', 'Cairo, Egypt')}</span></div>
+      <h2>${T('الوصف', 'Description')}</h2><p class="small" style="line-height:1.7">${desc}</p>
+      <h2>${T('التفاصيل', 'Property details')}</h2><div class="card pad">${spec.map(([k, v]) => `<div class="kv"><span>${k}</span><b>${v}</b></div>`).join('')}</div>
+      <h2>${T('المرافق والخدمات', 'Amenities')}</h2><div class="amen">${am.map(([i, l]) => `<span>${i} ${X(l)}</span>`).join('')}</div>
+      ${extra}
+      <h2>${T('الموقع', 'Location')}</h2>${mapBlock(x)}
+      <div class="card pad" style="margin-top:10px;padding-block:4px">${near.map(([i, l, k]) => `<div class="kv"><span>${i} ${X(l)}</span><b>${D(k)} ${T('كم', 'km')}</b></div>`).join('')}</div>
+      <button class="btn sec" data-act="toast" data-m="${T('سيفتح تطبيق الخرائط (تجريبي)', 'Would open Maps (demo)')}">🗺 ${T('افتح في الخرائط', 'Open in Maps')}</button>
+      <h2>${T('المُعلن', 'Listed by')}</h2><div class="card pad"><div class="agent"><div class="avatar">👤</div><div class="grow"><b>${X(ag[0])}</b><div class="small muted">${T('وسيط موثّق من بن بن', 'BEN-BEN verified agent')} · ⭐ ${D(ag[1])}</div></div></div>
+      <div class="acts"><button class="btn sm" data-act="toast" data-m="${T('اتصال (تجريبي)', 'Calling… (demo)')}">📞 ${T('اتصال', 'Call')}</button><button class="btn sm" data-act="toast" data-m="${T('واتساب (تجريبي)', 'WhatsApp (demo)')}">💬 ${T('واتساب', 'WhatsApp')}</button><button class="btn sm sec" data-act="toast" data-m="${T('تم إرسال رسالتك', 'Message sent')}">✉️ ${T('رسالة', 'Message')}</button></div></div>
+      <div class="row small muted" style="margin:10px 0"><span>${T('تاريخ النشر:', 'Posted:')} ${D(2 + (n % 20))} ${T('نوفمبر ٢٠٢٦', 'Nov 2026')}</span><span class="grow"></span><button data-act="toast" data-m="${T('تمت المشاركة (تجريبي)', 'Shared (demo)')}">↗ ${T('مشاركة', 'Share')}</button></div>`;
+  }
+
   /* ---------- screens ---------- */
   const R = {};
 
@@ -117,7 +182,7 @@
     else if (joined) cta = `<a class="btn" href="#/room/${id}">${T('ادخل غرفة المزاد المباشر', 'Enter the live room')}</a>`;
     else cta = `<button class="btn" data-act="joinSheet" data-id="${id}">${T('انضم للمزايدة', 'Join to bid')}</button>`;
     return { back: '#/auctions', title: T('تفاصيل المزاد', 'Auction'), tab: 'auctions', flush: false, html: `
-      <div style="margin:-16px -16px 14px">${img(a.g, `<div class="badges">${a.status === 'live' ? `<span class="badge live">${T('مباشر', 'LIVE')}</span>` : ''}</div>`, true)}</div>
+      ${gallery(a, a.status === 'live' ? `<span class="badge live">${T('مباشر', 'LIVE')}</span>` : `<span class="badge gold">${T('مزاد', 'Auction')}</span>`)}
       <h1>${X(a.title)}</h1><p class="muted">${X(AREAS[a.area])} · ${X(TYPES[a.type])}</p>
       <div class="card pad" style="margin-top:12px">
         <div class="kv"><span>${T('سعر الافتتاح', 'Opening price')}</span><b>${egp(a.start)}</b></div>
@@ -125,6 +190,7 @@
         <div class="kv"><span>${T('المساحة', 'Size')}</span><b>${D(a.size)} ${T('م²', 'm²')}</b></div>
         <div class="kv"><span>${T('غرف النوم', 'Bedrooms')}</span><b>${D(a.beds)}</b></div>
         <div class="kv"><span>${T('زيادات المزايدة', 'Bid increments')}</span><b>${a.steps.map((s) => egp(s)).join(' · ')}</b></div></div>
+      ${propDetail(a, 'auction')}
       <div class="banner info">⏱ ${T('الحماية من القنص: أي مزايدة في آخر ٢٠ ثانية تمدد الوقت.', 'Anti-sniping: a bid in the last 20 seconds extends the clock.')}</div>
       ${cta}` };
   };
@@ -232,9 +298,9 @@
   R.listing = (id) => {
     const l = findListing(id); if (!l) return { redirect: '#/explore' };
     return { tab: 'explore', back: '#/explore', title: T('تفاصيل العقار', 'Listing'), html: `
-      <div style="margin:-16px -16px 14px">${img(l.g, `<button class="heart" data-act="save" data-id="${l.id}">${S.saved.includes(l.id) ? '♥' : '♡'}</button>`, true)}</div>
-      <h1>${X(l.title)}</h1><div class="price">${egp(l.price)}</div><p class="muted">${X(AREAS[l.area])} · ${X(TYPES[l.type])}</p>
-      <div class="card pad" style="margin-top:12px"><div class="kv"><span>${T('المساحة', 'Size')}</span><b>${D(l.size)} ${T('م²', 'm²')}</b></div><div class="kv"><span>${T('غرف النوم', 'Bedrooms')}</span><b>${D(l.beds)}</b></div><div class="kv"><span>${T('الحمامات', 'Bathrooms')}</span><b>${D(l.baths || 2)}</b></div><div class="kv"><span>${T('سعر المتر', 'Price per m²')}</span><b>${egp(Math.round(l.price / l.size))}</b></div></div>
+      ${gallery(l, `<span class="badge gold">${T('للبيع', 'For sale')}</span>`)}
+      <div class="row between"><h1 class="grow">${X(l.title)}</h1><button class="ibtn" data-act="save" data-id="${l.id}" style="font-size:22px">${S.saved.includes(l.id) ? '♥' : '♡'}</button></div><div class="price">${egp(l.price)} <small>· ${egp(Math.round(l.price / l.size))} / ${T('م²', 'm²')}</small></div><p class="muted">${X(AREAS[l.area])} · ${X(TYPES[l.type])}</p>
+      ${propDetail(l, 'sale')}
       <button class="btn" data-act="contact">${T('تواصل مع البائع', 'Contact seller')}</button>
       <button class="btn sec" data-act="save" data-id="${l.id}">${S.saved.includes(l.id) ? '♥ ' + T('محفوظ', 'Saved') : '♡ ' + T('احفظ', 'Save')}</button>` };
   };
@@ -250,8 +316,9 @@
   R.rental = (id) => {
     const r = RENTALS.find((x) => x.id === id); const sent = S.rentReqs.find((q) => q.rid === id);
     return { tab: 'rent', back: '#/rent', title: T('تفاصيل الإيجار', 'Rental'), html: `
-      <div style="margin:-16px -16px 14px">${img(r.g, '', true)}</div><h1>${X(r.title)}</h1><div class="price">${egp(r.rent)} <small>/ ${T('شهر', 'month')}</small></div>
-      <div class="card pad" style="margin-top:12px"><div class="kv"><span>${T('المنطقة', 'Area')}</span><b>${X(AREAS[r.area])}</b></div><div class="kv"><span>${T('المساحة', 'Size')}</span><b>${D(r.size)} ${T('م²', 'm²')}</b></div><div class="kv"><span>${T('تأمين الإيجار', 'Rental deposit')}</span><b>${egp(r.rent * 2)}</b></div></div>
+      ${gallery(r, `<span class="badge gold">${r.furnished ? T('مفروشة', 'Furnished') : T('للإيجار', 'For rent')}</span>`)}
+      <h1>${X(r.title)}</h1><div class="price">${egp(r.rent)} <small>/ ${T('شهر', 'month')} · ${T('تأمين', 'deposit')} ${egp(r.rent * 2)}</small></div>
+      ${propDetail(r, 'rent')}
       ${sent ? `<div class="banner ok">✓ ${T('تم إرسال طلبك', 'Request sent')}</div><a class="btn sec" href="#/requests" data-act="rqRent">${T('تابع طلباتك', 'Track your requests')}</a>` : `<button class="btn" data-act="rentSheet" data-id="${id}">${T('اطلب الإيجار', 'Request to rent')}</button>`}` };
   };
 
@@ -313,7 +380,7 @@
     if (S.theme === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', S.theme);
     const ph = $('phone'); if (s.stage) ph.setAttribute('data-surface', 'stage'); else ph.removeAttribute('data-surface');
     $('top').innerHTML = (s.back ? `<a class="ibtn back" href="${s.back}" aria-label="back">‹</a>` : '') + (s.logo ? `<div class="logo"><img src="assets/logo/lockup-horizontal${s.stage || document.documentElement.dataset.theme === 'dark' ? '-on-navy' : ''}.svg" alt="BEN-BEN"></div>` : `<div class="title">${s.title || ''}</div>`) +
-      `<button class="ibtn" data-act="lang" aria-label="language">${ar() ? 'EN' : 'ع'}</button><button class="ibtn" data-act="theme" aria-label="theme">◐</button>`;
+      `<button class="ibtn" data-act="lang" aria-label="language">${ar() ? 'EN' : 'ع'}</button><button class="ibtn" data-act="theme" aria-label="theme">🌓</button>`;
     // pick logo variant by effective theme
     const dark = S.theme === 'dark' || (S.theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
     const li = $('top').querySelector('.logo img'); if (li) li.src = 'assets/logo/lockup-horizontal' + (dark || s.stage ? '-on-navy' : '') + '.svg';
@@ -360,6 +427,9 @@
     exSaved() { ui.ex.saved = !ui.ex.saved; render(); },
     exSavedGo() { ui.ex.saved = true; },
     save(el, ev) { ev.preventDefault(); ev.stopPropagation(); const id = el.dataset.id, i = S.saved.indexOf(id); if (i < 0) S.saved.push(id); else S.saved.splice(i, 1); save(); render(); },
+    toast(el) { toast(el.dataset.m); },
+    video() { toast(T('فيديو تجريبي', 'Demo video (placeholder)')); },
+    gal(el) { const st = $('strip'); st.children[+el.dataset.i].scrollIntoView({ inline: 'start', block: 'nearest', behavior: 'smooth' }); },
     contact() { toast(T('تم إرسال طلبك للبائع', 'Your message was sent to the seller')); },
     submitListing() {
       S.userListings.push({ id: 'u' + (S.userListings.length + 1), area: $('ln-area').value, type: 'apt', title: { ar: $('ln-title').value, en: $('ln-title').value }, price: E(+$('ln-price').value || 0), beds: 3, baths: 2, size: 160, g: 3, status: 'pending' });
@@ -395,6 +465,11 @@
     ui.otp = ui.otp.split(''); ui.otp[+i] = ev.target.value; ui.otp = ui.otp.join('');
     const n = ev.target.parentNode.children[+i + 1]; if (ev.target.value && n) n.focus();
   });
+  document.addEventListener('scroll', (ev) => {
+    if (ev.target.id !== 'strip') return; const st = ev.target; const i = Math.round(Math.abs(st.scrollLeft) / st.clientWidth);
+    const c = $('gcount'); if (c) c.textContent = D(i + 1) + ' / ' + D(6);
+    document.querySelectorAll('.thumbs button').forEach((b, k) => b.classList.toggle('on', k === i));
+  }, true);
   $('side-reset').addEventListener('click', A.reset);
   if (!location.hash) location.hash = '#/login';
   render();
