@@ -3,13 +3,15 @@
 --
 -- Rules for anyone adding to this file:
 --   * Idempotent: the deploy job runs it after every merge to main. Use `on conflict do nothing/update`.
---   * People: invented names, emails only at example.com / example.org, phone numbers only from the
---     reserved test range +20 100 000 0xxx, national IDs only from the mock-KYC fixture list.
+--   * People: invented names, emails only at example.com / example.org / *.test, phone numbers only from
+--     the reserved test range +20 100 000 0xxx, national IDs (14 digits) only with governorate code 99 in
+--     digits 8-9 (no real governorate has 99).
 --   * Places: public area names only (New Cairo, Sheikh Zayed and their public districts), no street
 --     addresses of real properties.
---   * tools/ci/check-seed-synthetic.sh enforces the email and phone rules in CI.
+--   * tools/ci/check-seed-synthetic.sh enforces the email and phone rules in CI, and CI
+--     check 2 runs every seed file a second time and fails if any row count changes.
 --
--- It also runs locally from seed.sql, so it must not assume runtime_env = 'staging'.
+-- It also runs locally and in CI right after seed.sql, so it must not assume runtime_env = 'staging'.
 
 do $$
 declare

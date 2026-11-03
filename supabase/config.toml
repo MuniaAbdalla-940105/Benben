@@ -20,6 +20,10 @@ max_rows = 1000
 # `postgres` are reachable through the Data API roles (`anon`, `authenticated`, `service_role`)
 # without explicit GRANTs, matching the cloud default. Set to `false` to require explicit GRANTs
 # instead. Left unset, a fresh project falls back to `true`.
+# BEN-BEN: left unset on purpose (review M4). `false` also strips service_role's default grants, but only
+# locally (staging does not read this file), so local and staging would differ and Edge Functions
+# (ADR-006) would behave differently. Instead the ST-001 migration revokes the anon/authenticated defaults
+# in the database itself, which applies identically everywhere; CI check 6 and pgTAP verify it.
 # auto_expose_new_tables = true
 
 [api.tls]
@@ -69,7 +73,9 @@ schema_paths = []
 enabled = true
 # Specifies an ordered list of seed files to load during db reset.
 # Supports glob patterns relative to supabase directory: "./seeds/*.sql"
-sql_paths = ["./seed.sql", "./seed/staging.sql"]
+# seed.sql marks the DB as local; then every file in seed/ in name order (the staging deploy runs the
+# same seed/ files in the same order, so local, CI and staging get identical synthetic data).
+sql_paths = ["./seed.sql", "./seed/*.sql"]
 
 [db.network_restrictions]
 # Enable management of network restrictions.

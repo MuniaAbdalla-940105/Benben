@@ -1,4 +1,5 @@
--- Ensures the Vault secrets named in ADR-002 §15 exist. Run by the staging deploy job (and safe locally).
+-- Ensures the Vault secrets named in ADR-002 §15 exist. Part of the seed set: runs on every local and CI
+-- reset and in the staging deploy (review A9). Not synthetic *data*, but it must exist wherever the seed runs.
 -- Values are generated inside the database (32 random bytes, base64) and never leave it: nothing is in Git,
 -- in CI logs or in GitHub secrets. Existing secrets are never overwritten, so this is idempotent.
 -- Rotation is a deliberate, story-owned change (ADR-002 §12: re-encrypt with a new key_version).
