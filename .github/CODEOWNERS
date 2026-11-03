@@ -7,3 +7,9 @@
 /supabase/migrations-down/      @MuniaAbdalla-940105
 /supabase/migrations-reverted.txt @MuniaAbdalla-940105
 /supabase/config.toml           @MuniaAbdalla-940105
+/supabase/functions/            @MuniaAbdalla-940105
+/supabase/seed/                 @MuniaAbdalla-940105
+/supabase/seed.sql              @MuniaAbdalla-940105
+/package.json                   @MuniaAbdalla-940105
+/pnpm-workspace.yaml            @MuniaAbdalla-940105
+/pnpm-lock.yaml                 @MuniaAbdalla-940105
