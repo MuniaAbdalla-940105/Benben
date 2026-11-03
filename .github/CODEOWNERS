@@ -1,0 +1,15 @@
+# Review M1: changes to the pipeline, the database schema and the local stack config need the
+# stakeholder's review. Enable "Require review from Code Owners" in the branch protection for main
+# (docs/decisions/ADR-005-staging-hosting-and-region.md §3).
+/.github/                       @MuniaAbdalla-940105
+/tools/ci/                      @MuniaAbdalla-940105
+/supabase/migrations/           @MuniaAbdalla-940105
+/supabase/migrations-down/      @MuniaAbdalla-940105
+/supabase/migrations-reverted.txt @MuniaAbdalla-940105
+/supabase/config.toml           @MuniaAbdalla-940105
+/supabase/functions/            @MuniaAbdalla-940105
+/supabase/seed/                 @MuniaAbdalla-940105
+/supabase/seed.sql              @MuniaAbdalla-940105
+/package.json                   @MuniaAbdalla-940105
+/pnpm-workspace.yaml            @MuniaAbdalla-940105
+/pnpm-lock.yaml                 @MuniaAbdalla-940105

@@ -1,0 +1,123 @@
+# Preview, step 2 of 2 (review H1). Triggered when the Preview workflow finishes. Runs the workflow file
+# from main (workflow_run always does), never installs, builds or runs pull-request code, and treats
+# the artifact as untrusted data:
+#   - the PR number and head SHA come from the workflow_run payload and the GitHub API, never from the artifact;
+#   - only same-repository PRs are deployed (no fork previews on our domain);
+#   - the artifact is checked for shape and re-scanned for secrets before upload;
+#   - it goes to a separate Pages project, benben-web-preview, so a preview can never replace staging.
+# CLOUDFLARE_API_TOKEN lives in the "preview" environment only.
+name: Preview deploy
+
+on:
+  workflow_run:
+    workflows: [Preview]
+    types: [completed]
+
+concurrency:
+  group: preview-deploy-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PAGES_PROJECT: benben-web-preview
+
+jobs:
+  deploy:
+    name: Deploy preview to benben-web-preview
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: preview
+    permissions:
+      contents: read
+      actions: read        # download the artifact from the Preview run
+      pull-requests: write # sticky comment (review L4: only this job)
+    steps:
+      - name: Resolve the PR from the run (not from the artifact)
+        id: pr
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const sha = run.head_sha;
+            if (!/^[0-9a-f]{40}$/.test(sha)) throw new Error('bad head sha');
+            const { owner, repo } = context.repo;
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ owner, repo, commit_sha: sha });
+            const pr = prs.find((p) => p.state === 'open' && p.head.sha === sha && p.base.ref === 'main'
+                                      && p.head.repo && p.head.repo.full_name === `${owner}/${repo}`);
+            if (!pr) { core.notice('No open same-repo PR into main for this commit; nothing to deploy.'); return; }
+            if (!Number.isInteger(pr.number) || pr.number <= 0) throw new Error('bad PR number');
+            core.setOutput('number', String(pr.number));
+            core.setOutput('sha', sha);
+      - name: Check the host is configured
+        id: cfg
+        if: ${{ steps.pr.outputs.number != '' }}
+        env:
+          HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+          ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ "$HAS_TOKEN" != true ] || [ -z "$ACCOUNT_ID" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Preview deploy skipped"
+              echo "Missing: CLOUDFLARE_API_TOKEN (environment preview) and/or CLOUDFLARE_ACCOUNT_ID (repository variable)."
+              echo "See docs/decisions/ADR-005-staging-hosting-and-region.md §3. No preview URL exists until then."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::Preview deploy skipped: Cloudflare is not configured (ADR-005)"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Check out main (trusted scripts and lockfile only)
+        if: ${{ steps.cfg.outputs.ready == 'true' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - if: ${{ steps.cfg.outputs.ready == 'true' }}
+        uses: ./.github/actions/setup
+      - name: Download the untrusted build artifact
+        if: ${{ steps.cfg.outputs.ready == 'true' }}
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-preview-dist
+          path: ${{ runner.temp }}/preview-dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Validate and re-scan the artifact
+        if: ${{ steps.cfg.outputs.ready == 'true' }}
+        run: bash tools/ci/check-untrusted-dist.sh "$RUNNER_TEMP/preview-dist"
+      - name: Upload to Cloudflare Pages (benben-web-preview, branch pr-<number>)
+        id: deploy
+        if: ${{ steps.cfg.outputs.ready == 'true' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.sha }}
+        run: |
+          url="$(bash tools/ci/pages-deploy.sh "$RUNNER_TEMP/preview-dist" "$PAGES_PROJECT" "pr-${PR_NUMBER}" "$HEAD_SHA" | tail -1)"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "### Preview: $url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Comment the preview URL on the PR
+        if: ${{ steps.deploy.outputs.url != '' }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.sha }}
+        with:
+          script: |
+            const marker = '<!-- benben-preview -->';
+            const body = `${marker}\n**Preview (apps/web):** ${process.env.URL}\n\nCommit ${process.env.HEAD_SHA.slice(0, 7)}. Backend: staging Supabase (publishable key). Schema changes in this PR reach staging only after merge.`;
+            const { owner, repo } = context.repo;
+            const issue_number = Number(process.env.PR_NUMBER);
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const mine = comments.find((c) => c.body && c.body.startsWith(marker) && c.user && c.user.type === 'Bot');
+            if (mine) await github.rest.issues.updateComment({ owner, repo, comment_id: mine.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });

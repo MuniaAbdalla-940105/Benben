@@ -1,0 +1,2 @@
+/* Design tokens (light, dark, live stage) from the design system. Imported once by each app. */
+@import '../../../docs/design/tokens.css';

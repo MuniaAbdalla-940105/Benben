@@ -1,0 +1,7 @@
+# Migrations that were on main and have been rolled back on purpose (docs/runbook.md §5).
+# CI check 3 lets a PR delete a merged migration only when its version is listed here AND its down script
+# in supabase/migrations-down/ is deleted in the same PR.
+#
+# One entry per line: <14-digit version>  # story/bug ID, date, reason
+# Example:
+# 20261120093000  # BUG-014 2026-11-21 rolled back on staging; replaced by 20261121080000

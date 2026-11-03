@@ -1,0 +1,4 @@
+# Edge Functions that must never be deployed to production (ADR-002 §4). One name per line.
+# tools/ci/deploy-functions.sh drops them from the production list and fails if one slips through.
+mock-gateway
+dev-sms-inbox

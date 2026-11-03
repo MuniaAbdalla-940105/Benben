@@ -1,0 +1,4 @@
+* text=auto eol=lf
+packages/db-types/src/database.ts linguist-generated=true
+pnpm-lock.yaml linguist-generated=true
+*.svg text

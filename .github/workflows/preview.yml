@@ -1,0 +1,46 @@
+# Preview, step 1 of 2 (review H1): build apps/web for a pull request with NO secrets and upload the result
+# as an artifact. This workflow runs pull-request code, so it must never get a token. Step 2,
+# preview-deploy.yml, runs from main under the "preview" environment, re-validates the artifact and
+# uploads it to the separate Cloudflare Pages project benben-web-preview.
+# Build values are repository variables (public by design): the staging URL and the publishable key.
+name: Preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build apps/web preview (no secrets)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Build (staging backend when configured, publishable key only)
+        env:
+          PROJECT_REF: ${{ vars.STAGING_PROJECT_REF }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.STAGING_SUPABASE_ANON_KEY }}
+          VITE_APP_ENV: staging
+        run: |
+          if [ -n "$PROJECT_REF" ]; then export VITE_SUPABASE_URL="https://${PROJECT_REF}.supabase.co"; fi
+          pnpm --filter @benben/web build
+      - name: "8 · Bundle secret scan"
+        run: bash tools/ci/check-bundle-secrets.sh apps/web/dist
+      - name: Upload the build for preview-deploy.yml
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-preview-dist
+          path: apps/web/dist/
+          if-no-files-found: error
+          retention-days: 3
